@@ -1,0 +1,19 @@
+{
+  "name": "cordova-plugin-live",
+  "version": "1.0.0",
+  "description": "cordova live 直播插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lounai-chen/cordova-plugin-live.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lounai-chen/cordova-plugin-live/issues"
+  },
+  "homepage": "https://github.com/lounai-chen/cordova-plugin-live#readme"
+}

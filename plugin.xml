@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-live" version="1.0.0"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>LivePlugin</name>
+    <js-module name="LivePlugin" src="www/LivePlugin.js">
+        <clobbers target="LivePlugin" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="LivePlugin">
+                <param name="android-package" value="com.alivc.live.pusher.demo.LivePlugin" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml" />
+        <source-file src="src/android/LivePlugin.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="LivePlugin">
+                <param name="ios-package" value="LivePlugin" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/LivePlugin.m" />
+    </platform>
+</plugin>

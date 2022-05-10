@@ -145,7 +145,7 @@ public class PushMoreDialog extends DialogFragment implements View.OnClickListen
             int id = buttonView.getId();
             if (mAlivcLivePusher == null) {
                 if(getActivity() != null) {
-                    mAlivcLivePusher = ((LivePushActivity)getActivity()).getLivePusher();
+                    //mAlivcLivePusher = ((LivePushActivity)getActivity()).getLivePusher();
                 }
 
                 if(mAlivcLivePusher == null) {
@@ -176,7 +176,7 @@ public class PushMoreDialog extends DialogFragment implements View.OnClickListen
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
             if (mAlivcLivePusher == null) {
                 if(getActivity() != null) {
-                    mAlivcLivePusher = ((LivePushActivity)getActivity()).getLivePusher();
+                  //  mAlivcLivePusher = ((LivePushActivity)getActivity()).getLivePusher();
                 }
 
                 if(mAlivcLivePusher == null) {

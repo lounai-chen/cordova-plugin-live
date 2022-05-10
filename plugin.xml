@@ -6,6 +6,7 @@
     <js-module name="LivePlugin" src="www/LivePlugin.js">
         <clobbers target="LivePlugin" />
     </js-module>
+    <!-- android -->
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="LivePlugin">
@@ -14,7 +15,12 @@
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml" />
         <source-file src="src/android/LivePlugin.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" />
+        
+             <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
     </platform>
+
+
+    <!-- ios -->
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
             <feature name="LivePlugin">

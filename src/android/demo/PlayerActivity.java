@@ -34,11 +34,12 @@ import com.acker.simplezxing.activity.CaptureActivity;
 import java.util.ArrayList;
 import java.util.List;
 import com.zhongzilian.chestnutapp.R;
+import org.apache.cordova.CordovaActivity;
 
 /**
  * 直播拉流界面
  */
-public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, ButtonClickListener {
+public class PlayerActivity extends CordovaActivity implements SurfaceHolder.Callback, ButtonClickListener {
     private static final String TAG = "PlayerActivity";
     private PlayButtonListView mButtonListView;
     private SurfaceView mSurfaceView;
@@ -56,7 +57,7 @@ public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -277,7 +278,7 @@ public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (mAliPlayer != null) {
             stopPlay();
             mAliPlayer.setSurface(null);

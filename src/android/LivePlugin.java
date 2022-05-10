@@ -1,5 +1,7 @@
 package com.alivc.live.pusher.demo;
 
+import android.content.Intent;
+
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
@@ -14,10 +16,21 @@ public class LivePlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("coolMethod")) {
+        if (action.equals("init")) {
+          //Intent pIntent = new Intent(this.cordova.getActivity(), MainLiveActivity.class);
+          //Intent pIntent = new Intent(this.cordova.getActivity(), PushConfigActivity.class);
+          Intent pIntent = new Intent(this.cordova.getActivity(), LivePushActivity.class);
+
+          LivePushActivity._this_cordova = this.cordova;
+          this.cordova.getActivity().startActivity(pIntent);
+           webView.getView().bringToFront(); //view置顶
             String message = args.getString(0);
             this.coolMethod(message, callbackContext);
             return true;
+        }
+        else  if (action.equals("start")) {
+            LivePushActivity lpa = new LivePushActivity();
+            lpa.startLive();
         }
         return false;
     }

@@ -8,12 +8,13 @@ import android.widget.ImageView;
 
 //import com.alivc.live.pusher.demo.R;
 import com.zhongzilian.chestnutapp.R;
+import org.apache.cordova.CordovaActivity;
 
-public class LicenseActivity extends Activity {
+public class LicenseActivity extends CordovaActivity {
 
     private ImageView mBack;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
         mBack = (ImageView) findViewById(R.id.iv_back);

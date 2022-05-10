@@ -19,18 +19,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.zhongzilian.chestnutapp.R;
 
+import org.apache.cordova.CordovaActivity;
+import org.apache.cordova.CordovaInterface;
+
 import com.alivc.live.pusher.AlivcLivePusher;
 import com.alivc.live.pusher.widget.FastClickUtil;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainLiveActivity extends CordovaActivity implements View.OnClickListener{
     private LinearLayout mLivePushLayout;
     private LinearLayout mLivePullCommonPullLayout;
     private LinearLayout mLivePullRtcLayout;
     private TextView mVersion;//推流sdk版本号
     private String mPushUrl;
-
+    public static CordovaInterface _this_cordova;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -39,16 +42,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
         //首次安装按home键置入后台，从桌面图标点击重新启动的问题
-        if (!isTaskRoot()) {
-            finish();
-            return;
-        }
+//        if (!isTaskRoot()) {
+//            finish();
+//            return;
+//        }
         if (!permissionCheck()) {
             if (Build.VERSION.SDK_INT >= 23) {
                 ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
             } else {
                 showNoPermissionTip(getString(noPermissionTip[mNoPermissionIndex]));
-                finish();
+               // finish();
             }
         }
         Intent intent = getIntent();
@@ -111,22 +114,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (FastClickUtil.isFastClick()) {
                     return;//点击间隔 至少1秒
                 }
-                intent = new Intent(MainActivity.this, PushConfigActivity.class);
+                intent = new Intent(MainLiveActivity.this, PushConfigActivity.class);
                 if (!TextUtils.isEmpty(mPushUrl)){
                     intent.putExtra("pushUrl", mPushUrl);
                 }
-                startActivity(intent);
+                //startActivity(intent);
+
+              this._this_cordova.getActivity().startActivity(intent);
                 break;
             case R.id.pull_common_enter_layout:
-                intent = new Intent(MainActivity.this, VideoRecordConfigActivity.class);
+                intent = new Intent(MainLiveActivity.this, VideoRecordConfigActivity.class);
                 if (!TextUtils.isEmpty(mPushUrl)){
                     intent.putExtra("pushUrl", mPushUrl);
                 }
-                startActivity(intent);
+                //startActivity(intent);
+              this._this_cordova.getActivity().startActivity(intent);
                 break;
             case R.id.pull_enter_layout:
-                intent = new Intent(MainActivity.this, PlayerActivity.class);
-                startActivity(intent);
+                intent = new Intent(MainLiveActivity.this, PlayerActivity.class);
+                //startActivity(intent);
+              this._this_cordova.getActivity().startActivity(intent);
                 break;
             default:
                 break;

@@ -1,16 +1,20 @@
 package com.alivc.live.pusher.demo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -20,18 +24,34 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import androidx.activity.ComponentActivity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentController;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.alivc.live.pusher.AlivcAudioChannelEnum;
+import com.alivc.live.pusher.AlivcAudioSampleRateEnum;
+import com.alivc.live.pusher.AlivcEncodeModeEnum;
+import com.alivc.live.pusher.AlivcImageFormat;
+import com.alivc.live.pusher.AlivcLivePushCameraTypeEnum;
 import com.alivc.live.pusher.AlivcLivePushConfig;
 import com.alivc.live.pusher.AlivcLivePushLogLevel;
 import com.alivc.live.pusher.AlivcLivePushStatsInfo;
 import com.alivc.live.pusher.AlivcLivePusher;
+import com.alivc.live.pusher.AlivcPreviewDisplayMode;
 import com.alivc.live.pusher.AlivcPreviewOrientationEnum;
+import com.alivc.live.pusher.AlivcResolutionEnum;
+import com.alivc.live.pusher.AlivcSoundFormat;
 import com.alivc.live.pusher.SurfaceStatus;
 
 import java.io.File;
@@ -47,16 +67,25 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.alivc.live.pusher.WaterMarkInfo;
 import com.zhongzilian.chestnutapp.R;
 
 import static android.os.Environment.MEDIA_MOUNTED;
+import static com.alivc.live.pusher.AlivcFpsEnum.FPS_25;
+import static com.alivc.live.pusher.AlivcImageFormat.IMAGE_FORMAT_YUV420P;
+import static com.alivc.live.pusher.AlivcLivePushConstants.DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT;
+import static com.alivc.live.pusher.AlivcLivePushConstants.DEFAULT_VALUE_INT_RETRY_INTERVAL;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT;
 
+import org.apache.cordova.CordovaInterface;
 import org.webrtc.utils.AlivcLog;
+import org.apache.cordova.CordovaActivity;
 
-public class LivePushActivity extends AppCompatActivity implements IPushController {
+
+
+public class LivePushActivity extends CordovaActivity implements IPushController       {
     private static final String TAG = "LivePushActivity";
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 0;
@@ -101,8 +130,8 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
     private SurfaceStatus mSurfaceStatus = SurfaceStatus.UNINITED;
 //    private Handler mHandler = new Handler();
     private boolean isPause = false;
-
-    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+    private AlivcResolutionEnum mDefinition = AlivcResolutionEnum.RESOLUTION_540P;
+    private int mCameraId = 1;// Camera.CameraInfo.CAMERA_FACING_FRONT;
     private boolean mFlash = false;
     private boolean mMixExtern = false;
     private boolean mMixMain = false;
@@ -110,38 +139,103 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
     AlivcLivePushStatsInfo alivcLivePushStatsInfo = null;
     private String mAuthTime = "";
     private String mPrivacyKey = "";
-
+  private ArrayList<WaterMarkInfo> waterMarkInfos = new ArrayList<>();
 //    private ConnectivityChangedReceiver mChangedReceiver = new ConnectivityChangedReceiver();
     private boolean videoThreadOn = false;
     private boolean audioThreadOn = false;
 
     private int mNetWork = 0;
     private int mFps;
-
+    public static CordovaInterface _this_cordova;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+      if (!permissionCheck()) {
+        if (Build.VERSION.SDK_INT >= 23) {
+          ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
+        } else {
+          showNoPermissionTip(getString(noPermissionTip[mNoPermissionIndex]));
+          // finish();
+        }
+      }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mPushUrl = getIntent().getStringExtra(URL_KEY);
-        mAsync = getIntent().getBooleanExtra(ASYNC_KEY, false);
-        mAudioOnly = getIntent().getBooleanExtra(AUDIO_ONLY_KEY, false);
-        mVideoOnly = getIntent().getBooleanExtra(VIDEO_ONLY_KEY, false);
-        mOrientation = getIntent().getIntExtra(ORIENTATION_KEY, ORIENTATION_PORTRAIT.ordinal());
-        mCameraId = getIntent().getIntExtra(CAMERA_ID, Camera.CameraInfo.CAMERA_FACING_FRONT); //  1);//
-        mFlash = getIntent().getBooleanExtra(FLASH_ON, false);
-        mAuthTime = getIntent().getStringExtra(AUTH_TIME);
-        mPrivacyKey = getIntent().getStringExtra(PRIVACY_KEY);
-        mMixExtern = getIntent().getBooleanExtra(MIX_EXTERN,false);
-        mMixMain = getIntent().getBooleanExtra(MIX_MAIN, false);
-        mBeautyOn = getIntent().getBooleanExtra(BEAUTY_CHECKED, true);
-        mFps = getIntent().getIntExtra(FPS, 0);
+        addWaterMarkInfo();
+        //todo
+//        mPushUrl = getIntent().getStringExtra(URL_KEY);
+//        mAsync = getIntent().getBooleanExtra(ASYNC_KEY, false);
+//        mAudioOnly = getIntent().getBooleanExtra(AUDIO_ONLY_KEY, false);
+//        mVideoOnly = getIntent().getBooleanExtra(VIDEO_ONLY_KEY, false);
+//        mOrientation = getIntent().getIntExtra(ORIENTATION_KEY, ORIENTATION_PORTRAIT.ordinal());
+//        mCameraId = getIntent().getIntExtra(CAMERA_ID, 1); //  1);// Camera.CameraInfo.CAMERA_FACING_FRONT
+//        mFlash = getIntent().getBooleanExtra(FLASH_ON, false);
+//        mAuthTime = getIntent().getStringExtra(AUTH_TIME);
+//        mPrivacyKey = getIntent().getStringExtra(PRIVACY_KEY);
+//        mMixExtern = getIntent().getBooleanExtra(MIX_EXTERN,false);
+//        mMixMain = getIntent().getBooleanExtra(MIX_MAIN, false);
+//        mBeautyOn = getIntent().getBooleanExtra(BEAUTY_CHECKED, true);
+//        mFps = getIntent().getIntExtra(FPS, 0);
+
+      mPushUrl="rtmp://rtmp.huayustech.com/cst_app/aaa?auth_key=1652151838-0-0-1fdaf1542af97bc7119ae90116b3d2de";
+      mAsync=true;
+      mOrientation = 0;
+      mCameraId = 1;
+      mAudioOnly = false;
+      mVideoOnly = false;
+      mFlash = false;
+      mFps = 25;
+      mOrientation = 0;
+      mMixMain = false;
+      mMixExtern = false;
+      mBeautyOn = false; //美颜
+
+      mAlivcLivePushConfig = new AlivcLivePushConfig();
+      mAlivcLivePushConfig.setResolution(mDefinition);
+      mAlivcLivePushConfig.setExtraInfo("such_as_user_id");
+//      if(mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT.getOrientation() || mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT.getOrientation())
+//      {
+//        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network_land.png");
+//        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push_land.png");
+//      } else {
+//        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network.png");
+//        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push.png");
+//      }
+//      if(mAlivcLivePushConfig != null) {
+//        mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FILL);
+//      }
+//      mAlivcLivePushConfig.setFps(FPS_25);
+//      mAlivcLivePushConfig.setAudioOnly(false);
+//      mAlivcLivePushConfig.setVideoOnly(false);
+//      mAlivcLivePushConfig.setAutoFocus(true);
+//      mAlivcLivePushConfig.setCameraType(AlivcLivePushCameraTypeEnum.CAMERA_TYPE_FRONT);//前置摄像头
+//      mAlivcLivePushConfig.setAudioEncodeMode(AlivcEncodeModeEnum.Encode_MODE_SOFT);
+//      mAlivcLivePushConfig.setVideoEncodeMode(true ? AlivcEncodeModeEnum.Encode_MODE_HARD : AlivcEncodeModeEnum.Encode_MODE_SOFT); //视频硬编码
+//      mAlivcLivePushConfig.setPreviewMirror(false); //预览镜像
+//      mAlivcLivePushConfig.setPushMirror(false);    //推流镜像
+//      mAlivcLivePushConfig.setExternMainStream(true, AlivcImageFormat.IMAGE_FORMAT_YUVNV12, AlivcSoundFormat.SOUND_FORMAT_S16);
+//      mAlivcLivePushConfig.setAudioChannels(AlivcAudioChannelEnum.AUDIO_CHANNEL_ONE);
+//      mAlivcLivePushConfig.setAudioSamepleRate(AlivcAudioSampleRateEnum.AUDIO_SAMPLE_RATE_44100);
+      mAlivcLivePushConfig.setInitialVideoBitrate(1400);
+      mAlivcLivePushConfig.setAudioBitRate(1000*64);
+      mAlivcLivePushConfig.setMinVideoBitrate(600);
+      mAlivcLivePushConfig.setTargetVideoBitrate(1400);
+      mAlivcLivePushConfig.setConnectRetryCount(DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT);
+      mAlivcLivePushConfig.setConnectRetryInterval(DEFAULT_VALUE_INT_RETRY_INTERVAL);
+////      for(WaterMarkInfo info : waterMarkInfos){
+////        mAlivcLivePushConfig.removeWaterMark(info.mWaterMarkPath);
+////      }
+//      mAlivcLivePushConfig.setAlivcExternMainImageFormat(IMAGE_FORMAT_YUV420P);
+//      mAlivcLivePushConfig.setAudioChannels(AlivcAudioChannelEnum.AUDIO_CHANNEL_TWO);
+
         setOrientation(mOrientation);
         setContentView(R.layout.activity_push);
         initView();
-        mAlivcLivePushConfig = (AlivcLivePushConfig) getIntent().getSerializableExtra(AlivcLivePushConfig.CONFIG);
+
+        //mAlivcLivePushConfig = (AlivcLivePushConfig) getIntent().getSerializableExtra(AlivcLivePushConfig.CONFIG);
         mAlivcLivePusher = new AlivcLivePusher();
 
         try {
@@ -154,12 +248,14 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             showDialog(this, e.getMessage());
+          Log.e( "error: ",  e.getMessage());
         } catch (IllegalStateException e) {
             e.printStackTrace();
             showDialog(this, e.getMessage());
+          Log.e( "error: ",  e.getMessage());
         }
 
-        mLivePushFragment = LivePushFragment.newInstance(mPushUrl, mAsync, mAudioOnly, mVideoOnly, mCameraId, mFlash, mAlivcLivePushConfig.getQualityMode().getQualityMode(), mAuthTime, mPrivacyKey, mMixExtern, mMixMain, mBeautyOn, mFps, mOrientation);
+        mLivePushFragment = LivePushFragment.newInstance(mPushUrl, mAsync, mAudioOnly, mVideoOnly, mCameraId, mFlash, 0, mAuthTime, mPrivacyKey, mMixExtern, mMixMain, mBeautyOn, mFps, mOrientation);
         mPushTextStatsFragment = new PushTextStatsFragment();
         mPushDiagramStatsFragment = new PushDiagramStatsFragment();
 
@@ -167,6 +263,52 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
         mScaleDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureDetector);
         mDetector = new GestureDetector(getApplicationContext(), mGestureDetector);
         mNetWork = NetWorkUtils.getAPNType(this);
+
+        //开启异步推流
+//        mSurfaceStatus = SurfaceStatus.CREATED;
+//        if(mAlivcLivePusher != null) {
+//          try {
+//            if(mAsync) {
+//            //  mAlivcLivePusher.startPreviewAysnc(mPreviewView);
+//              mAlivcLivePusher.startPreviewAysnc(null);
+//            } else {
+//              mAlivcLivePusher.startPreview(mPreviewView);
+//            }
+//            if(mAlivcLivePushConfig.isExternMainStream()) {
+//              startYUV(getApplicationContext());
+//              startPCM(getApplicationContext());
+//            }
+//          } catch (IllegalArgumentException e) {
+//            e.toString();
+//          } catch (IllegalStateException e) {
+//            e.toString();
+//          }
+//        }
+
+
+    }
+
+    public    void   startLive(){
+      //开启异步推流
+        mSurfaceStatus = SurfaceStatus.CREATED;
+        if(mAlivcLivePusher != null) {
+          try {
+            if(mAsync) {
+            //  mAlivcLivePusher.startPreviewAysnc(mPreviewView);
+              mAlivcLivePusher.startPreviewAysnc(null);
+            } else {
+              mAlivcLivePusher.startPreview(mPreviewView);
+            }
+            if(mAlivcLivePushConfig.isExternMainStream()) {
+              startYUV(getApplicationContext());
+              startPCM(getApplicationContext());
+            }
+          } catch (IllegalArgumentException e) {
+            e.toString();
+          } catch (IllegalStateException e) {
+            e.toString();
+          }
+        }
     }
 
     public void initView() {
@@ -177,7 +319,10 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.tv_pager);
         mFragmentList.add(mLivePushFragment);
-        mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), mFragmentList) ;
+    //  FragmentActivity fa = new FragmentActivity();
+      //AppCompatActivity fa = new AppCompatActivity();
+     // final FragmentController mFragments = FragmentController.createController(new FragmentActivity.HostCallbacks());
+       // mFragmentAdapter = new FragmentAdapter(mFragments.getSupportFragmentManager(), mFragmentList) ;
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -344,7 +489,8 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
         bundle.putBoolean(BEAUTY_CHECKED, ischecked);
         bundle.putInt(FPS, fps);
         intent.putExtras(bundle);
-        activity.startActivityForResult(intent, REQ_CODE_PUSH);
+       activity.startActivityForResult(intent, REQ_CODE_PUSH);
+     // _this_cordova.getActivity().startActivity(intent );
     }
 
     @Override
@@ -389,7 +535,7 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
 
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         videoThreadOn = false;
         audioThreadOn = false;
         if(mAlivcLivePusher != null) {
@@ -479,16 +625,16 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
     }
 
     private void showDialog(Context context, String message) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle(getString(R.string.dialog_title));
-        dialog.setMessage(message);
-        dialog.setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        dialog.show();
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//        dialog.setTitle(getString(R.string.dialog_title));
+//        dialog.setMessage(message);
+//        dialog.setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+//            }
+//        });
+//        dialog.show();
     }
 
     public interface PauseState {
@@ -685,4 +831,62 @@ public class LivePushActivity extends AppCompatActivity implements IPushControll
             }
         });
     }
+
+  private int mNoPermissionIndex = 0;
+  private final int PERMISSION_REQUEST_CODE = 1;
+  private final String[] permissionManifest = {
+    Manifest.permission.CAMERA,
+    Manifest.permission.BLUETOOTH,
+    Manifest.permission.RECORD_AUDIO,
+    Manifest.permission.READ_PHONE_STATE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.INTERNET,
+  };
+
+  private final int[] noPermissionTip = {
+    R.string.no_camera_permission,
+    R.string.no_record_bluetooth_permission,
+    R.string.no_record_audio_permission,
+    R.string.no_read_phone_state_permission,
+    R.string.no_write_external_storage_permission,
+    R.string.no_read_external_storage_permission,
+  };
+
+  private boolean permissionCheck() {
+    int permissionCheck = PackageManager.PERMISSION_GRANTED;
+    String permission;
+    for (int i = 0; i < permissionManifest.length; i++) {
+      permission = permissionManifest[i];
+      mNoPermissionIndex = i;
+      if (PermissionChecker.checkSelfPermission(this, permission)
+        != PackageManager.PERMISSION_GRANTED) {
+        permissionCheck = PackageManager.PERMISSION_DENIED;
+      }
+    }
+    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private void showNoPermissionTip(String tip) {
+    Toast.makeText(this, tip, Toast.LENGTH_LONG).show();
+  }
+  private void addWaterMarkInfo() {
+    //添加三个水印，位置坐标不同
+    WaterMarkInfo waterMarkInfo = new WaterMarkInfo();
+    waterMarkInfo.mWaterMarkPath = Common.waterMark;
+    WaterMarkInfo waterMarkInfo1 = new WaterMarkInfo();
+    waterMarkInfo1.mWaterMarkPath = Common.waterMark;
+    waterMarkInfo.mWaterMarkCoordY += 0.2;
+    WaterMarkInfo waterMarkInfo2 = new WaterMarkInfo();
+    waterMarkInfo2.mWaterMarkPath = Common.waterMark;
+    waterMarkInfo2.mWaterMarkCoordY += 0.4;
+    waterMarkInfos.add(waterMarkInfo);
+    waterMarkInfos.add(waterMarkInfo1);
+    waterMarkInfos.add(waterMarkInfo2);
+  }
+
 }

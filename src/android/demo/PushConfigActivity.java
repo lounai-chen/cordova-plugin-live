@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -53,6 +54,8 @@ import com.alivc.live.pusher.WaterMarkInfo;
 import com.alivc.live.pusher.widget.FastClickUtil;
 import com.zhongzilian.chestnutapp.R;
 
+import org.apache.cordova.CordovaActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -79,7 +82,7 @@ import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_THREE;
 import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_TWO;
 import static com.alivc.live.pusher.demo.LivePushActivity.REQ_CODE_PUSH;
 
-public class PushConfigActivity extends AppCompatActivity {
+public class PushConfigActivity extends CordovaActivity {
     private static final String TAG = "PushConfigActivity";
 
     private AlivcResolutionEnum mDefinition = AlivcResolutionEnum.RESOLUTION_540P;
@@ -195,7 +198,7 @@ public class PushConfigActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -414,7 +417,8 @@ public class PushConfigActivity extends AppCompatActivity {
                 case R.id.water_position:
                     PushWaterMarkDialog pushWaterMarkDialog = new PushWaterMarkDialog();
                     pushWaterMarkDialog.setWaterMarkInfo(waterMarkInfos);
-                    pushWaterMarkDialog.show(getSupportFragmentManager(), "waterDialog");
+                  FragmentActivity fa = new FragmentActivity();
+                     pushWaterMarkDialog.show(fa.getSupportFragmentManager(), "waterDialog");
                     break;
                 case R.id.iv_back:
                     finish();
@@ -1281,9 +1285,11 @@ public class PushConfigActivity extends AppCompatActivity {
     }
 
     private AlivcLivePushConfig getPushConfig() {
+
         if(mUrl.getText().toString().isEmpty()) {
+            mUrl.setText("rtmp://rtmp.huayustech.com/aaa/bbb?auth_key=1652079240-0-0-28bfb2a5ee4e42bae1df32c2f0cdfb9b"); //todo
             Toast.makeText(this, getString(R.string.url_empty), Toast.LENGTH_LONG).show();
-            return null;
+            //return null;
         }
         mAlivcLivePushConfig.setResolution(mDefinition);
         if(!mInitRate.getText().toString().isEmpty()) {
@@ -1410,7 +1416,7 @@ public class PushConfigActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if(mAlivcLivePusher != null) {
             try {
                 mAlivcLivePusher.destroy();

@@ -60,14 +60,14 @@ public class MusicDialog extends DialogFragment implements View.OnClickListener 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        //getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         getDialog().setCanceledOnTouchOutside(true);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.DialogStyle);
+       // setStyle(DialogFragment.STYLE_NO_FRAME, R.style.DialogStyle);
     }
 
     @Nullable

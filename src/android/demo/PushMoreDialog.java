@@ -44,7 +44,7 @@ public class PushMoreDialog extends DialogFragment implements View.OnClickListen
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+       // getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         getDialog().setCanceledOnTouchOutside(true);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

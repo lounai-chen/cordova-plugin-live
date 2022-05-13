@@ -14,8 +14,11 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.Surface;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -39,17 +43,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alivc.live.pusher.AlivcAudioAACProfileEnum;
 import com.alivc.live.pusher.AlivcAudioChannelEnum;
 import com.alivc.live.pusher.AlivcAudioSampleRateEnum;
 import com.alivc.live.pusher.AlivcEncodeModeEnum;
+import com.alivc.live.pusher.AlivcFpsEnum;
 import com.alivc.live.pusher.AlivcImageFormat;
+import com.alivc.live.pusher.AlivcLivePushBGMListener;
 import com.alivc.live.pusher.AlivcLivePushCameraTypeEnum;
 import com.alivc.live.pusher.AlivcLivePushConfig;
+import com.alivc.live.pusher.AlivcLivePushError;
+import com.alivc.live.pusher.AlivcLivePushErrorListener;
+import com.alivc.live.pusher.AlivcLivePushInfoListener;
 import com.alivc.live.pusher.AlivcLivePushLogLevel;
+import com.alivc.live.pusher.AlivcLivePushNetworkListener;
 import com.alivc.live.pusher.AlivcLivePushStatsInfo;
 import com.alivc.live.pusher.AlivcLivePusher;
 import com.alivc.live.pusher.AlivcPreviewDisplayMode;
 import com.alivc.live.pusher.AlivcPreviewOrientationEnum;
+import com.alivc.live.pusher.AlivcQualityModeEnum;
 import com.alivc.live.pusher.AlivcResolutionEnum;
 import com.alivc.live.pusher.AlivcSoundFormat;
 import com.alivc.live.pusher.SurfaceStatus;
@@ -84,8 +96,8 @@ import org.webrtc.utils.AlivcLog;
 import org.apache.cordova.CordovaActivity;
 
 
-
-public class LivePushActivity extends CordovaActivity implements IPushController       {
+//CordovaActivity
+public class LivePushActivity extends CordovaActivity   implements IPushController       {
     private static final String TAG = "LivePushActivity";
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 0;
@@ -147,8 +159,9 @@ public class LivePushActivity extends CordovaActivity implements IPushController
     private int mNetWork = 0;
     private int mFps;
     public static CordovaInterface _this_cordova;
+    public static String _urlPlush;
 
-    @Override
+  @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -180,7 +193,7 @@ public class LivePushActivity extends CordovaActivity implements IPushController
 //        mBeautyOn = getIntent().getBooleanExtra(BEAUTY_CHECKED, true);
 //        mFps = getIntent().getIntExtra(FPS, 0);
 
-      mPushUrl="rtmp://rtmp.huayustech.com/cst_app/aaa?auth_key=1652151838-0-0-1fdaf1542af97bc7119ae90116b3d2de";
+      mPushUrl= _urlPlush ;  
       mAsync=true;
       mOrientation = 0;
       mCameraId = 1;
@@ -188,14 +201,15 @@ public class LivePushActivity extends CordovaActivity implements IPushController
       mVideoOnly = false;
       mFlash = false;
       mFps = 25;
-      mOrientation = 0;
       mMixMain = false;
       mMixExtern = false;
       mBeautyOn = false; //美颜
 
-      mAlivcLivePushConfig = new AlivcLivePushConfig();
-      mAlivcLivePushConfig.setResolution(mDefinition);
-      mAlivcLivePushConfig.setExtraInfo("such_as_user_id");
+     // LivePushActivity.startActivity(null, mAlivcLivePushConfig, mPushUrl, mAsync, mAudioOnly, mVideoOnly, mOrientation, mCameraId, mFlash, "", "", mMixMain, mAlivcLivePushConfig.isExternMainStream(), mBeautyOn, mFps); //mBeautyOn.isChecked()
+
+//      mAlivcLivePushConfig = new AlivcLivePushConfig();
+//      mAlivcLivePushConfig.setResolution(mDefinition);
+//      mAlivcLivePushConfig.setExtraInfo("such_as_user_id");
 //      if(mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT.getOrientation() || mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT.getOrientation())
 //      {
 //        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network_land.png");
@@ -219,17 +233,39 @@ public class LivePushActivity extends CordovaActivity implements IPushController
 //      mAlivcLivePushConfig.setExternMainStream(true, AlivcImageFormat.IMAGE_FORMAT_YUVNV12, AlivcSoundFormat.SOUND_FORMAT_S16);
 //      mAlivcLivePushConfig.setAudioChannels(AlivcAudioChannelEnum.AUDIO_CHANNEL_ONE);
 //      mAlivcLivePushConfig.setAudioSamepleRate(AlivcAudioSampleRateEnum.AUDIO_SAMPLE_RATE_44100);
-      mAlivcLivePushConfig.setInitialVideoBitrate(1400);
-      mAlivcLivePushConfig.setAudioBitRate(1000*64);
-      mAlivcLivePushConfig.setMinVideoBitrate(600);
-      mAlivcLivePushConfig.setTargetVideoBitrate(1400);
-      mAlivcLivePushConfig.setConnectRetryCount(DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT);
-      mAlivcLivePushConfig.setConnectRetryInterval(DEFAULT_VALUE_INT_RETRY_INTERVAL);
+//      mAlivcLivePushConfig.setInitialVideoBitrate(1400);
+//      mAlivcLivePushConfig.setAudioBitRate(1000*64);
+//      mAlivcLivePushConfig.setMinVideoBitrate(600);
+//      mAlivcLivePushConfig.setTargetVideoBitrate(1400);
+//      mAlivcLivePushConfig.setConnectRetryCount(DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT);
+//      mAlivcLivePushConfig.setConnectRetryInterval(DEFAULT_VALUE_INT_RETRY_INTERVAL);
 ////      for(WaterMarkInfo info : waterMarkInfos){
 ////        mAlivcLivePushConfig.removeWaterMark(info.mWaterMarkPath);
 ////      }
 //      mAlivcLivePushConfig.setAlivcExternMainImageFormat(IMAGE_FORMAT_YUV420P);
 //      mAlivcLivePushConfig.setAudioChannels(AlivcAudioChannelEnum.AUDIO_CHANNEL_TWO);
+
+
+
+      mAlivcLivePushConfig  = new  AlivcLivePushConfig();//初始化推流配置类
+      mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);//分辨率540P，最大支持720P
+      mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_20); //建议用户使用20fps
+      mAlivcLivePushConfig.setEnableBitrateControl(true); // 打开码率自适应，默认为true
+      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT);
+      // 默认为竖屏，可设置home键向左或向右横屏
+      mAlivcLivePushConfig.setAudioProfile(AlivcAudioAACProfileEnum.AAC_LC);//设置音频编码模式
+      mAlivcLivePushConfig.setQualityMode(AlivcQualityModeEnum.QM_FLUENCY_FIRST);//流畅度优先
+      mAlivcLivePushConfig.setEnableAutoResolution(true); // 打开分辨率自适应，默认为false
+      mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FIT);
+      if(mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT.getOrientation() || mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT.getOrientation())
+      {
+        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network_land.png");
+        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push_land.png");
+      } else {
+        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network.png");
+        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push.png");
+      }
+
 
         setOrientation(mOrientation);
         setContentView(R.layout.activity_push);
@@ -261,31 +297,16 @@ public class LivePushActivity extends CordovaActivity implements IPushController
 
         initViewPager();
         mScaleDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureDetector);
-        mDetector = new GestureDetector(getApplicationContext(), mGestureDetector);
+         mDetector = new GestureDetector(getApplicationContext(), mGestureDetector);
         mNetWork = NetWorkUtils.getAPNType(this);
 
-        //开启异步推流
-//        mSurfaceStatus = SurfaceStatus.CREATED;
-//        if(mAlivcLivePusher != null) {
-//          try {
-//            if(mAsync) {
-//            //  mAlivcLivePusher.startPreviewAysnc(mPreviewView);
-//              mAlivcLivePusher.startPreviewAysnc(null);
-//            } else {
-//              mAlivcLivePusher.startPreview(mPreviewView);
-//            }
-//            if(mAlivcLivePushConfig.isExternMainStream()) {
-//              startYUV(getApplicationContext());
-//              startPCM(getApplicationContext());
-//            }
-//          } catch (IllegalArgumentException e) {
-//            e.toString();
-//          } catch (IllegalStateException e) {
-//            e.toString();
-//          }
-//        }
 
 
+
+    }
+
+    public    void stopLive(){
+      mAlivcLivePusher.stopPush();
     }
 
     public    void   startLive(){
@@ -319,10 +340,12 @@ public class LivePushActivity extends CordovaActivity implements IPushController
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.tv_pager);
         mFragmentList.add(mLivePushFragment);
-    //  FragmentActivity fa = new FragmentActivity();
-      //AppCompatActivity fa = new AppCompatActivity();
-     // final FragmentController mFragments = FragmentController.createController(new FragmentActivity.HostCallbacks());
-       // mFragmentAdapter = new FragmentAdapter(mFragments.getSupportFragmentManager(), mFragmentList) ;
+    // FragmentActivity fa = new FragmentActivity();
+     // AppCompatActivity fa = new AppCompatActivity();
+      //final FragmentController mFragments = FragmentController.createController(new FragmentActivity.HostCallbacks());
+      mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), mFragmentList) ; //getSupportFragmentManager
+
+
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -336,6 +359,8 @@ public class LivePushActivity extends CordovaActivity implements IPushController
                 return false;
             }
         });
+
+
     }
 
     private void setOrientation(int orientation) {
@@ -489,7 +514,7 @@ public class LivePushActivity extends CordovaActivity implements IPushController
         bundle.putBoolean(BEAUTY_CHECKED, ischecked);
         bundle.putInt(FPS, fps);
         intent.putExtras(bundle);
-       activity.startActivityForResult(intent, REQ_CODE_PUSH);
+        activity.startActivityForResult(intent, REQ_CODE_PUSH);
      // _this_cordova.getActivity().startActivity(intent );
     }
 
@@ -625,15 +650,16 @@ public class LivePushActivity extends CordovaActivity implements IPushController
     }
 
     private void showDialog(Context context, String message) {
+      Log.e("ERROR: 123:,",message);
 //        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 //        dialog.setTitle(getString(R.string.dialog_title));
 //        dialog.setMessage(message);
-//        dialog.setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
-//            }
-//        });
+////        dialog.setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+////            @Override
+////            public void onClick(DialogInterface dialogInterface, int i) {
+////                finish();
+////            }
+////        });
 //        dialog.show();
     }
 
@@ -887,6 +913,23 @@ public class LivePushActivity extends CordovaActivity implements IPushController
     waterMarkInfos.add(waterMarkInfo);
     waterMarkInfos.add(waterMarkInfo1);
     waterMarkInfos.add(waterMarkInfo2);
+  }
+
+  private void showToast(final String text) {
+    if (getApplicationContext() == null || text == null) {
+      return;
+    }
+    Handler handler = new Handler(Looper.getMainLooper());
+    handler.post(new Runnable() {
+      @Override
+      public void run() {
+        if (getApplicationContext() != null) {
+          Toast toast = Toast.makeText( getApplicationContext() , text, Toast.LENGTH_SHORT);
+          toast.setGravity(Gravity.CENTER, 0, 0);
+          toast.show();
+        }
+      }
+    });
   }
 
 }

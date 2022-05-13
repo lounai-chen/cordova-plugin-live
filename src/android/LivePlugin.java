@@ -16,23 +16,23 @@ public class LivePlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("init")) {
-          //Intent pIntent = new Intent(this.cordova.getActivity(), MainLiveActivity.class);
-          //Intent pIntent = new Intent(this.cordova.getActivity(), PushConfigActivity.class);
-          Intent pIntent = new Intent(this.cordova.getActivity(), LivePushActivity.class);
+      if (action.equals("init")) {
+        String urlPush = args.getString(0);
+        // Intent pIntent = new Intent(this.cordova.getActivity(), MainLiveActivity.class);
+        // Intent pIntent = new Intent(this.cordova.getActivity(), PushConfigActivity.class);
+        Intent pIntent = new Intent(this.cordova.getActivity(), LivePushActivity.class);
+        LivePushActivity._urlPlush = urlPush;
+        LivePushActivity._this_cordova = this.cordova;
 
-          LivePushActivity._this_cordova = this.cordova;
-          this.cordova.getActivity().startActivity(pIntent);
-           webView.getView().bringToFront(); //view置顶
-            String message = args.getString(0);
-            this.coolMethod(message, callbackContext);
-            return true;
-        }
-        else  if (action.equals("start")) {
-            LivePushActivity lpa = new LivePushActivity();
-            lpa.startLive();
-        }
-        return false;
+        this.cordova.getActivity().startActivity(pIntent);
+
+        // webView.getView().bringToFront(); //view置顶 //todo
+
+        this.coolMethod("成功", callbackContext);
+        return true;
+      }
+
+      return false;
     }
 
     private void coolMethod(String message, CallbackContext callbackContext) {

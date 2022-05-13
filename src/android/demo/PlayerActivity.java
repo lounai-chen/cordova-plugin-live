@@ -95,7 +95,7 @@ public class PlayerActivity extends CordovaActivity implements SurfaceHolder.Cal
                     mAliPlayer.reload();
                 }
                 if (mDialog == null || !mDialog.isShowing()) {
-                    mDialog = new CommonDialog(PlayerActivity.this);
+                  //  mDialog = new CommonDialog(PlayerActivity.this);
                     mDialog.setDialogTitle("播放器出错");
                     mDialog.setDialogContent(errorInfo.getMsg());
                     mDialog.setConfirmButton(TextFormatUtil.getTextFormat(PlayerActivity.this, R.string.cancle), new DialogInterface.OnClickListener() {
@@ -289,16 +289,16 @@ public class PlayerActivity extends CordovaActivity implements SurfaceHolder.Cal
     }
 
     private void showTipDialog(String tittle, String msg) {
-        CommonDialog dialog = new CommonDialog(this);
-        dialog.setDialogTitle(tittle);
-        dialog.setDialogContent(msg);
-        dialog.setConfirmButton(TextFormatUtil.getTextFormat(this, R.string.btn_confirm), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+//        CommonDialog dialog = new CommonDialog(this);
+//        dialog.setDialogTitle(tittle);
+//        dialog.setDialogContent(msg);
+//        dialog.setConfirmButton(TextFormatUtil.getTextFormat(this, R.string.btn_confirm), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
     }
 
     @Override

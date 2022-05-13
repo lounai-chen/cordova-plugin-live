@@ -45,7 +45,7 @@ public class PushWaterMarkDialog extends DialogFragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        //getDialog().getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         getDialog().setCanceledOnTouchOutside(true);
     }
 

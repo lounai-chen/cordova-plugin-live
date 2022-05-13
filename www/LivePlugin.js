@@ -5,6 +5,4 @@ exports.init = function (arg0, success, error) {
 };
 
 
-exports.start = function (arg0, success, error) {
-    exec(success, error, 'LivePlugin', 'start', [arg0]);
-};
+ 

@@ -190,6 +190,8 @@ public class LivePushFragment extends Fragment implements Runnable {
         bundle.putInt(FPS, fps);
         bundle.putInt(PREVIEW_ORIENTATION, previewOrientation);
         livePushFragment.setArguments(bundle);
+
+
         return livePushFragment;
     }
 
@@ -208,6 +210,8 @@ public class LivePushFragment extends Fragment implements Runnable {
 
         //Fragment may be recreated, so move all init logic to onActivityCreated
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -249,6 +253,8 @@ public class LivePushFragment extends Fragment implements Runnable {
         mAnimojiOn = SharedPreferenceUtils.isAnimojiOn(getContext()) && isDeviceSupportAnimoji;
         initAnimojiEngine(getContext());
         mAnimojiButton.setVisibility(mAnimojiOn ? View.VISIBLE : View.GONE);
+
+
 
         if (pusher != null && (mBeautyOn || mAnimojiOn)) {
             pusher.setCustomDetect(new AlivcLivePushCustomDetect() {
@@ -322,6 +328,9 @@ public class LivePushFragment extends Fragment implements Runnable {
         }
 
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -963,16 +972,16 @@ public class LivePushFragment extends Fragment implements Runnable {
                 @Override
                 public void run() {
                     if (getActivity() != null) {
-                        mDialog = new CommonDialog(getActivity());
-                        mDialog.setDialogTitle(getSafeString(R.string.dialog_title));
-                        mDialog.setDialogContent(message);
-                        mDialog.setConfirmButton(TextFormatUtil.getTextFormat(getActivity(), R.string.ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        mDialog.show();
+//                        mDialog = new CommonDialog(getActivity());
+//                        mDialog.setDialogTitle(getSafeString(R.string.dialog_title));
+//                        mDialog.setDialogContent(message);
+//                        mDialog.setConfirmButton(TextFormatUtil.getTextFormat(getActivity(), R.string.ok), new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        mDialog.show();
                     }
                 }
             });
@@ -1137,70 +1146,7 @@ public class LivePushFragment extends Fragment implements Runnable {
         return mTempUrl;
     }
 
-    private void startPCM(final Context context) {
-        AlivcLivePusher pusher = mPushController.getLivePusher();
-        new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-            private AtomicInteger atoInteger = new AtomicInteger(0);
 
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
-                t.setName("LivePushActivity-readPCM-Thread" + atoInteger.getAndIncrement());
-                return t;
-            }
-        }).execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                audioThreadOn = true;
-                byte[] pcm;
-                int allSended = 0;
-                int sizePerSecond = 44100 * 2;
-                InputStream myInput = null;
-                OutputStream myOutput = null;
-                boolean reUse = false;
-                long startPts = System.nanoTime() / 1000;
-                try {
-                    File f = new File(getActivity().getFilesDir().getPath() + File.separator + "alivc_resource/441.pcm");
-                    myInput = new FileInputStream(f);
-                    // File f = new File("/sdcard/alivc_resource/441.pcm");
-                    byte[] buffer = new byte[2048];
-                    int length = myInput.read(buffer, 0, 2048);
-                    while (length > 0 && audioThreadOn) {
-                        long pts = System.nanoTime() / 1000;
-                        pusher.inputStreamAudioData(buffer, length, 44100, 1, pts);
-                        allSended += length;
-                        if ((allSended * 1000000L / sizePerSecond - 50000) > (pts - startPts)) {
-                            try {
-                                Thread.sleep(45);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        length = myInput.read(buffer);
-                        if (length < 2048) {
-                            myInput.close();
-                            myInput = new FileInputStream(f);
-                            length = myInput.read(buffer);
-                        }
-                        try {
-                            Thread.sleep(3);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    myInput.close();
-                    audioThreadOn = false;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     private void stopPcm() {
         audioThreadOn = false;

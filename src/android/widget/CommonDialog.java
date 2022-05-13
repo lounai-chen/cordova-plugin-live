@@ -32,9 +32,9 @@ public class CommonDialog extends Dialog {
     private TextView confirmButton;
     private int buttonCount;
 
-    public CommonDialog(@NonNull Context context) {
-        this(context, R.style.DialogStyle);
-    }
+//    public CommonDialog(@NonNull Context context) {
+//        //this(context, R.style.DialogStyle);
+//    }
 
     public CommonDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);

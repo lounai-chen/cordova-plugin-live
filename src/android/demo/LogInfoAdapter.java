@@ -83,8 +83,8 @@ public class LogInfoAdapter extends RecyclerView.Adapter<LogInfoAdapter.LogViewH
     public LogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_log_info, parent, false);
         LogViewHolder holder = new LogViewHolder(itemView);
-        holder.tvLabel = (TextView) itemView.findViewById(R.id.tv_label);
-        holder.tvValue = (TextView) itemView.findViewById(R.id.tv_value);
+//        holder.tvLabel = (TextView) itemView.findViewById(R.id.tv_label);
+//        holder.tvValue = (TextView) itemView.findViewById(R.id.tv_value);
         return holder;
     }
 

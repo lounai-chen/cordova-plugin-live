@@ -246,6 +246,9 @@ public class PushConfigActivity extends CordovaActivity {
             mUrl.setText(url);
         }
 
+      mUrl.setText("rtmp://rtmp.huayustech.com/aaa/bbb?auth_key=1652079240-0-0-28bfb2a5ee4e42bae1df32c2f0cdfb9b");
+      LivePushActivity.startActivity(PushConfigActivity.this, mAlivcLivePushConfig, mUrl.getText().toString(), mAsyncValue, mAudioOnlyPush, mVideoOnlyPush, mOrientationEnum, mCameraId, isFlash, mAuthTimeStr, mPrivacyKeyStr, mMixStream, mAlivcLivePushConfig.isExternMainStream(), false, mFpsConfig); //mBeautyOn.isChecked()
+
     }
 
     private void turnOnBitRateFps(boolean on)

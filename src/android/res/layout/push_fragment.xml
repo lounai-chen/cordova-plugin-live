@@ -277,21 +277,21 @@
         </RelativeLayout>
     </LinearLayout>
 
-<!--    <com.alivc.live.beautyui.AnimojiContainerView-->
-<!--        android:id="@+id/animoji_container_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:visibility="gone" />-->
+    <com.alivc.live.beautyui.AnimojiContainerView
+        android:id="@+id/animoji_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
-<!--    <com.aliyunsdk.queen.menu.BeautyMenuPanel-->
-<!--        android:id="@+id/beauty_beauty_menuPanel"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:visibility="gone"/>-->
+    <com.aliyunsdk.queen.menu.BeautyMenuPanel
+        android:id="@+id/beauty_beauty_menuPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
     <com.alivc.live.pusher.widget.DataView
         android:id="@+id/ll_data"

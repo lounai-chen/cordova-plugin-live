@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:maxHeight="5dp"
                 android:minHeight="5dp"
-
+                android:theme="@style/SeekBarColor"
                 android:progress="50" />
 
             <TextView
@@ -223,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:maxHeight="5dp"
                 android:minHeight="5dp"
-
+                android:theme="@style/SeekBarColor"
                 android:progress="50" />
 
             <TextView

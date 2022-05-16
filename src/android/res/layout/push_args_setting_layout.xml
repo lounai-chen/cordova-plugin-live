@@ -52,7 +52,7 @@
                     android:maxHeight="5dp"
                     android:minHeight="5dp"
                     android:progress="80"
-                 />
+                    android:theme="@style/SeekBarColor" />
 
                 <TextView
                     android:id="@+id/resolution_text"
@@ -523,7 +523,7 @@
                         android:maxHeight="5dp"
                         android:minHeight="5dp"
                         android:progress="0"
-                         />
+                        android:theme="@style/SeekBarColor" />
 
                     <TextView
                         android:id="@+id/min_fps_text"
@@ -582,7 +582,7 @@
                         android:maxHeight="5dp"
                         android:minHeight="5dp"
                         android:progress="80"
-                          />
+                        android:theme="@style/SeekBarColor" />
 
                     <TextView
                         android:id="@+id/fps_text"
@@ -641,7 +641,7 @@
                         android:maxHeight="5dp"
                         android:minHeight="5dp"
                         android:progress="80"
-                     />
+                        android:theme="@style/SeekBarColor" />
 
                     <TextView
                         android:id="@+id/audio_rate_text"

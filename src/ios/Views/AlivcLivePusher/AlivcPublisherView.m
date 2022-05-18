@@ -131,7 +131,7 @@ static const int maxDynamicWatermarkCount = 3;
 
 - (void)setupGuideView {
     
-    self.guideView = [[AlivcGuidePageView alloc] initWithFrame:CGRectMake(20, 0, self.bounds.size.width - 40, self.bounds.size.height/6)];
+    self.guideView = [[AlivcGuidePageView alloc] initWithFrame:CGRectMake(20, 0, self.bounds.size.width - 20, self.bounds.size.height/6)];
     self.guideView.center = self.center;
     [self addSubview:self.guideView];
 }
@@ -143,7 +143,7 @@ static const int maxDynamicWatermarkCount = 3;
     CGFloat retractX = 10;
 
     if (_config.orientation == AlivcLivePushOrientationLandscapeLeft || _config.orientation == AlivcLivePushOrientationLandscapeRight ) {
-        //self.topView.frame = CGRectMake(self.width - 80, 50, 80, self.height-100);
+        self.topView.frame = CGRectMake(self.frame.size.width - 80, 50, 80,self.frame.size.height-100);
         
         self.backButton = [self setupButtonWithFrame:(CGRectMake(retractX + 80, 50, 40, 40))
                                          normalImage:[UIImage imageNamed:@"back"]
@@ -151,7 +151,7 @@ static const int maxDynamicWatermarkCount = 3;
                                               action:@selector(backButtonAction:)];
 
     }else{
-        //self.topView.frame = CGRectMake(self.width - 80, self.height - 600, 80, 400);
+        self.topView.frame = CGRectMake( self.frame.size.width - 80, self.frame.size.height - 600, 80, 400);
         self.backButton = [self setupButtonWithFrame:(CGRectMake(retractX, 90, 40, 40))
                                          normalImage:[UIImage imageNamed:@"back"]
                                          selectImage:nil
@@ -198,7 +198,9 @@ static const int maxDynamicWatermarkCount = 3;
                                               selectImage:nil
                                                    action:@selector(beautySettingButtonAction:)];
     //[self.beautySettingButton setEnabled:self.config.beautyOn];
-    [self.topView addSubview: self.beautySettingButton];
+    if(false){
+        [self.topView addSubview: self.beautySettingButton];
+    }
 
     self.topView.showsVerticalScrollIndicator = NO;
     [self.topView setContentSize:CGSizeMake(topViewButtonSize, topViewButtonSize * 7)];
@@ -290,7 +292,7 @@ static const int maxDynamicWatermarkCount = 3;
     self.infoLabel = [[UILabel alloc] init];
     self.infoLabel.frame = CGRectMake(20, 60, self.bounds.size.width - 40, 40);
     self.infoLabel.textColor = [UIColor blackColor];
-//    self.infoLabel.backgroundColor = AlivcRGBA(255, 255, 255, 0.5);
+    self.infoLabel.backgroundColor = UIColor.clearColor;//(255, 255, 255, 0.5);
     self.infoLabel.font = [UIFont systemFontOfSize:14.f];
     self.infoLabel.layer.masksToBounds = YES;
     self.infoLabel.layer.cornerRadius = 10;
@@ -468,12 +470,12 @@ static const int maxDynamicWatermarkCount = 3;
     CGFloat height = self.bounds.size.height;
     
     self.debugChartView = [[AlivcDebugChartView alloc] initWithFrame:(CGRectMake(width, 0, width, height))];
-   // self.debugChartView.backgroundColor = AlivcRGBA(255, 255, 255, 0.8);
+    self.debugChartView.backgroundColor = UIColor.redColor;//AlivcRGBA(255, 255, 255, 0.8);
     [self addSubview:self.debugChartView];
     
     
     self.debugTextView = [[AlivcDebugTextView alloc] initWithFrame:(CGRectMake(-width, 0, width, height))];
-    //self.debugTextView.backgroundColor = AlivcRGBA(255, 255, 255, 0.8);
+    self.debugTextView.backgroundColor = UIColor.redColor; //AlivcRGBA(255, 255, 255, 0.8);
     [self addSubview:self.debugTextView];
 }
 
@@ -544,7 +546,7 @@ static const int maxDynamicWatermarkCount = 3;
     button.backgroundColor = [UIColor clearColor];
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-//    button.titleLabel.backgroundColor = [UIColor redColor];
+   //  button.titleLabel.backgroundColor = [UIColor redColor];
 //    button.layer.masksToBounds = YES;
 //    button.layer.cornerRadius = rect.size.height / 5;
     

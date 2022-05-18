@@ -16,7 +16,10 @@
         <config-file parent="/*" target="AndroidManifest.xml" />
         <source-file src="src/android/LivePlugin.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" />
         
-             <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
+        <!-- <source-file src="src/android/*.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" /> -->
+        
+        <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
+
     </platform>
 
 
@@ -28,5 +31,18 @@
             </feature>
         </config-file>
         <source-file src="src/ios/LivePlugin.m" />
+
+
+        <framework src="src/ios/SDK/alivcffmpeg.framework" />
+        <framework src="src/ios/SDK/AlivcLibReplayKitExt.framework" />
+        <framework src="src/ios/SDK/AlivcLivePusher.framework" />
+        <framework src="src/ios/SDK/AliyunPlayer.framework" />
+        <framework src="src/ios/SDK/AliyunQueenUIKit.framework" custom="true"/>
+        <framework src="src/ios/SDK/artcSource.framework" />
+        <framework src="src/ios/SDK/MNN.framework" custom="true"/>
+        <framework src="src/ios/SDK/opencv2.framework"  />
+        <framework src="src/ios/SDK/queen.framework"  />
+        <framework src="src/ios/SDK/RtsSDK.framework"  />
+
     </platform>
 </plugin>

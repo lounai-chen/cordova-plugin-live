@@ -89,7 +89,7 @@ int64_t getCurrentTimeUs()
     [self initMotionManager];
 
     // 如果不需要退后台继续推流，可以参考这套退后台通知的实现。
-//    [self addBackgroundNotifications];
+    [self addBackgroundNotifications];
 
     
     [self setupSubviews];
@@ -103,14 +103,14 @@ int64_t getCurrentTimeUs()
     defaultSampleRate = self.pushConfig.audioSampleRate;
 
     int ret = [self setupPusher];
-    
+
     if (ret != 0) {
         [self showPusherInitErrorAlert:ret];
         return;
     }
-    
+
     ret = [self startPreview];
-    
+
     if (ret != 0) {
         [self showPusherStartPreviewErrorAlert:ret isStart:YES];
         return;
@@ -295,8 +295,9 @@ int64_t getCurrentTimeUs()
         _audioStreamFp = 0;
     }
     
+    //[self stopPush];
+    //[self stopPreview] ;
     
-        
    
     
     if (self.livePusher) {
@@ -304,6 +305,7 @@ int64_t getCurrentTimeUs()
     }
     
     self.livePusher = nil;
+    
 }
 
 
@@ -874,6 +876,7 @@ int64_t getCurrentTimeUs()
 
 #pragma mark - AlivcPublisherViewDelegate
 
+//返回，停止预览，停止推流
 - (void)publisherOnClickedBackButton {
     // zzy 20220316 横屏问题 add begin
 //    self.allowSelectInterfaceOrientation = NO;
@@ -882,7 +885,7 @@ int64_t getCurrentTimeUs()
     [self cancelTimer];
     [self destoryPusher];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

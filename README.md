@@ -2,20 +2,20 @@
 cordova live 直播推流插件 , 集成的是阿里云SDK
 
 
-1.安装命令
+### 1.安装命令
 
 ```
 cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ```
 
-2.使用方法
-`LivePlugin.init('您的推流地址')`
+### 2.使用方法
+`LivePlugin.init('您的推流地址',function(s){ },function(e){alert('error: '+e)})`
 
 
-**安卓配置**
+### **安卓配置**
 
 *1.注意您的cordova项目, "cordova-android" 的依赖版本起码是 ==10.1.2==*
-*2.文件太多,需手动拷贝到对应目录*
+*2.依赖库,AndroidManifest需手动对应的修改*
 
 0.AndroidManifest 
 
@@ -188,11 +188,16 @@ dependencies {
 ```
 
 
-**ios配置**
+### **ios配置**
+
+不支持模拟器调试
 
 
+
+##### *注意:插件的文件实在太多,就没写在plugin.xml配置文件里,需==手动==拷贝到对应目录* 
 
 
 参考链接
-[https://help.aliyun.com/document_detail/94844.html](https://note.youdao.com/) 
-https://www.jianshu.com/p/7232940d3e3f 
+阿里云官网文档: [https://help.aliyun.com/document_detail/94844.html](https://note.youdao.com/)
+
+IOS全球化多语言配置: https://www.jianshu.com/p/7232940d3e3f 

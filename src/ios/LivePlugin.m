@@ -22,34 +22,37 @@
 @implementation LivePlugin
 
 - (void)pluginInitialize {
-    _pushConfigVC = [[AlivcLivePushConfigViewController alloc] init];
-    _publisherVC = [[AlivcLivePusherViewController alloc] init];
+    //_pushConfigVC = [[AlivcLivePushConfigViewController alloc] init];
+   // _publisherVC = [[AlivcLivePusherViewController alloc] init];
 }
 
 - (void)init:(CDVInvokedUrlCommand*)command
 {
-//    AlivcLivePushConfigViewController *_live_config = [[AlivcLivePushConfigViewController alloc] init];
-//    _live_config.viewDidLoad();
-    
-    
-  //  AlivcLivePushConfigViewController *pushConfigVC =  [[AlivcLivePushConfigViewController alloc] init];
-   // _pushConfigVC.viewDidLoad(@"");
-   // [self.pushConfigVC viewDidLoad];
-//    self.viewController = _pushConfigVC;
-    //[self.viewController.navigationController pushViewController:self.pushConfigVC animated:false];
- 
-    
-    
-//    CDVPluginResult* pluginResult = nil;
-//    NSString* echo = @"111";// [command.arguments objectAtIndex:0];
-//
-//    if (echo != nil && [echo length] > 0) {
-//        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-//    } else {
-//        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-//    }
-//
-//    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+        
+        
+        // If a popover is already open, close it; we only want one at a time.
+        if (self.publisherVC != nil) {
+             
+            [self.publisherVC dismissViewControllerAnimated:YES completion:nil];
+            self.publisherVC = nil;
+        }
+      
+        
+        if(self.publisherVC == nil){
+            self.publisherVC = [[AlivcLivePusherViewController alloc] init];
+        }
+
+    CDVPluginResult* pluginResult = nil;
+    NSString* push_url =  [command.arguments objectAtIndex:0];
+
+    if (push_url == nil || [push_url length] == 0) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+     
     
     self.pushConfig = [[AlivcLivePushConfig alloc] init];
     self.pushConfig.resolution = AlivcLivePushResolution540P;//默认为540P，最大支持720P
@@ -62,30 +65,24 @@
     self.pushConfig.enableAutoResolution = YES; //分辨率自适应
   
     
-    _publisherVC.pushURL = @"rtmp://rtmp.huayustech.com/kk568/lkiu?auth_key=1652783701-0-0-409541ae4ca292e997fc56166cba15b5";
-    _publisherVC.pushConfig = self.pushConfig;
-    _publisherVC.beautyOn = false;// self.beautyOn;
-    _publisherVC.isUseAsyncInterface = false;// self.isUseAsync;
-    _publisherVC.authKey = nil;// self.authKey;
-    _publisherVC.authDuration = nil;// self.authDuration;
-    _publisherVC.isUserMainStream = false; //self.isUserMainStream;
-    _publisherVC.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self.viewController presentViewController:self.publisherVC animated:YES completion:nil];
+        self.publisherVC.pushURL = push_url;// @"rtmp://rtmp.huayustech.com/kk568/lkiu?auth_key=1652783701-0-0-409541ae4ca292e997fc56166cba15b5";
+        self.publisherVC.pushConfig = self.pushConfig;
+        self.publisherVC.beautyOn = false;
+        self.publisherVC.isUseAsyncInterface = false;
+        self.publisherVC.authKey = nil;
+        self.publisherVC.authDuration = nil;
+        self.publisherVC.isUserMainStream = false;
+        self.publisherVC.modalPresentationStyle = UIModalPresentationFullScreen;
     
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];
+    [self.viewController presentViewController:self.publisherVC animated:YES completion:^{
+        //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     
-    // Check command.arguments here.
-//           [self.commandDelegate runInBackground:^{
-//              // [self.viewController.navigationController pushViewController:self.pushConfigVC animated:false];
-//               [self.pushConfigVC viewDidLoad];
-//
-//               NSString* payload = nil;
-//               // Some blocking logic...
-//               CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:payload];
-//               // The sendPluginResult method is thread-safe.
-//               [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-//           }];
+    });
 }
 
 @end

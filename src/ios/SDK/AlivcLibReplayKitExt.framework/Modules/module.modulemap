@@ -1,0 +1,6 @@
+framework module AlivcLibReplayKitExt {
+  umbrella header "AlivcLibReplayKitExt.h"
+
+  export *
+  module * { export * }
+}

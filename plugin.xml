@@ -16,7 +16,7 @@
         <config-file parent="/*" target="AndroidManifest.xml" />
         <!-- <source-file src="src/android/LivePlugin.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" /> -->
         
-        <source-file src="src/android/" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" />
+        <source-file src="src/android/LivePlugin/" target-dir="src/com/alivc/live/pusher/demo/" />
         
         <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
 
@@ -73,7 +73,7 @@
             </feature>
         </config-file>
         <!-- <source-file src="src/ios/LivePlugin.m" /> -->
-        <source-file src="src/ios/" />
+        <source-file src="src/ios/LivePlugin/" />
 
 
         <framework src="src/ios/SDK/alivcffmpeg.framework" />

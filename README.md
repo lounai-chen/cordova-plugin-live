@@ -24,88 +24,17 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 <application ==android:allowBackup="true"==    />
 
 <!--      begin live-->
-      <activity
-        android:name="com.alivc.live.pusher.demo.MainActivity"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait"
-        android:alwaysRetainTaskState="true"
-        android:clearTaskOnLaunch="false"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:windowSoftInputMode="stateHidden|adjustPan">
-        <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
+      
+      <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
+      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.PushConfigActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.PlayerActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <activity android:alwaysRetainTaskState="true" android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" android:name="com.alivc.live.pusher.demo.VideoRecordConfigActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.LicenseActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <activity android:alwaysRetainTaskState="true" android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" android:name="com.alivc.live.pusher.demo.LivePushActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      <service android:enabled="true" android:foregroundServiceType="mediaProjection" android:name="com.alivc.live.pusher.demo.ForegroundService" />
 
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
-
-      <activity
-        android:name="com.alivc.live.pusher.demo.PushConfigActivity"
-        android:screenOrientation="portrait"
-        android:alwaysRetainTaskState="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-      <activity
-        android:name="com.alivc.live.pusher.demo.PlayerActivity"
-        android:screenOrientation="portrait"
-        android:alwaysRetainTaskState="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-      <activity
-        android:name="com.alivc.live.pusher.demo.VideoRecordConfigActivity"
-        android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
-        android:screenOrientation="portrait"
-        android:alwaysRetainTaskState="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-      <activity
-        android:name="com.alivc.live.pusher.demo.LicenseActivity"
-        android:screenOrientation="portrait"
-        android:alwaysRetainTaskState="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-      <activity
-        android:name="com.alivc.live.pusher.demo.LivePushActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-      <activity
-        android:name="com.mob.tools.MobUIShell"
-        android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar"
-        android:windowSoftInputMode="stateHidden|adjustResize">
-
-        <intent-filter>
-          <data android:scheme="tencent100371282" />
-          <action android:name="android.intent.action.VIEW" />
-
-          <category android:name="android.intent.category.BROWSABLE" />
-          <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-        <!-- 调用新浪原生SDK，需要注册的回调activity -->
-        <intent-filter>
-          <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-          <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-        <!--集成line客户端登录授权，需要添如下格式的过滤器-->
-        <intent-filter>
-          <data android:scheme="line.1477692153" />
-          <action android:name="android.intent.action.VIEW" />
-
-          <category android:name="android.intent.category.BROWSABLE" />
-          <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-      </activity>
-
-      <service
-        android:name="com.alivc.live.pusher.demo.ForegroundService"
-        android:enabled="true"
-        android:foregroundServiceType="mediaProjection"/>
-
+      <meta-data android:name="Mob-AppKey" android:value="1aeeb15ac7a52" />
+      <meta-data android:name="Mob-AppSecret" android:value="1aeeb15ac7a52" />
       
 <!--      end  live-->
 ```
@@ -154,7 +83,7 @@ dependencies {
 
 
 
-##### *注意:插件的图片,多语言配置,就没写在plugin.xml配置文件里,需==手动==拷贝到对应目录* 
+##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需==手动==拷贝到对应目录* 
 
 
 参考链接

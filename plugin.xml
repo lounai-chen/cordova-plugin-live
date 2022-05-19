@@ -14,12 +14,18 @@
             </feature>
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml" />
-        <!-- <source-file src="src/android/LivePlugin.java" target-dir="src/com/alivc/live/pusher/demo/LivePlugin" /> -->
         
-        <source-file src="src/android/LivePlugin/" target-dir="src/com/alivc/live/pusher/demo/" />
+         
+        <source-file src="src/android/pusher/" target-dir="java/com/alivc/live/" />
+        <!-- <source-file src="src/android/LivePlugin/LivePlugin.java" target-dir="src/com/alivc/live/pusher/" /> -->
+        
+       
+        <!-- 资源文件容易冲突,故注释了 -->
+        <!-- <source-file src="src/android/res/" target-dir="src/main/res/"/>  -->
+        <!-- <source-file src="src/android/assets/" target-dir="src/main/"/>  -->
+        <source-file src="src/android/commonlibs/" target-dir="/"/> 
         
         <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
-
 
         <config-file parent="/*" target="AndroidManifest.xml"> 
             <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -72,8 +78,9 @@
                 <param name="ios-package" value="LivePlugin" />
             </feature>
         </config-file>
-        <!-- <source-file src="src/ios/LivePlugin.m" /> -->
+       
         <source-file src="src/ios/LivePlugin/" />
+        <!-- <source-file src="src/ios/LivePlugin/LivePlugin.m" /> -->
 
 
         <framework src="src/ios/SDK/alivcffmpeg.framework" />

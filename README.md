@@ -21,7 +21,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 
 ```
-<application android:allowBackup="true"    />
+<application ==android:allowBackup="true"==    />
 
 <!--      begin live-->
       <activity

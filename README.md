@@ -84,6 +84,9 @@ dependencies {
 
 2.AliyunQueenUIKit.framework,MNN.framework 设置为 Do Not Embed,  其他的framework设置为 Embed & Sign 
 
+3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加 
+
+
 
 
 ##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需==手动==拷贝到对应目录* 

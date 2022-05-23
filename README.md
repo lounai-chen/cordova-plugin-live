@@ -80,7 +80,9 @@ dependencies {
 
 ### **ios配置**
 
-不支持模拟器调试
+1.不支持模拟器调试 
+
+2.AliyunQueenUIKit.framework,MNN.framework 设置为 Do Not Embed,  其他的framework设置为 Embed & Sign 
 
 
 

@@ -9,7 +9,19 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ```
 
 ### 2.使用方法
-`LivePlugin.init('您的推流地址',function(s){ },function(e){alert('error: '+e)})`
+`LivePlugin.init('您的推流地址',function(s){ },function(e){alert('error: '+e)})` 
+```
+ *   以下配置,可以让html的UI界面显示在JAVA界面的上面
+ *    body{
+ *       visibility: hidden;
+ *       background-color: transparent;
+ *     }
+ *
+ *     div {
+ *         visibility: visible;
+ *     }
+ ``` 
+
 
 
 ### **安卓配置**

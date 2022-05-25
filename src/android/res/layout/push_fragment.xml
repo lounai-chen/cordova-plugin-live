@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     >
 
+<SurfaceView
+    android:id="@+id/frg_preview_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+
     <ImageView
         android:id="@+id/exit"
         android:layout_width="30dp"

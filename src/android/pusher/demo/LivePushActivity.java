@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -97,7 +98,7 @@ import org.apache.cordova.CordovaActivity;
 
 
 //CordovaActivity
-public class LivePushActivity extends CordovaActivity   implements IPushController       {
+public class LivePushActivity extends  CordovaActivity   implements IPushController       {
     private static final String TAG = "LivePushActivity";
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 0;
@@ -121,7 +122,7 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
     public SurfaceView mPreviewView;
     private ViewPager mViewPager;
 
-    private List<Fragment> mFragmentList = new ArrayList<>();
+    private List<android.app.Fragment> mFragmentList = new ArrayList<>();
     private FragmentAdapter mFragmentAdapter;
 
     private GestureDetector mDetector;
@@ -159,6 +160,7 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
     private int mNetWork = 0;
     private int mFps;
     public static CordovaInterface _this_cordova;
+  public static com.alivc.live.pusher.demo.LivePlugin  _this_plugin;
     public static String _urlPlush;
 
   @Override
@@ -173,6 +175,8 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
           // finish();
         }
       }
+
+
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -193,7 +197,7 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
 //        mBeautyOn = getIntent().getBooleanExtra(BEAUTY_CHECKED, true);
 //        mFps = getIntent().getIntExtra(FPS, 0);
 
-      mPushUrl= _urlPlush ;  
+      mPushUrl= _urlPlush ;
       mAsync=true;
       mOrientation = 0;
       mCameraId = 1;
@@ -247,53 +251,58 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
 
 
 
-      mAlivcLivePushConfig  = new  AlivcLivePushConfig();//初始化推流配置类
-      mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);//分辨率540P，最大支持720P
-      mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_20); //建议用户使用20fps
-      mAlivcLivePushConfig.setEnableBitrateControl(true); // 打开码率自适应，默认为true
-      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT);
-      // 默认为竖屏，可设置home键向左或向右横屏
-      mAlivcLivePushConfig.setAudioProfile(AlivcAudioAACProfileEnum.AAC_LC);//设置音频编码模式
-      mAlivcLivePushConfig.setQualityMode(AlivcQualityModeEnum.QM_FLUENCY_FIRST);//流畅度优先
-      mAlivcLivePushConfig.setEnableAutoResolution(true); // 打开分辨率自适应，默认为false
-      mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FIT);
-      if(mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT.getOrientation() || mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT.getOrientation())
-      {
-        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network_land.png");
-        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push_land.png");
-      } else {
-        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network.png");
-        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push.png");
-      }
+//      mAlivcLivePushConfig  = new  AlivcLivePushConfig();//初始化推流配置类
+//      mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);//分辨率540P，最大支持720P
+//      mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_20); //建议用户使用20fps
+//      mAlivcLivePushConfig.setEnableBitrateControl(true); // 打开码率自适应，默认为true
+//      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT);
+//      // 默认为竖屏，可设置home键向左或向右横屏
+//      mAlivcLivePushConfig.setAudioProfile(AlivcAudioAACProfileEnum.AAC_LC);//设置音频编码模式
+//      mAlivcLivePushConfig.setQualityMode(AlivcQualityModeEnum.QM_FLUENCY_FIRST);//流畅度优先
+//      mAlivcLivePushConfig.setEnableAutoResolution(true); // 打开分辨率自适应，默认为false
+//      mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FIT);
+//      if(mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT.getOrientation() || mAlivcLivePushConfig.getPreviewOrientation() == AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT.getOrientation())
+//      {
+//        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network_land.png");
+//        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push_land.png");
+//      } else {
+//        mAlivcLivePushConfig.setNetworkPoorPushImage(getFilesDir().getPath() + File.separator + "alivc_resource/poor_network.png");
+//        mAlivcLivePushConfig.setPausePushImage(getFilesDir().getPath() + File.separator + "alivc_resource/background_push.png");
+//      }
+//
+//
+//        setOrientation(mOrientation);
+//        setContentView(R.layout.activity_push);
+//        initView();
+//
+//        //mAlivcLivePushConfig = (AlivcLivePushConfig) getIntent().getSerializableExtra(AlivcLivePushConfig.CONFIG);
+//        mAlivcLivePusher = new AlivcLivePusher();
+//
+//        try {
+//            mAlivcLivePusher.init(getApplicationContext(),mAlivcLivePushConfig);
+//            mAlivcLivePusher.setLogLevel(AlivcLivePushLogLevel.AlivcLivePushLogLevelInfo);
+//            String logPath = getFilePath(getApplicationContext(), "log_path");
+//            // full log file limited was kLogMaxFileSizeInKB * 5 (parts)
+//            int maxPartFileSizeInKB = 100 * 1024 * 1024; //100G
+//            mAlivcLivePusher.setLogDirPath(logPath, maxPartFileSizeInKB);
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//            showDialog(this, e.getMessage());
+//          Log.e( "error: ",  e.getMessage());
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//            showDialog(this, e.getMessage());
+//          Log.e( "error: ",  e.getMessage());
+//        }
+//
+//        mLivePushFragment = LivePushFragment.newInstance(mPushUrl, mAsync, mAudioOnly, mVideoOnly, mCameraId, mFlash, 0, mAuthTime, mPrivacyKey, mMixExtern, mMixMain, mBeautyOn, mFps, mOrientation);
+//        mPushTextStatsFragment = new PushTextStatsFragment();
+//        mPushDiagramStatsFragment = new PushDiagramStatsFragment();
 
 
-        setOrientation(mOrientation);
+            setOrientation(mOrientation);
         setContentView(R.layout.activity_push);
         initView();
-
-        //mAlivcLivePushConfig = (AlivcLivePushConfig) getIntent().getSerializableExtra(AlivcLivePushConfig.CONFIG);
-        mAlivcLivePusher = new AlivcLivePusher();
-
-        try {
-            mAlivcLivePusher.init(getApplicationContext(),mAlivcLivePushConfig);
-            mAlivcLivePusher.setLogLevel(AlivcLivePushLogLevel.AlivcLivePushLogLevelInfo);
-            String logPath = getFilePath(getApplicationContext(), "log_path");
-            // full log file limited was kLogMaxFileSizeInKB * 5 (parts)
-            int maxPartFileSizeInKB = 100 * 1024 * 1024; //100G
-            mAlivcLivePusher.setLogDirPath(logPath, maxPartFileSizeInKB);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            showDialog(this, e.getMessage());
-          Log.e( "error: ",  e.getMessage());
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            showDialog(this, e.getMessage());
-          Log.e( "error: ",  e.getMessage());
-        }
-
-        mLivePushFragment = LivePushFragment.newInstance(mPushUrl, mAsync, mAudioOnly, mVideoOnly, mCameraId, mFlash, 0, mAuthTime, mPrivacyKey, mMixExtern, mMixMain, mBeautyOn, mFps, mOrientation);
-        mPushTextStatsFragment = new PushTextStatsFragment();
-        mPushDiagramStatsFragment = new PushDiagramStatsFragment();
 
         initViewPager();
         mScaleDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureDetector);
@@ -305,45 +314,35 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
 
     }
 
-    public    void stopLive(){
-      mAlivcLivePusher.stopPush();
-    }
-
-    public    void   startLive(){
-      //开启异步推流
-        mSurfaceStatus = SurfaceStatus.CREATED;
-        if(mAlivcLivePusher != null) {
-          try {
-            if(mAsync) {
-            //  mAlivcLivePusher.startPreviewAysnc(mPreviewView);
-              mAlivcLivePusher.startPreviewAysnc(null);
-            } else {
-              mAlivcLivePusher.startPreview(mPreviewView);
-            }
-            if(mAlivcLivePushConfig.isExternMainStream()) {
-              startYUV(getApplicationContext());
-              startPCM(getApplicationContext());
-            }
-          } catch (IllegalArgumentException e) {
-            e.toString();
-          } catch (IllegalStateException e) {
-            e.toString();
-          }
-        }
-    }
 
     public void initView() {
         mPreviewView = (SurfaceView) findViewById(R.id.preview_view);
         mPreviewView.getHolder().addCallback(mCallback);
+
+        //隐藏预览界面 (但内容还在)
+//      mPreviewView.setVisibility(View.VISIBLE);
+//      mPreviewView.bringToFront();
+ // mPreviewView.setBackgroundColor(Color.TRANSPARENT);
+//      mPreviewView.setBackgroundColor(0); // 设置背景色
+//      mPreviewView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
+
+       //      _this_plugin.webView.getView().bringToFront();
+     // _this_plugin.webView.getView().bringToFront();
     }
 
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.tv_pager);
-        mFragmentList.add(mLivePushFragment);
+       mFragmentList.add(mLivePushFragment); // todo
+
+
+
+
     // FragmentActivity fa = new FragmentActivity();
      // AppCompatActivity fa = new AppCompatActivity();
       //final FragmentController mFragments = FragmentController.createController(new FragmentActivity.HostCallbacks());
-      mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), mFragmentList) ; //getSupportFragmentManager
+
+    //  mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), mFragmentList) ; //getSupportFragmentManager
+//todo
 
 
         mViewPager.setAdapter(mFragmentAdapter);
@@ -364,13 +363,13 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
     }
 
     private void setOrientation(int orientation) {
-        if(orientation == ORIENTATION_PORTRAIT.ordinal()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else if(orientation == ORIENTATION_LANDSCAPE_HOME_RIGHT.ordinal()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else if(orientation == ORIENTATION_LANDSCAPE_HOME_LEFT.ordinal()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-        }
+//        if(orientation == ORIENTATION_PORTRAIT.ordinal()) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        } else if(orientation == ORIENTATION_LANDSCAPE_HOME_RIGHT.ordinal()) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        } else if(orientation == ORIENTATION_LANDSCAPE_HOME_LEFT.ordinal()) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+//        }
     }
 
     private GestureDetector.OnGestureListener mGestureDetector = new GestureDetector.OnGestureListener() {
@@ -644,8 +643,14 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
         return this.mStateListener;
     }
 
+
+
     @Override
     public SurfaceView getPreviewView() {
+      if(mPreviewView==null){
+        mPreviewView = (SurfaceView) findViewById(R.id.preview_view);
+        mPreviewView.getHolder().addCallback(mCallback);
+      }
         return this.mPreviewView;
     }
 
@@ -900,6 +905,7 @@ public class LivePushActivity extends CordovaActivity   implements IPushControll
   private void showNoPermissionTip(String tip) {
     Toast.makeText(this, tip, Toast.LENGTH_LONG).show();
   }
+
   private void addWaterMarkInfo() {
     //添加三个水印，位置坐标不同
     WaterMarkInfo waterMarkInfo = new WaterMarkInfo();

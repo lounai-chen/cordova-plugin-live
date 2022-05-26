@@ -74,9 +74,21 @@
         self.publisherVC.isUserMainStream = false;
         self.publisherVC.modalPresentationStyle = UIModalPresentationFullScreen;
     
-    [self.viewController presentViewController:self.publisherVC animated:YES completion:^{
-        //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
-    }];
+    // [self.viewController presentViewController:self.publisherVC animated:YES completion:^{
+    //     //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
+    // }];
+
+      [self.viewController addChildViewController:self.publisherVC];
+ 
+          // display the camera below the webview
+
+          // make transparent
+          self.webView.opaque = NO;
+          self.webView.backgroundColor = [UIColor clearColor];
+
+          [self.webView.superview addSubview:self.publisherVC.view];
+          [self.webView.superview bringSubviewToFront:self.webView];
+
     
     
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];

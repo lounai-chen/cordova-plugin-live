@@ -85,6 +85,7 @@ import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_FRON
 //import com.alivc.live.beauty.constant.BeautySDKType;
 import com.alivc.component.custom.AlivcLivePushCustomDetect;
 import com.alivc.live.pusher.SurfaceStatus;
+import com.alivc.live.pusher.demo.LivePlugin;
 import com.alivc.live.pusher.widget.CommonDialog;
 import com.alivc.live.pusher.widget.DataView;
 import com.alivc.live.pusher.widget.FastClickUtil;
@@ -99,7 +100,12 @@ import com.zhongzilian.chestnutapp.R;
 
 public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static Context mAppContext;
-  public static String mUrlPush;
+  public static String mPlugin_UrlPush;
+  public static String mPlugin_PreviewOrientationEnum = "1";
+  public static String mPlugin_CameraIsFront = "1";
+  public static String mPlugin_AudioOnly = "0";
+  public static String mPlugin_VideoOnly = "0";
+
   public static final String TAG = "LivePushFragment";
 
   private static final String URL_KEY = "url_key";
@@ -146,7 +152,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private boolean isFlash = false;
   private boolean mMixExtern = false;
   private boolean mMixMain = false;
-  private boolean flashState = true;
+  private boolean flashState = false;
 
   private int snapshotCount = 0;
 
@@ -259,31 +265,37 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
 //            mPreviewOrientation = getArguments().getInt(PREVIEW_ORIENTATION);
 //            flashState = isFlash;
 //        }
-    mPushUrl= mUrlPush;
-    mAsync=true;
-    // mOrientation = 0;
-    mCameraId = 1;
-    //mAudioOnly = false;
-    mVideoOnly = false;
+    mPushUrl= mPlugin_UrlPush;
+    mPreviewOrientation = Integer.parseInt(mPlugin_PreviewOrientationEnum);
+    mCameraId =  Integer.parseInt(mPlugin_CameraIsFront); // 1前置摄像头
+    mAudio = mPlugin_AudioOnly == "1"; // 纯音频
+    mVideoOnly = mPlugin_VideoOnly == "1"; //纯视频
     //mFlash = false;
+    mAsync=true;
     mFps = 25;
     mMixMain = false;
     mMixExtern = false;
     mBeautyOn = false; //美颜
 
-
     mAlivcLivePushConfig  = new AlivcLivePushConfig();//初始化推流配置类
     mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);//分辨率540P，最大支持720P
     mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_20); //建议用户使用20fps
     mAlivcLivePushConfig.setEnableBitrateControl(true); // 打开码率自适应，默认为true
-    mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT);
-    // 默认为竖屏，可设置home键向左或向右横屏
+    if(mPreviewOrientation==2){
+      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT);
+    }
+    else if(mPreviewOrientation==3) {
+      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT);
+    }
+    else{
+      mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT);   // 默认为竖屏，可设置home键向左或向右横屏
+    }
     mAlivcLivePushConfig.setAudioProfile(AlivcAudioAACProfileEnum.AAC_LC);//设置音频编码模式
     mAlivcLivePushConfig.setQualityMode(AlivcQualityModeEnum.QM_FLUENCY_FIRST);//流畅度优先
     mAlivcLivePushConfig.setEnableAutoResolution(true); // 打开分辨率自适应，默认为false
     mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FIT);
 
-      mAlivcLivePusher    = new AlivcLivePusher();
+    mAlivcLivePusher    = new AlivcLivePusher();
 
     try {
       mAlivcLivePusher.init(mAppContext,mAlivcLivePushConfig);
@@ -303,8 +315,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     }
 
 
-
-
     if (mAlivcLivePusher != null) {
       mAlivcLivePusher.setLivePushInfoListener(mPushInfoListener);
       mAlivcLivePusher.setLivePushErrorListener(mPushErrorListener);
@@ -322,8 +332,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     mAnimojiOn = SharedPreferenceUtils.isAnimojiOn(getContext()) && isDeviceSupportAnimoji;
     initAnimojiEngine(getContext());
     mAnimojiButton.setVisibility(mAnimojiOn ? View.VISIBLE : View.GONE);
-
-
 
     if (mAlivcLivePusher != null && (mBeautyOn || mAnimojiOn)) {
       mAlivcLivePusher.setCustomDetect(new AlivcLivePushCustomDetect() {
@@ -541,24 +549,63 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   }
 
   public   void StartPreview(){
-//  if(mPushController==null){
-//    mPushController = new LivePushActivity();
-//  }
-//    mPreviewView = mPushController.getPreviewView();
     mAlivcLivePusher.startPreviewAysnc(mPreviewView);
   }
 
   public   void StartPushLive(){
-
     mAlivcLivePusher.startPushAysnc(mPushUrl);
   }
 
   public   void StopLive(){
     mAlivcLivePusher.stopPush();
     stopPcm();
-
-
   }
+
+  //关闭预览
+  public   void StopPreview(){
+    mAlivcLivePusher.stopPreview();
+  }
+
+  //重新推流
+  public   void RestartPushAync() {
+    if (!mIsStartAsnycPushing) {
+      mIsStartAsnycPushing = true;
+      mAlivcLivePusher.restartPushAync();
+    }
+  }
+
+  //暂停
+  public  void Pause() {
+    mAlivcLivePusher.pause();
+  }
+
+  //恢复
+  public  void ResumeAsync(){
+    mAlivcLivePusher.resumeAsync();
+  }
+
+  //闪光灯
+  public  void LiveFlash() {
+    flashState = !flashState;
+    mAlivcLivePusher.setFlash(flashState);
+  }
+
+  // 摄像头 (前置/后置)
+  public  void CameraDirection() {
+    if (mCameraId == CAMERA_TYPE_FRONT.getCameraId()) {
+      mCameraId = CAMERA_TYPE_BACK.getCameraId();
+    } else {
+      mCameraId = CAMERA_TYPE_FRONT.getCameraId();
+    }
+    mAlivcLivePusher.switchCamera();
+    if(mCameraId == 0  ){ // 后置摄像头
+      mAlivcLivePusher.setFlash(flashState);
+    }
+    else {
+      mAlivcLivePusher.setFlash(false); // 关闭闪光灯
+    }
+  }
+
 
   View.OnClickListener onClickListener = new View.OnClickListener() {
     @Override
@@ -829,6 +876,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onPreviewStarted(AlivcLivePusher pusher) {
       showToast(getSafeString(R.string.start_preview));
+      LivePlugin.callJS("100|开启预览");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -836,6 +884,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     public void onPreviewStoped(AlivcLivePusher pusher) {
       if (isAdded()) {
         showToast(getSafeString(R.string.stop_preview));
+        LivePlugin.callJS("101|停止预览");
       }
     }
 
@@ -846,6 +895,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       mIsStartAsnycPushing = false;
       if (isAdded()) {
         showToast(getSafeString(R.string.start_push));
+        LivePlugin.callJS("102|开始推流");
       }
     }
 
@@ -857,18 +907,21 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onPushPauesed(AlivcLivePusher pusher) {
       showToast(getSafeString(R.string.pause_push));
+      LivePlugin.callJS("103|暂停");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPushResumed(AlivcLivePusher pusher) {
       showToast(getSafeString(R.string.resume_push));
+      LivePlugin.callJS("104|重新推流");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPushStoped(AlivcLivePusher pusher) {
       showToast(getSafeString(R.string.stop_push));
+      LivePlugin.callJS("105|停止推流");
     }
 
     /**
@@ -880,7 +933,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onPushRestarted(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-      showToast(getSafeString(R.string.restart_success));
+      //showToast(getSafeString(R.string.restart_success));
+      LivePlugin.callJS("106|重新推流成功");
     }
 
     @Override
@@ -923,7 +977,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onSystemError(AlivcLivePusher livePusher, AlivcLivePushError error) {
       mIsStartAsnycPushing = false;
-      showDialog(getSafeString(R.string.system_error) + error.toString());
+      //showDialog(getSafeString(R.string.system_error) + error.toString());
+      LivePlugin.callJS("-10|推流未知错误");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -931,7 +986,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     public void onSDKError(AlivcLivePusher livePusher, AlivcLivePushError error) {
       if (error != null) {
         mIsStartAsnycPushing = false;
-        showDialog(getSafeString(R.string.sdk_error) + error.toString());
+        //showDialog(getSafeString(R.string.sdk_error) + error.toString());
+        LivePlugin.callJS("-11|推流SDK相关错误");
       }
     }
   };
@@ -940,39 +996,45 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNetworkPoor(AlivcLivePusher pusher) {
-      showNetWorkDialog(getSafeString(R.string.network_poor));
+      //showNetWorkDialog(getSafeString(R.string.network_poor));
+      LivePlugin.callJS("-12|网络不稳定,稍后重试");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onNetworkRecovery(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.network_recovery));
+      //showToast(getSafeString(R.string.network_recovery));
+      LivePlugin.callJS("-13|网络已恢复");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReconnectStart(AlivcLivePusher pusher) {
-      showToastShort(getSafeString(R.string.reconnect_start));
+      //showToastShort(getSafeString(R.string.reconnect_start));
+      LivePlugin.callJS("-14|开始重新连接");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReconnectFail(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-      showDialog(getSafeString(R.string.reconnect_fail));
+      //showDialog(getSafeString(R.string.reconnect_fail));
+      LivePlugin.callJS("-15|重新连接失败");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReconnectSucceed(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.reconnect_success));
+     // showToast(getSafeString(R.string.reconnect_success));
+      LivePlugin.callJS("-16|重新连接成功");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onSendDataTimeout(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-      showDialog(getSafeString(R.string.senddata_timeout));
+     // showDialog(getSafeString(R.string.senddata_timeout));
+      LivePlugin.callJS("-17|发送数据超时");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -980,13 +1042,15 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     public void onConnectFail(AlivcLivePusher pusher) {
       isConnectResult = true;
       mIsStartAsnycPushing = false;
-      showDialog(getSafeString(R.string.connect_fail));
+      //showDialog(getSafeString(R.string.connect_fail));
+      LivePlugin.callJS("-18|连接失败");
     }
 
     @Override
     public void onConnectionLost(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-      showToast("推流已断开");
+    //  showToast("推流已断开");
+      LivePlugin.callJS("-19|推流已断开");
     }
 
     @Override
@@ -997,12 +1061,14 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onSendMessage(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.send_message));
+      //showToast(getSafeString(R.string.send_message));
+      LivePlugin.callJS("-20|推流已断开");
     }
 
     @Override
     public void onPacketsLost(AlivcLivePusher pusher) {
-      showToast("推流丢包通知");
+    //  showToast("推流丢包通知");
+      LivePlugin.callJS("-21|推流丢失数据");
     }
   };
 

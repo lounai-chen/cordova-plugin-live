@@ -105,7 +105,12 @@ dependencies {
 ##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需==手动==拷贝到对应目录* 
 
 
-参考链接
-阿里云官网文档: https://help.aliyun.com/document_detail/94844.html
+参考链接 
+
+阿里云官网文档: https://help.aliyun.com/document_detail/94844.html 
 
 IOS全球化多语言配置: https://www.jianshu.com/p/7232940d3e3f 
+
+view置顶: https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git 
+
+

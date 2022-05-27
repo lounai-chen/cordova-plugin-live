@@ -39,12 +39,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 <!--      begin live-->
       
-      <activity android:name="com.alivc.live.pusher.demo.MainLiveActivity"></activity>
-      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.PushConfigActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.PlayerActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-      <activity android:alwaysRetainTaskState="true" android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" android:name="com.alivc.live.pusher.demo.VideoRecordConfigActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-      <activity android:alwaysRetainTaskState="true" android:name="com.alivc.live.pusher.demo.LicenseActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-      <activity android:alwaysRetainTaskState="true" android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" android:name="com.alivc.live.pusher.demo.LivePushActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+  
       <service android:enabled="true" android:foregroundServiceType="mediaProjection" android:name="com.alivc.live.pusher.demo.ForegroundService" />
 
       <meta-data android:name="Mob-AppKey" android:value="1aeeb15ac7a52" />

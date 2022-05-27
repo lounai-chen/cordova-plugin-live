@@ -79,22 +79,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static android.os.Environment.MEDIA_MOUNTED;
 import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_BACK;
 import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_FRONT;
-//import com.alivc.live.beauty.BeautyFactory;
-//import com.alivc.live.beauty.BeautyInterface;
-//import com.alivc.live.beauty.constant.BeautyImageFormat;
-//import com.alivc.live.beauty.constant.BeautySDKType;
-import com.alivc.component.custom.AlivcLivePushCustomDetect;
+
 import com.alivc.live.pusher.SurfaceStatus;
 import com.alivc.live.pusher.demo.LivePlugin;
 import com.alivc.live.pusher.widget.CommonDialog;
 import com.alivc.live.pusher.widget.DataView;
-import com.alivc.live.pusher.widget.FastClickUtil;
-import com.alivc.live.pusher.widget.TextFormatUtil;
-//import com.aliyunsdk.queen.menu.BeautyMenuPanel;
-import com.aliyun.animoji.AnimojiDataFactory;
-import com.aliyun.animoji.AnimojiEngine;
-import com.aliyun.animoji.AnimojiError;
-import com.aliyun.animoji.Flip;
+
 import com.aliyun.animoji.utils.DeviceOrientationDetector;
 import com.zhongzilian.chestnutapp.R;
 
@@ -123,23 +113,9 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private static final String FPS = "fps";
   private static final String PREVIEW_ORIENTATION = "preview_orientation";
   private final long REFRESH_INTERVAL = 2000;
-  private ImageView mExit;
-  private TextView mMusic;
-  private TextView mFlash;
-  private TextView mCamera;
-  private TextView mSnapshot;
-  private TextView mBeautyButton;
-  private TextView mAnimojiButton;
-  private TextView mUrl;
-  private TextView mIsPushing;
+
   private LinearLayout mGuide;
 
-  private TextView mPreviewButton;
-  private TextView mPushButton;
-  private TextView mOperaButton;
-  private TextView mMore;
-  private TextView mRestartButton;
-  private TextView mDataButton;
   private String mPushUrl = null;
   private boolean mAsync = false;
 
@@ -173,11 +149,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private TextView mStatusTV;
   private LinearLayout mActionBar;
   Vector<Integer> mDynamicals = new Vector<>();
-  // 高级美颜管理类
-//    private BeautyInterface mBeautyManager;
-//    private boolean isBeautyEnable = true;
-//    private AnimojiContainerView mAnimojiContainerView;
-//    private AnimojiEngine mAnimojiEngine;
+
+
   private DataView mDataView;
   private int mCurBr;
   private int mTargetBr;
@@ -187,9 +160,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private CommonDialog mDialog;
   private AlivcLivePushStatsInfo mPushStatsInfo;
   private boolean isConnectResult = false;//是否正在链接中
-  private TextView mTotalLivePushStatsInfoTV;//数据指标
-  // private BeautyMenuPanel mBeautyBeautyContainerView;
-  private IPushController mPushController = null;
+
   private final DeviceOrientationDetector mDeviceOrientationDetector = new DeviceOrientationDetector();
   private int mDeviceOrientation = 0;
   private boolean mAnimojiOn = false;
@@ -227,9 +198,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public void onAttach(Context context) {
     super.onAttach(context);
 
-    if (context instanceof IPushController) {
-      mPushController = (IPushController) context;
-    }
+
   }
 
   @Override
@@ -246,25 +215,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-//        AlivcLivePusher pusher = mPushController.getLivePusher();
-//        if (getArguments() != null) {
-//            mPushUrl = getArguments().getString(URL_KEY);
-//            mTempUrl = mPushUrl;
-//            mAsync = getArguments().getBoolean(ASYNC_KEY, false);
-//            mAudio = getArguments().getBoolean(AUDIO_ONLY_KEY, false);
-//            mVideoOnly = getArguments().getBoolean(VIDEO_ONLY_KEY, false);
-//            mCameraId = getArguments().getInt(CAMERA_ID);
-//            isFlash = getArguments().getBoolean(FLASH_ON, false);
-//            mMixExtern = getArguments().getBoolean(MIX_EXTERN, false);
-//            mMixMain = getArguments().getBoolean(MIX_MAIN, false);
-//            mQualityMode = getArguments().getInt(QUALITY_MODE_KEY);
-//            mAuthTime = getArguments().getString(AUTH_TIME);
-//            mPrivacyKey = getArguments().getString(PRIVACY_KEY);
-//            mBeautyOn = getArguments().getBoolean(BEAUTY_CHECKED);
-//            mFps = getArguments().getInt(FPS);
-//            mPreviewOrientation = getArguments().getInt(PREVIEW_ORIENTATION);
-//            flashState = isFlash;
-//        }
     mPushUrl= mPlugin_UrlPush;
     mPreviewOrientation = Integer.parseInt(mPlugin_PreviewOrientationEnum);
     mCameraId =  Integer.parseInt(mPlugin_CameraIsFront); // 1前置摄像头
@@ -327,82 +277,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       mDeviceOrientation = orientation;
     });
 
-    // Only when device level matches, can use animoji feature.
-    boolean isDeviceSupportAnimoji = AnimojiEngine.isDeviceSupported(getContext());
-    mAnimojiOn = SharedPreferenceUtils.isAnimojiOn(getContext()) && isDeviceSupportAnimoji;
-    initAnimojiEngine(getContext());
-    mAnimojiButton.setVisibility(mAnimojiOn ? View.VISIBLE : View.GONE);
-
-    if (mAlivcLivePusher != null && (mBeautyOn || mAnimojiOn)) {
-      mAlivcLivePusher.setCustomDetect(new AlivcLivePushCustomDetect() {
-        @Override
-        public void customDetectCreate() {
-          Log.d(TAG, "customDetectCreate start");
-          initBeautyManager();
-          Log.d(TAG, "customDetectCreate end");
-        }
-
-        @Override
-        public long customDetectProcess(long data, int width, int height, int rotation, int format, long extra) {
-          Log.d(TAG, "customDetectProcess start: data ptr:" + data + ",width:" + width + ",height:" + height + "," + format + "," + rotation);
-//
-//                    if (mBeautyManager != null) {
-//                        mBeautyManager.onDrawFrame(data, BeautyImageFormat.kNV21, width, height, 0, mCameraId);
-//                        Log.d(TAG, "keria: " + mCameraId);
-//                    }
-          Log.d(TAG, "customDetectProcess end");
-
-          return 0;
-        }
-
-        @Override
-        public void customDetectDestroy() {
-          Log.d(TAG, "customDetectDestroy start");
-          destroyBeautyManager();
-          Log.d(TAG, "customDetectDestroy end");
-        }
-      });
-
-      mAlivcLivePusher.setCustomFilter(new AlivcLivePushCustomFilter() {
-        @Override
-        public void customFilterCreate() {
-          Log.d(TAG, "customFilterCreate start");
-
-          initBeautyManager();
-          initAnimojiEngine(getContext());
-
-          Log.d(TAG, "customFilterCreate end");
-        }
-
-        @Override
-        public int customFilterProcess(int inputTexture, int textureWidth, int textureHeight, long extra) {
-//                    Log.d(TAG, "customFilterProcess start: textureId" + inputTexture + ",width:" + textureWidth + ",height:" + textureHeight);
-
-//                    int ret = mBeautyManager != null ? mBeautyManager.onTextureInput(inputTexture, textureWidth, textureHeight) : inputTexture;
-//
-//                    // should do in texture thread!!!
-//                    if (null != mAnimojiEngine) {
-//                        if (mDeviceOrientation % 180 == 0) {
-//                            mAnimojiEngine.setParams(180 - mDeviceOrientation, 180 - mDeviceOrientation, Flip.NONE);
-//                        } else {
-//                            mAnimojiEngine.setParams(mDeviceOrientation, mDeviceOrientation, Flip.NONE);
-//                        }
-//                        mAnimojiEngine.process(textureWidth, textureHeight, ret, 0);
-//                    }
-
-          return  0;
-        }
-
-        @Override
-        public void customFilterDestroy() {
-          destroyBeautyManager();
-          if (mAnimojiButton.getVisibility() == View.VISIBLE) {
-            destroyAnimojiEngine();
-          }
-          Log.d(TAG, "customFilterDestroy---> thread_id: " + Thread.currentThread().getId());
-        }
-      });
-    }
 
   }
 
@@ -466,86 +340,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     view.setVisibility(View.VISIBLE);
     view.bringToFront();
 
-    mDataButton = (TextView) view.findViewById(R.id.data);
-    mDataView = (DataView) view.findViewById(R.id.ll_data);
-    mDataView.setVisibility(View.GONE);
-    mStatusTV = (TextView) view.findViewById(R.id.tv_status);
-    mExit = (ImageView) view.findViewById(R.id.exit);
-    mMusic = (TextView) view.findViewById(R.id.music);
-    mFlash = (TextView) view.findViewById(R.id.flash);
-    mFlash.setSelected(isFlash);
-    mCamera = (TextView) view.findViewById(R.id.camera);
-    mSnapshot = (TextView) view.findViewById(R.id.snapshot);
-    mActionBar = (LinearLayout) view.findViewById(R.id.action_bar);
-    mCamera.setSelected(true);
-    mSnapshot.setSelected(true);
-    mPreviewButton = (TextView) view.findViewById(R.id.preview_button);
-    mPreviewButton.setSelected(false);
-    mPushButton = (TextView) view.findViewById(R.id.push_button);
-    mPushButton.setSelected(true);
-    mOperaButton = (TextView) view.findViewById(R.id.opera_button);
-    mOperaButton.setSelected(false);
-    mMore = (TextView) view.findViewById(R.id.more);
-    mBeautyButton = (TextView) view.findViewById(R.id.beauty_button);
-    mBeautyButton.setSelected(SharedPreferenceUtils.isBeautyOn(getActivity().getApplicationContext()));
-    mAnimojiButton = (TextView) view.findViewById(R.id.animoji_button);
-    mAnimojiButton.setSelected(SharedPreferenceUtils.isAnimojiOn(getActivity().getApplicationContext()));
-    mRestartButton = (TextView) view.findViewById(R.id.restart_button);
-    mUrl = (TextView) view.findViewById(R.id.push_url);
-    mUrl.setText(mPushUrl);
-    mIsPushing = (TextView) view.findViewById(R.id.isPushing);
-    mIsPushing.setText(String.valueOf(isPushing));
-    mGuide = (LinearLayout) view.findViewById(R.id.guide);
-    mTotalLivePushStatsInfoTV = ((TextView) mDataView.findViewById(R.id.tv_data));
-    mExit.setOnClickListener(onClickListener);
-    mMusic.setOnClickListener(onClickListener);
-    mFlash.setOnClickListener(onClickListener);
-    mCamera.setOnClickListener(onClickListener);
-    mSnapshot.setOnClickListener(onClickListener);
-    mPreviewButton.setOnClickListener(onClickListener);
-    mPushButton.setOnClickListener(onClickListener);
-    mOperaButton.setOnClickListener(onClickListener);
-    mBeautyButton.setOnClickListener(onClickListener);
-    mAnimojiButton.setOnClickListener(onClickListener);
-    mRestartButton.setOnClickListener(onClickListener);
-    mMore.setOnClickListener(onClickListener);
-    mDataButton.setOnClickListener(onClickListener);
-
-    if (mVideoOnly) {
-      mMusic.setVisibility(View.GONE);
-    }
-    if (mAudio) {
-      mPreviewButton.setVisibility(View.GONE);
-    }
-    if (mMixMain) {
-      mBeautyButton.setVisibility(View.GONE);
-      mAnimojiButton.setVisibility(View.GONE);
-      mMusic.setVisibility(View.GONE);
-      mFlash.setVisibility(View.GONE);
-      mCamera.setVisibility(View.GONE);
-    }
-    mMore.setVisibility(mAudio ? View.GONE : View.VISIBLE);
-    mBeautyButton.setVisibility(mAudio ? View.GONE : View.VISIBLE);
-    mAnimojiButton.setVisibility(isSupportAnimoji(getContext()) ? View.VISIBLE : View.GONE);
-    mFlash.setVisibility(mAudio ? View.GONE : View.VISIBLE);
-    mCamera.setVisibility(mAudio ? View.GONE : View.VISIBLE);
-    mFlash.setClickable(mCameraId != CAMERA_TYPE_FRONT.getCameraId());
-    view.setFocusableInTouchMode(true);
-    view.requestFocus();
-    view.setOnKeyListener(new View.OnKeyListener() {
-      @Override
-      public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-          if (!mPushButton.isSelected() && !isConnectResult) {
-            showDialog(getSafeString(R.string.connecting_dialog_tips));
-          } else {
-            getActivity().finish();
-          }
-          return true;
-        }
-        return false;
-      }
-    });
   }
 
   public   void StartPreview(){
@@ -607,269 +401,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   }
 
 
-  View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-      final int id = view.getId();
-    //  AlivcLivePusher pusher =  mPushController.getLivePusher();
-      AlivcLivePusher pusher = mAlivcLivePusher;// mPushController.getLivePusher();
-
-      if (pusher == null) {
-        return;
-      }
-
-      mExecutorService.execute(new Runnable() {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void run() {
-          LivePushActivity.PauseState stateListener = mPushController.getPauseStateListener();
-          try {
-            switch (id) {
-              case R.id.exit:
-                if (!mPushButton.isSelected() && !isConnectResult) {
-                  showDialog(getSafeString(R.string.connecting_dialog_tips));
-                  return;
-                }
-                getActivity().finish();
-                break;
-              case R.id.music:
-                if (mMusicDialog == null) {
-                  mMusicDialog = MusicDialog.newInstance();
-                  mMusicDialog.setAlivcLivePusher(pusher);
-                }
-               // mMusicDialog.show(getFragmentManager(), "beautyDialog");
-
-                break;
-              case R.id.flash:
-                pusher.setFlash(!mFlash.isSelected());
-                flashState = !mFlash.isSelected();
-                mFlash.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    mFlash.setSelected(!mFlash.isSelected());
-                  }
-                });
-                break;
-              case R.id.camera:
-                if (mCameraId == CAMERA_TYPE_FRONT.getCameraId()) {
-                  mCameraId = CAMERA_TYPE_BACK.getCameraId();
-                } else {
-                  mCameraId = CAMERA_TYPE_FRONT.getCameraId();
-                }
-                pusher.switchCamera();
-//                                mBeautyManager.switchCameraId(mCameraId);
-                mFlash.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    mFlash.setClickable(mCameraId == CAMERA_TYPE_FRONT.getCameraId() ? false : true);
-                    if (mCameraId == CAMERA_TYPE_FRONT.getCameraId()) {
-                      mFlash.setSelected(false);
-                    } else {
-                      mFlash.setSelected(flashState);
-                    }
-                  }
-                });
-
-                break;
-              case R.id.preview_button:
-                if (FastClickUtil.isFastClick()) {
-                  return;//点击间隔 至少1秒
-                }
-
-                final boolean isPreview = mPreviewButton.isSelected();
-                if (!isPreview) {
-                  pusher.stopPreview();
-                } else {
-                  SurfaceView previewView = mPushController.getPreviewView();
-
-                  if (mAsync) {
-                    pusher.startPreviewAysnc(previewView);
-                  } else {
-                    pusher.startPreview(previewView);
-                  }
-                }
-
-                mPreviewButton.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    mPreviewButton.setText(isPreview ? getSafeString(R.string.stop_preview_button) : getSafeString(R.string.start_preview_button));
-                    mPreviewButton.setSelected(!isPreview);
-                  }
-                });
-
-                break;
-              case R.id.push_button:
-                final boolean isPush = mPushButton.isSelected();
-                if (isPush) {
-                  if (mAsync) {
-                    pusher.startPushAysnc(mPushUrl);
-                  } else {
-                    pusher.startPush(mPushUrl);
-                  }
-                } else {
-                  pusher.stopPush();
-                  stopPcm();
-                  mOperaButton.post(new Runnable() {
-                    @Override
-                    public void run() {
-                      mOperaButton.setText(getSafeString(R.string.pause_button));
-                      mOperaButton.setSelected(false);
-                    }
-                  });
-                  if (stateListener != null) {
-                    stateListener.updatePause(false);
-                  }
-                }
-
-                mPushButton.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    mStatusTV.setText(isPush ? getSafeString(R.string.pushing) : getSafeString(R.string.wating_push));
-                    mPushButton.setText(isPush ? getSafeString(R.string.stop_button) : getSafeString(R.string.start_push));
-                    mPushButton.setSelected(!isPush);
-                  }
-                });
-
-                break;
-              case R.id.opera_button:
-                final boolean isPause = mOperaButton.isSelected();
-                if (!isPause) {
-                  pusher.pause();
-                } else {
-                  if (mAsync) {
-                    pusher.resumeAsync();
-                  } else {
-                    pusher.resume();
-                  }
-                }
-
-                if (stateListener != null) {
-                  stateListener.updatePause(!isPause);
-                }
-                mOperaButton.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    mOperaButton.setText(isPause ? getSafeString(R.string.pause_button) : getSafeString(R.string.resume_button));
-                    mOperaButton.setSelected(!isPause);
-                    mPreviewButton.setText(isPause ? getSafeString(R.string.stop_preview_button) : getSafeString(R.string.start_preview_button));
-                    mPreviewButton.setSelected(!isPause);
-                  }
-                });
-
-                break;
-              case R.id.animoji_button:
-                mAnimojiButton.post(() -> {
-//                                    if (mBeautyBeautyContainerView.getVisibility() == View.VISIBLE) {
-//                                        changeBeautyContainerVisibility();
-//                                    }
-                  changeAnimojiContainerVisibility();
-                });
-                break;
-              case R.id.beauty_button:
-                if (!mBeautyOn) {
-                  ToastUtils.show(getSafeString(R.string.beauty_off_tips));
-                  return;
-                }
-                mBeautyButton.post(() -> {
-//                                    if (mAnimojiContainerView.getVisibility() == View.VISIBLE) {
-//                                        changeAnimojiContainerVisibility();
-//                                    }
-                  changeBeautyContainerVisibility();
-                });
-                break;
-              case R.id.restart_button:
-                if (mAsync) {
-                  if (!mIsStartAsnycPushing) {
-                    mIsStartAsnycPushing = true;
-                    pusher.restartPushAync();
-                  }
-                } else {
-                  pusher.restartPush();
-                }
-                break;
-              case R.id.more:
-                PushMoreDialog pushMoreDialog = new PushMoreDialog();
-                pushMoreDialog.setAlivcLivePusher(pusher, new DynamicListern() {
-                  @Override
-                  public void onAddDynamic() {
-                    if (pusher != null && mDynamicals.size() < 2) {
-                      float startX = 0.2f + mDynamicals.size() * 0.2f;
-                      float startY = 0.2f + mDynamicals.size() * 0.2f;
-                      int id = pusher.addDynamicsAddons(getActivity().getFilesDir().getPath() + File.separator + "alivc_resource/qizi/", startX, startY, 0.2f, 0.2f);
-                      if (id > 0) {
-                        mDynamicals.add(id);
-                      } else {
-                        ToastUtils.show(getSafeString(R.string.add_dynamic_failed) + id);
-                      }
-                    }
-                  }
-
-                  @Override
-                  public void onRemoveDynamic() {
-                    if (mDynamicals.size() > 0) {
-                      int index = mDynamicals.size() - 1;
-                      int id = mDynamicals.get(index);
-                      pusher.removeDynamicsAddons(id);
-                      mDynamicals.remove(index);
-                    }
-                  }
-                });
-                pushMoreDialog.setQualityMode(mQualityMode);
-                pushMoreDialog.setPushUrl(mPushUrl);
-                //pushMoreDialog.show(getFragmentManager(), "moreDialog");
-                break;
-              case R.id.snapshot:
-                pusher.snapshot(1, 0, new AlivcSnapshotListener() {
-                  @Override
-                  public void onSnapshot(Bitmap bmp) {
-                    String dateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss-SS").format(new Date());
-                    File f = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "snapshot-" + dateFormat + ".png");
-                    if (f.exists()) {
-                      f.delete();
-                    }
-                    try {
-                      FileOutputStream out = new FileOutputStream(f);
-                      bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-                      out.flush();
-                      out.close();
-                    } catch (FileNotFoundException e) {
-                      // TODO Auto-generated catch block
-                      e.printStackTrace();
-                    } catch (IOException e) {
-                      // TODO Auto-generated catch block
-                      e.printStackTrace();
-                    }
-                    showDialog("截图已保存：" + getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + "/snapshot-" + dateFormat + ".png");
-                  }
-                });
-                break;
-              case R.id.data:
-                mDataView.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    if (mDataView.getVisibility() == View.VISIBLE) {
-                      mDataView.setVisibility(View.INVISIBLE);
-                    } else {
-                      mDataView.setVisibility(View.VISIBLE);
-                    }
-                  }
-                });
-                break;
-              default:
-                break;
-            }
-          } catch (IllegalArgumentException e) {
-            showDialog(e.getMessage());
-            e.printStackTrace();
-          } catch (IllegalStateException e) {
-            showDialog(e.getMessage());
-            e.printStackTrace();
-          }
-        }
-      });
-
-    }
-  };
 
   AlivcLivePushInfoListener mPushInfoListener = new AlivcLivePushInfoListener() {
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -956,18 +487,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
 
     @Override
     public void onPushStatistics(AlivcLivePusher pusher, AlivcLivePushStatsInfo statistics) {
-      if (mPushController.getLivePusher() != null) {
-        if (mTotalLivePushStatsInfoTV != null) {
-          mTotalLivePushStatsInfoTV.post(new Runnable() {
-            @Override
-            public void run() {
-              if (statistics != null && statistics.getVideoEncodeBitrate() != 0) {
-                mTotalLivePushStatsInfoTV.setText(statistics.toString());
-              }
-            }
-          });
-        }
-      }
+
     }
   };
 
@@ -1253,20 +773,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
 
   @Override
   public void run() {
-    AlivcLivePusher pusher = mAlivcLivePusher;// mPushController.getLivePusher();
-    if (mIsPushing != null && pusher != null) {
-      try {
-        isPushing = pusher.isNetworkPushing();
-      } catch (IllegalStateException e) {
-        e.printStackTrace();
-      }
-      AlivcLivePushError error = pusher.getLastError();
-      if (!error.equals(AlivcLivePushError.ALIVC_COMMON_RETURN_SUCCESS)) {
-        mIsPushing.setText(String.valueOf(isPushing) + ", error code : " + error.getCode());
-      } else {
-        mIsPushing.setText(String.valueOf(isPushing));
-      }
-    }
+
     mHandler.postDelayed(this, REFRESH_INTERVAL);
 
   }
@@ -1283,18 +790,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     mHandler.removeCallbacks(this);
   }
 
-  public interface BeautyListener {
-    void onBeautySwitch(boolean beauty);
-  }
 
-  private BeautyListener mBeautyListener = new BeautyListener() {
-    @Override
-    public void onBeautySwitch(boolean beauty) {
-      if (mBeautyButton != null) {
-        mBeautyButton.setSelected(beauty);
-      }
-    }
-  };
+
 
   private String getMD5(String string) {
 
@@ -1341,18 +838,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     }
   }
 
-  private String getAuthString(String time) {
-    if (!time.isEmpty() && !mPrivacyKey.isEmpty()) {
-      long tempTime = (System.currentTimeMillis() + Integer.valueOf(time)) / 1000;
-      String tempprivacyKey = String.format(mMd5String, getUri(mPushUrl), tempTime, 0, 0, mPrivacyKey);
-      String auth = String.format(mAuthString, tempTime, 0, 0, getMD5(tempprivacyKey));
-      mTempUrl = mPushUrl + auth;
-    } else {
-      mTempUrl = mPushUrl;
-    }
-    return mTempUrl;
-  }
-
 
 
   private void stopPcm() {
@@ -1365,82 +850,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     void onRemoveDynamic();
   }
 
-  private void initBeautyManager() {
-//        if (mBeautyManager == null) {
-//            Log.d(TAG, "initBeautyManager start");
-//            mBeautyManager = BeautyFactory.createBeauty(BeautySDKType.QUEEN, LivePushFragment.this.getActivity());
-//            // initialize in texture thread.
-//            mBeautyManager.init();
-//            mBeautyManager.setBeautyEnable(isBeautyEnable);
-//            mBeautyManager.switchCameraId(mCameraId);
-//            Log.d(TAG, "initBeautyManager end");
-//        }
-  }
 
-  private void destroyBeautyManager() {
-//        if (mBeautyManager != null) {
-//            mBeautyManager.release();
-//            mBeautyManager = null;
-//        }
-  }
-
-  private void changeBeautyContainerVisibility() {
-//        if (mBeautyBeautyContainerView.getVisibility() == View.VISIBLE) {
-//            mActionBar.setVisibility(View.VISIBLE);
-//            mBeautyBeautyContainerView.onHideMenu();
-//            mBeautyBeautyContainerView.setVisibility(View.GONE);
-//        } else {
-//            mActionBar.setVisibility(View.GONE);
-//            mBeautyBeautyContainerView.onShowMenu();
-//            mBeautyBeautyContainerView.setVisibility(View.VISIBLE);
-//        }
-  }
-
-
-  private void changeAnimojiContainerVisibility() {
-//        if (mAnimojiContainerView.getVisibility() == View.VISIBLE) {
-//            mAnimojiContainerView.setVisibilityWithAnimation(false);
-//            mActionBar.setVisibility(View.VISIBLE);
-//        } else {
-//            mAnimojiContainerView.setVisibilityWithAnimation(true);
-//            mActionBar.setVisibility(View.INVISIBLE);
-//        }
-  }
-
-  // should do in texture thread!!!
-  private void initAnimojiEngine(@NonNull Context context) {
-    if (!mAnimojiOn) {
-      return;
-    }
-//        if (null == mAnimojiEngine) {
-//            mAnimojiEngine = new AnimojiEngine();
-//            int result = mAnimojiEngine.initEngine(context);
-//            if (AnimojiError.ANIMOJI_NO_ERROR == result) {
-//                mAnimojiEngine.setWebTrackEnable(true);
-//                mAnimojiEngine.setCallback((code, msg) -> {
-//                    Log.e(TAG, "animoji error: " + code + ", " + msg);
-//                });
-//            } else {
-//                Log.e(TAG, "init animoji error! " + result);
-//                destroyAnimojiEngine();
-//            }
-//        }
-  }
-
-  // should do in texture thread!!!
-  private void destroyAnimojiEngine() {
-//        if (null != mAnimojiEngine) {
-//            mAnimojiEngine.destroy();
-//            mAnimojiEngine = null;
-//        }
-  }
-
-  // only high-performance android device supports animoji feature.
-  private boolean isSupportAnimoji(@NonNull Context context) {
-//        boolean isDeviceSupportAnimoji = AnimojiEngine.isDeviceSupported(context);
-//        return !mAudio && mPreviewOrientation == AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT.getOrientation() && isDeviceSupportAnimoji;
-    return  false;
-  }
 
   public static String getFilePath(Context context, String dir) {
     String logFilePath = "";
@@ -1594,12 +1004,5 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     });
   }
 
-//    private ArrayList<AnimojiItemBean> getAnimojiItemBeans(@NonNull Context context) {
-//        ArrayList<AnimojiItemBean> itemBeans = new ArrayList<>();
-//        String alibear = AnimojiDataFactory.INSTANCE.getResourcePath(context, AnimojiDataFactory.ALIBEAR_BUNDLE_FILE);
-//        itemBeans.add(new AnimojiItemBean(com.alivc.live.queenbeauty.R.drawable.icon_animoji_alibear, "熊猫", alibear));
-////        String ding3duo = AnimojiDataFactory.INSTANCE.getResourcePath(context, AnimojiDataFactory.DING3DUO_BUNDLE_FILE);
-////        itemBeans.add(new AnimojiItemBean(com.alivc.live.queenbeauty.R.drawable.icon_animoji_ding3duo, "钉三多", ding3duo));
-//        return itemBeans;
-//    }
+
 }

@@ -3,28 +3,17 @@ package com.alivc.live.pusher.demo;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 
-import com.alivc.live.pusher.demo.LivePushActivity;
-import com.alivc.live.pusher.demo.LivePushFragment;
-import com.plugin.floatv1.floatingwindow.FloatingMainActivity;
-import com.plugin.floatv1.floatingwindow.FloatingVideoService;
 import com.zhongzilian.chestnutapp.R;
 
 
@@ -36,7 +25,6 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 
 /**

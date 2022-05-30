@@ -445,7 +445,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onPushResumed(AlivcLivePusher pusher) {
       //showToast(getSafeString(R.string.resume_push));
-      LivePlugin.callJS("104|重新推流");
+      LivePlugin.callJS("104|恢复");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

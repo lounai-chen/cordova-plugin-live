@@ -139,7 +139,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private boolean audioThreadOn = false;
   private boolean mIsStartAsnycPushing = false;
 
-  private MusicDialog mMusicDialog = null;
+
 
   private String mAuthString = "?auth_key=%1$d-%2$d-%3$d-%4$s";
   private String mMd5String = "%1$s-%2$d-%3$d-%4$d-%5$s";
@@ -406,7 +406,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPreviewStarted(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.start_preview));
+      //showToast(getSafeString(R.string.start_preview));
       LivePlugin.callJS("100|开启预览");
     }
 
@@ -414,7 +414,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @Override
     public void onPreviewStoped(AlivcLivePusher pusher) {
       if (isAdded()) {
-        showToast(getSafeString(R.string.stop_preview));
+        //showToast(getSafeString(R.string.stop_preview));
         LivePlugin.callJS("101|停止预览");
       }
     }
@@ -425,7 +425,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       isConnectResult = true;
       mIsStartAsnycPushing = false;
       if (isAdded()) {
-        showToast(getSafeString(R.string.start_push));
+        //showToast(getSafeString(R.string.start_push));
         LivePlugin.callJS("102|开始推流");
       }
     }
@@ -437,21 +437,21 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPushPauesed(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.pause_push));
+      //showToast(getSafeString(R.string.pause_push));
       LivePlugin.callJS("103|暂停");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPushResumed(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.resume_push));
+      //showToast(getSafeString(R.string.resume_push));
       LivePlugin.callJS("104|重新推流");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPushStoped(AlivcLivePusher pusher) {
-      showToast(getSafeString(R.string.stop_push));
+      //showToast(getSafeString(R.string.stop_push));
       LivePlugin.callJS("105|停止推流");
     }
 
@@ -618,9 +618,9 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       getActivity().runOnUiThread(new Runnable() {
         @Override
         public void run() {
-          if (mMusicDialog != null) {
-            mMusicDialog.updateProgress(progress, duration);
-          }
+//          if (mMusicDialog != null) {
+//            mMusicDialog.updateProgress(progress, duration);
+//          }
         }
       });
     }
@@ -638,7 +638,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onOpenFailed() {
-      showDialog(getSafeString(R.string.bgm_open_failed));
+      showDialog("打开失败");
     }
   };
 
@@ -719,57 +719,22 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       @RequiresApi(api = Build.VERSION_CODES.M)
       @Override
       public void run() {
-        if (getActivity() != null) {
-          final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-          dialog.setMessage(message);
-          dialog.setPositiveButton(getSafeString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-          });
-          dialog.show();
-        }
+//        if (getActivity() != null) {
+//          final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+//          dialog.setMessage(message);
+//          dialog.setPositiveButton(getSafeString(R.string.ok), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//          });
+//          dialog.show();
+//        }
       }
     });
   }
 
-  private void showNetWorkDialog(final String message) {
-    if (getActivity() == null || message == null) {
-      return;
-    }
-    Handler handler = new Handler(Looper.getMainLooper());
-    handler.post(new Runnable() {
-      @RequiresApi(api = Build.VERSION_CODES.M)
-      @Override
-      public void run() {
-        if (getActivity() != null) {
-          final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-          dialog.setTitle(getSafeString(R.string.dialog_title));
-          dialog.setMessage(message);
-          dialog.setNegativeButton(getSafeString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-          });
-          dialog.setNeutralButton(getSafeString(R.string.reconnect), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-              //AlivcLivePusher pusher = mPushController.getLivePusher();
-              AlivcLivePusher pusher = mAlivcLivePusher;// mPushController.getLivePusher();
 
-              try {
-                pusher.reconnectPushAsync(null);
-              } catch (IllegalStateException e) {
-
-              }
-            }
-          });
-          dialog.show();
-        }
-      }
-    });
-  }
 
   @Override
   public void run() {

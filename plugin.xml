@@ -20,7 +20,7 @@
         <!-- <source-file src="src/android/LivePlugin/LivePlugin.java" target-dir="src/com/alivc/live/pusher/" /> -->
         
        
-        <!-- 资源文件容易冲突,故注释了 -->
+        <!-- 资源文件容易冲突,故注释了,需您手动添加 -->
         <!-- <source-file src="src/android/res/" target-dir="src/main/res/"/>  -->
         <!-- <source-file src="src/android/assets/" target-dir="src/main/"/>  -->
         <source-file src="src/android/commonlibs/" target-dir="/"/> 

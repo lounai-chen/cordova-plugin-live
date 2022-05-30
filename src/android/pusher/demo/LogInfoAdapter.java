@@ -131,8 +131,7 @@ public class LogInfoAdapter extends RecyclerView.Adapter<LogInfoAdapter.LogViewH
         updateValue(LogItem.AUDIO_ENCODE_BITRATE, String.valueOf(alivcLivePushStatsInfo.getAudioEncodeBitrate()) + BITRATE_UNIT);
         updateValue(LogItem.AUDIO_ENCODE_FPS, String.valueOf(alivcLivePushStatsInfo.getAudioEncodeFps()));
         updateValue(LogItem.VIDEO_RENDER_FPS, String.valueOf(alivcLivePushStatsInfo.getVideoRenderFps()));
-        updateValue(LogItem.VIDEO_ENCODE_MODE, alivcLivePushStatsInfo.getVideoEncodeMode() == AlivcEncodeModeEnum.Encode_MODE_HARD ? mContext.getString(R.string.hardware_encode) : mContext.getString(R.string.software_encode));
-        updateValue(LogItem.VIDEO_ENCODE_BITRATE, String.valueOf(alivcLivePushStatsInfo.getVideoEncodeBitrate()) + BITRATE_UNIT);
+//        updateValue(LogItem.VIDEO_ENCODE_BITRATE, String.valueOf(alivcLivePushStatsInfo.getVideoEncodeBitrate()) + BITRATE_UNIT);
         updateValue(LogItem.VIDEO_ENCODE_FPS, String.valueOf(alivcLivePushStatsInfo.getVideoEncodeFps()));
         updateValue(LogItem.TOTALFRAME_ENCODED_VIDEO, String.valueOf(alivcLivePushStatsInfo.getTotalFramesOfEncodedVideo()));
         updateValue(LogItem.TOTALTIME_ENCODED_VODEO, String.valueOf(alivcLivePushStatsInfo.getTotalTimeOfEncodedVideo()));
@@ -177,7 +176,7 @@ public class LogInfoAdapter extends RecyclerView.Adapter<LogInfoAdapter.LogViewH
      * @param context
      */
     public void loadLabels(Context context) {
-        LABELS = context.getResources().getStringArray(R.array.log_labels);
+        //LABELS = context.getResources().getStringArray(R.array.log_labels);
     }
 
 

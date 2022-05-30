@@ -74,15 +74,15 @@ public class Common {
             @Override
             public void run() {
                 if(context != null) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    dialog.setTitle(context.getString(R.string.dialog_title));
-                    dialog.setMessage(message);
-                    dialog.setNegativeButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    dialog.show();
+//                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//                    //dialog.setTitle(context.getString(R.string.dialog_title));
+//                    dialog.setMessage(message);
+//                    dialog.setNegativeButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                        }
+//                    });
+//                    dialog.show();
                 }
             }
         });
@@ -134,31 +134,7 @@ public class Common {
         }
     }
 
-    public static ArrayList<MusicAdapter.MusicInfo> getResource() {
-        ArrayList<MusicAdapter.MusicInfo> list = new ArrayList<>();
-        if(new File(SD_DIR + RESOURCE_DIR).exists()) {
 
-            File[] files = new File(SD_DIR + RESOURCE_DIR).listFiles(new FilenameFilter() {
-
-                @Override
-                public boolean accept(File file, String s) {
-                    if(s.endsWith(".mp3")) {
-                        return true;
-                    }
-                    return false;
-                }
-            });
-            if(files != null && files.length > 0) {
-                for(int i = 0; i < files.length; i++) {
-                    MusicAdapter.MusicInfo musicInfo = new MusicAdapter.MusicInfo();
-                    musicInfo.setMusicName(files[i].getName());
-                    musicInfo.setPath(files[i].getAbsolutePath());
-                    list.add(musicInfo);
-                }
-            }
-        }
-        return list;
-    }
 
     public static String getTime(long ms) {
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");

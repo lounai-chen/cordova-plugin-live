@@ -231,7 +231,7 @@ public class FloatWindowManager {
     }
 
     private void showConfirmDialog(Context context, OnConfirmResult result) {
-        showConfirmDialog(context, context.getString(R.string.permission_float_deny_toast), result);
+        showConfirmDialog(context, "允许浮动", result);
     }
 
     private void showConfirmDialog(Context context, String message, final OnConfirmResult result) {
@@ -241,14 +241,14 @@ public class FloatWindowManager {
 
         dialog = new AlertDialog.Builder(context).setCancelable(true).setTitle("")
                 .setMessage(message)
-                .setPositiveButton(context.getString(R.string.permission_alert_submit_tip),
+                .setPositiveButton("允许浮动",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 result.confirmResult(true);
                                 dialog.dismiss();
                             }
-                        }).setNegativeButton(context.getString(R.string.permission_alert_cancel_tip),
+                        }).setNegativeButton("允许浮动",
                         new DialogInterface.OnClickListener() {
 
                             @Override

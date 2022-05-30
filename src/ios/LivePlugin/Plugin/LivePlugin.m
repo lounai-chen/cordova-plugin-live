@@ -78,17 +78,13 @@
     //     //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
     // }];
 
-      [self.viewController addChildViewController:self.publisherVC];
- 
-          // display the camera below the webview
+    // 插件 view 置顶 & 透明
+    [self.viewController addChildViewController:self.publisherVC];
+    self.webView.opaque = NO;
+    self.webView.backgroundColor = [UIColor clearColor];
 
-          // make transparent
-          self.webView.opaque = NO;
-          self.webView.backgroundColor = [UIColor clearColor];
-
-          [self.webView.superview addSubview:self.publisherVC.view];
-          [self.webView.superview bringSubviewToFront:self.webView];
-
+    [self.webView.superview addSubview:self.publisherVC.view];
+    [self.webView.superview bringSubviewToFront:self.webView];
     
     
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];

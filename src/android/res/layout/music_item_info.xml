@@ -10,7 +10,7 @@
         android:id="@+id/music_check"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@mipmap/music_check"
+  
         android:visibility="invisible"/>
     <TextView
         android:id="@+id/music_name"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:src="@mipmap/loop_icons"
+
         android:visibility="invisible"/>
 
     <LinearLayout

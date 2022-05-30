@@ -35,11 +35,11 @@ public class MaxHeightLayout extends LinearLayout {
     }
 
     private void initAtts(Context context, AttributeSet attrs){
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.mMaxRatio);
-        if (attributes != null) {
-            mMaxRatio = 0.75f;//attributes.getFloat(R.styleable.mMaxRatio_linear_max_ratio, 0.75f);
-            attributes.recycle();
-        }
+//        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.mMaxRatio);
+//        if (attributes != null) {
+//            mMaxRatio = 0.75f;//attributes.getFloat(R.styleable.mMaxRatio_linear_max_ratio, 0.75f);
+//            attributes.recycle();
+//        }
     }
 
     private void init() {

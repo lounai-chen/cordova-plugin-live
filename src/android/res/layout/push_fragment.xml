@@ -16,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
-        android:background="@mipmap/back"
+
         android:visibility="gone"
         android:scaleType="center"/>
 
@@ -27,9 +27,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:textColor="@color/title_color"
-        android:textSize="@dimen/view_size_text_16"
+
         android:visibility="gone"
-        android:text="@string/wating_push"
+        android:text="等待推流..."
         />
 
     <RelativeLayout
@@ -54,8 +54,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
                 android:clickable="true"
-                android:drawableTop="@drawable/icon_animoji"
-                android:text="@string/animoji"
+
+                android:text="animoji"
                 android:textColor="@color/wheel_text_color_1"
                 android:textSize="12dp"
                 android:visibility="gone" />
@@ -68,8 +68,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:clickable="true"
-                android:drawableTop="@drawable/beauty_selector"
-                android:text="@string/beauty"
+                
+                android:text="美颜"
                 android:textColor="@color/wheel_text_color_1"
                 android:textSize="12dp" />
 
@@ -80,50 +80,50 @@
                 android:clickable="true"
                 android:textSize="11dp"
                 android:layout_gravity="center_horizontal"
-                android:drawableTop="@mipmap/music"
+
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/wheel_text_color_1"
-                android:text="@string/backgroud_music"/>
+                android:text="背景音乐"/>
 
             <TextView
                 android:id="@+id/flash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:drawableTop="@mipmap/camera_flash_on"
+
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="11dp"
                 android:textColor="@color/wheel_text_color_1"
-                android:text="@string/flash"/>
+                android:text="闪光灯"/>
 
             <TextView
                 android:id="@+id/camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:drawableTop="@mipmap/camera_id"
+
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="11dp"
                 android:textColor="@color/wheel_text_color_1"
-                android:text="@string/camera"/>
+                android:text="摄像头"/>
 
             <TextView
                 android:id="@+id/snapshot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:drawableTop="@mipmap/screenshot"
+
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="12dp"
                 android:textColor="@color/wheel_text_color_1"
-                android:text="@string/snapshot"/>
+                android:text="截图"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -142,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
-            android:text="@string/push_url"/>
+            android:text="推流路径"/>
         <TextView
             android:id="@+id/push_url"
             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
-            android:text="@string/ispushing"/>
+            android:text="推流中"/>
         <TextView
             android:id="@+id/isPushing"
             android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
             android:textSize="10dp"
             android:gravity="center"
             android:drawableTop="@drawable/preview_selector"
-            android:text="@string/stop_preview_button">
+            android:text="停止预览">
         </TextView>
         <!--        <Button-->
         <!--            android:id="@+id/preview_button"-->
@@ -206,8 +206,8 @@
             android:textSize="10dp"
             android:gravity="center"
             android:drawableTop="@drawable/push_selector"
-            android:textColor="@color/wheel_text_color_1"
-            android:text="@string/start_push"/>
+            android:textColor="#333333"
+            android:text="开始推流"/>
         <TextView
             android:id="@+id/opera_button"
             android:layout_height="match_parent"
@@ -217,8 +217,8 @@
             android:textSize="10dp"
             android:gravity="center"
             android:drawableTop="@drawable/stop_selector"
-            android:textColor="@color/wheel_text_color_1"
-            android:text="@string/pause_button"/>
+            android:textColor="#333333"
+            android:text="暂停"/>
         <TextView
             android:id="@+id/restart_button"
             android:layout_height="match_parent"
@@ -228,8 +228,8 @@
             android:textSize="10dp"
             android:gravity="center"
             android:drawableTop="@drawable/repush_selector"
-            android:text="@string/repush_button"
-            android:textColor="@color/wheel_text_color_1"/>
+            android:text="重新推流"
+            android:textColor="#333333"/>
         <TextView
             android:id="@+id/more"
             android:layout_height="match_parent"
@@ -240,7 +240,7 @@
             android:gravity="center"
             android:drawableTop="@drawable/more_setting_selector"
             android:textColor="@color/wheel_text_color_1"
-            android:text="@string/more_setting_button"/>
+            android:text="更多设置"/>
 
         <TextView
             android:id="@+id/data"
@@ -252,7 +252,7 @@
             android:gravity="center"
             android:drawableTop="@drawable/data_selector"
             android:textColor="@color/wheel_text_color_1"
-            android:text="@string/data_args"/>
+            android:text="数据指标"/>
 
     </LinearLayout>
 
@@ -266,7 +266,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/line"/>
+          />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -276,13 +276,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="@string/slide_left_view_log"/>
+                android:text="slide_left_view_log"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/slide_right_view_log_char"/>
+                android:text="slide_right_view_log_char"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -307,5 +307,6 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
+        android:visibility="gone"
         android:layout_height="wrap_content"/>
 </RelativeLayout>

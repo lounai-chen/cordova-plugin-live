@@ -9,7 +9,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/local_info"
+        android:text="local_info"
         android:layout_marginLeft="28dp"
         android:textColor="@color/color_07C2DE"
         android:textSize="12sp"

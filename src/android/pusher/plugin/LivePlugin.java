@@ -318,8 +318,7 @@ public class LivePlugin extends CordovaPlugin   {
         ActivityCompat.requestPermissions(this.cordova.getActivity(), permissionManifest, PERMISSION_REQUEST_CODE);
       } else {
         mCallbackContext.error("0|请授权");
-        return false;
-        // showNoPermissionTip(getString(noPermissionTip[mNoPermissionIndex]));
+        return false; 
       }
     }
     return  true;
@@ -337,14 +336,7 @@ public class LivePlugin extends CordovaPlugin   {
     Manifest.permission.INTERNET,
   };
 
-  private final int[] noPermissionTip = {
-    R.string.no_camera_permission,
-    R.string.no_record_bluetooth_permission,
-    R.string.no_record_audio_permission,
-    R.string.no_read_phone_state_permission,
-    R.string.no_write_external_storage_permission,
-    R.string.no_read_external_storage_permission,
-  };
+ 
 
   private boolean permissionCheck() {
     int permissionCheck = PackageManager.PERMISSION_GRANTED;

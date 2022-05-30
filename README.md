@@ -37,15 +37,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ```
 <application ==android:allowBackup="true"==    />
 
-<!--      begin live-->
-      
-  
-      <service android:enabled="true" android:foregroundServiceType="mediaProjection" android:name="com.alivc.live.pusher.demo.ForegroundService" />
-
-      <meta-data android:name="Mob-AppKey" android:value="1aeeb15ac7a52" />
-      <meta-data android:name="Mob-AppSecret" android:value="1aeeb15ac7a52" />
-      
-<!--      end  live-->
+ 
 ```
 
  

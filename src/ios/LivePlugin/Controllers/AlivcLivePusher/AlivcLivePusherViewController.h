@@ -26,4 +26,19 @@
 
 @property (nonatomic, assign) BOOL isUserMainStream;
 
+
+
+- (int) start;
+- (int) stop;
+
+- (int)startPreviewPlugin;
+- (int)StopPreviewPlugin;
+- (int)pausePushPlugin;
+- (int)resumePushPlugin;
+- (int)restartPushPlugin;
+
+
+- (void)CameraDirection;
+- (void)LiveFlash;
+
 @end

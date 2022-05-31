@@ -16,6 +16,7 @@
 #import "Masonry.h"
 #import "ALLiveConfig.h"
 #import "AlivcCommonUtils.h"
+#import "LivePlugin.h"
 //#import "UIView+Toast.h"
 
 #import <AlivcLivePusher/AlivcLivePusher.h>
@@ -48,6 +49,8 @@
     
 }
 
+@property (nonatomic ,strong) LivePlugin *pluginCallBack;
+
 // UI
 @property (nonatomic, strong) AlivcPublisherView *publisherView;
 @property (nonatomic, strong) AliyunQueenPanelController *beautyPanelController;
@@ -57,6 +60,7 @@
 
 // flags
 @property (nonatomic, assign) BOOL isAutoFocus;
+@property (nonatomic, assign) BOOL g_flash; //闪光灯
 
 // SDK
 @property (nonatomic, strong) AlivcLivePusher *livePusher;
@@ -274,6 +278,19 @@ int64_t getCurrentTimeUs()
     return 0;
 }
 
+#pragma mark 按钮事件
+- (void)CameraDirection{
+    if (self.livePusher) {
+        [self.livePusher switchCamera];
+    }
+}
+
+- (void)LiveFlash {
+    self.g_flash = !self.g_flash;
+    if (self.livePusher) {
+        [self.livePusher setFlash:self.g_flash?true:false];
+    }
+}
 
 /**
  销毁推流
@@ -308,6 +325,25 @@ int64_t getCurrentTimeUs()
     
 }
 
+/**
+ 开始预览plugin
+ */
+- (int)startPreviewPlugin {
+    
+    if (!self.livePusher) {
+        return -1;
+    }
+    int ret = 0;
+    if (self.isUseAsyncInterface) {
+        // 使用异步接口
+        ret = [self.livePusher startPreviewAsync:self.previewView];
+        
+    } else {
+        // 使用同步接口
+        ret = [self.livePusher startPreview:self.previewView];
+    }
+    return ret;
+}
 
 /**
  开始预览
@@ -329,6 +365,17 @@ int64_t getCurrentTimeUs()
     return ret;
 }
 
+/**
+ 停止预览plugin
+ */
+- (int)StopPreviewPlugin {
+    
+    if (!self.livePusher) {
+        return -1;
+    }
+    int ret = [self.livePusher stopPreview];
+    return ret;
+}
 
 /**
  停止预览
@@ -342,11 +389,34 @@ int64_t getCurrentTimeUs()
     return ret;
 }
 
+/**
+ 开始推流 plugin
+ */
+- (int) start {
+    if (!self.livePusher) {
+        return -1;
+    }
+    
+    // 鉴权测试时，使用Auth A类型的URL。
+    [self updateAuthURL];
+    
+    int ret = 0;
+    if (self.isUseAsyncInterface) {
+        // 使用异步接口
+        ret = [self.livePusher startPushWithURLAsync:self.pushURL];
+    
+    } else {
+        // 使用同步接口
+        ret = [self.livePusher startPushWithURL:self.pushURL];
+    }
+    
+    return ret;
+}
 
 /**
  开始推流
  */
-- (int)startPush {
+- (int) startPush {
     if (!self.livePusher) {
         return -1;
     }
@@ -381,6 +451,37 @@ int64_t getCurrentTimeUs()
     return ret;
 }
 
+/**
+ 停止推流 plugin
+ */
+- (int)stop {
+    
+    if (!self.livePusher) {
+        return -1;
+    }
+    
+    int ret = [self.livePusher stopPush];
+    
+    [self cancelTimer];
+    [self destoryPusher];
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self dismissViewControllerAnimated:YES completion:nil];
+   
+    return ret;
+}
+
+/**
+ 暂停推流plugin
+ */
+- (int)pausePushPlugin {
+    
+    if (!self.livePusher) {
+        return -1;
+    }
+
+    int ret = [self.livePusher pause];
+    return ret;
+}
 
 /**
  暂停推流
@@ -392,6 +493,28 @@ int64_t getCurrentTimeUs()
     }
 
     int ret = [self.livePusher pause];
+    return ret;
+}
+
+/**
+ 恢复推流plugin
+ */
+- (int)resumePushPlugin {
+   
+    if (!self.livePusher) {
+        return -1;
+    }
+    
+    int ret = 0;
+
+    if (self.isUseAsyncInterface) {
+        // 使用异步接口
+       ret = [self.livePusher resumeAsync];
+        
+    } else {
+        // 使用同步接口
+        ret = [self.livePusher resume];
+    }
     return ret;
 }
 
@@ -418,6 +541,26 @@ int64_t getCurrentTimeUs()
     return ret;
 }
 
+/**
+ 重新推流plugin
+ */
+- (int)restartPushPlugin {
+    
+    if (!self.livePusher) {
+        return -1;
+    }
+    
+    int ret = 0;
+    if (self.isUseAsyncInterface) {
+        // 使用异步接口
+        ret = [self.livePusher restartPushAsync];
+        
+    } else {
+        // 使用同步接口
+        ret = [self.livePusher restartPush];
+    }
+    return ret;
+}
 
 
 /**
@@ -485,6 +628,9 @@ int64_t getCurrentTimeUs()
                             delegate:self
                          cancelTitle:NSLocalizedString(@"exit", nil)
                    otherButtonTitles:NSLocalizedString(@"ok", nil),nil];
+   
+    NSString *msg =@"-10|推流未知错误";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
@@ -498,6 +644,9 @@ int64_t getCurrentTimeUs()
                             delegate:self
                          cancelTitle:NSLocalizedString(@"exit", nil)
                    otherButtonTitles:NSLocalizedString(@"ok", nil),nil];
+    
+    NSString *msg =@"-10|推流SDK相关错误";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
@@ -514,6 +663,9 @@ int64_t getCurrentTimeUs()
                             delegate:self
                          cancelTitle:NSLocalizedString(@"reconnect_button", nil)
                    otherButtonTitles:NSLocalizedString(@"exit", nil), nil];
+    
+    NSString *msg =@"-18|连接失败";
+    [self.pluginCallBack sendCmd: msg];
 
 }
 
@@ -528,6 +680,8 @@ int64_t getCurrentTimeUs()
                             delegate:nil
                          cancelTitle:NSLocalizedString(@"ok", nil)
                    otherButtonTitles:nil];
+    NSString *msg =@"-17|发送数据超时";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 - (void)onSendSeiMessage:(AlivcLivePusher *)pusher {
@@ -546,6 +700,8 @@ int64_t getCurrentTimeUs()
 - (void)onNetworkPoor:(AlivcLivePusher *)pusher {
     
     [self showAlertViewWithErrorCode:0 errorStr:nil tag:0 title:NSLocalizedString(@"dialog_title", nil) message:NSLocalizedString(@"当前网速较慢，请检查网络状态", nil) delegate:nil cancelTitle:NSLocalizedString(@"ok", nil) otherButtonTitles:nil];
+    NSString *msg =@"-12|网络不稳定,稍后重试";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
@@ -575,6 +731,10 @@ int64_t getCurrentTimeUs()
                             delegate:self
                          cancelTitle:NSLocalizedString(@"reconnect_button", nil)
                    otherButtonTitles:NSLocalizedString(@"ok", nil), nil];
+    
+    NSString *msg =@"-15|重新连接失败";
+    [self.pluginCallBack sendCmd: msg];
+
 }
 
 - (NSString *)onPushURLAuthenticationOverdue:(AlivcLivePusher *)pusher {
@@ -605,35 +765,54 @@ int64_t getCurrentTimeUs()
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addUserStream];
     });
+    
+    NSString *msg =@"100|开启预览";
+    [self.pluginCallBack sendCmd: msg];
+
 }
 
 
 - (void)onPreviewStoped:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"stop_preview_log", nil)];
+    
+    NSString *msg =@"100|开启预览";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 - (void)onPushStarted:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"start_push_log", nil)];
+    
+    NSString *msg =@"102|开启推流";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
 - (void)onPushPaused:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"pause_push_log", nil)];
+    
+    NSString *msg =@"104|暂停";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
 - (void)onPushResumed:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"resume_push_log", nil)];
+    
+    NSString *msg =@"104|恢复";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
 - (void)onPushStoped:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"stop_push_log", nil)];
+    
+    NSString *msg =@"100|停止推流";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
@@ -646,6 +825,9 @@ int64_t getCurrentTimeUs()
 - (void)onPushRestart:(AlivcLivePusher *)pusher {
     
     [self.publisherView updateInfoText:NSLocalizedString(@"restart_push_log", nil)];
+    
+    NSString *msg =@"106|重新推流成功";
+    [self.pluginCallBack sendCmd: msg];
 }
 
 
@@ -1305,7 +1487,7 @@ int64_t getCurrentTimeUs()
     
     self.view.backgroundColor = [UIColor grayColor];
     [self.view addSubview: self.previewView];
-    [self.view addSubview: self.publisherView];
+   // [self.view addSubview: self.publisherView];
 }
 
 - (void)showPusherInitErrorAlert:(int)error {
@@ -1377,7 +1559,7 @@ int64_t getCurrentTimeUs()
 
 
 - (void)setupDefaultValues {
-    
+    self.g_flash = false;
     self.isAutoFocus = self.pushConfig.autoFocus;
 }
 

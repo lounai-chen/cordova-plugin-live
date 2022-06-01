@@ -1,4 +1,8 @@
 <resources>
+	<string name="app_name">栗子学院</string>
+    <string name="launcher_name">栗子学院</string>
+    <string name="activity_name">栗子学院</string>
+ 
     <string name="setting_resolution_180P">180P</string>
     <string name="setting_resolution_240P">240P</string>
     <string name="setting_resolution_360P">360P</string>
@@ -16,7 +20,7 @@
     <string name="music_mode">Music Mode</string>
     <string name="animoji_enable">Animoji</string>
 
-    <string name="app_name">AlivcLive</string>
+ 
     <string name="license_declaration">License declaration</string>
     <string name="license_declaration_text">© 2017 Copyright by Alibaba Cloud All rights reserved</string>
     <string name="resolution_label">Resolution</string>

@@ -120,6 +120,8 @@ dependencies {
 
 ##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需==手动==拷贝到对应目录* 
 由于现在可以直接用html端的页面显示操作按钮,多语言可以不用设置了 
+如果播流没声音,需要转码模版设置RTS. 详情查看 https://help.aliyun.com/document_detail/199444.html 
+
 
 
 

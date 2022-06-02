@@ -68,7 +68,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:clickable="true"
-                
+
                 android:text="美颜"
                 android:textColor="@color/wheel_text_color_1"
                 android:textSize="12dp" />
@@ -186,7 +186,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/preview_selector"
+
             android:text="停止预览">
         </TextView>
         <!--        <Button-->
@@ -205,7 +205,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/push_selector"
+
             android:textColor="#333333"
             android:text="开始推流"/>
         <TextView
@@ -216,7 +216,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/stop_selector"
+
             android:textColor="#333333"
             android:text="暂停"/>
         <TextView
@@ -227,7 +227,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/repush_selector"
+
             android:text="重新推流"
             android:textColor="#333333"/>
         <TextView
@@ -238,7 +238,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/more_setting_selector"
+
             android:textColor="@color/wheel_text_color_1"
             android:text="更多设置"/>
 
@@ -250,7 +250,7 @@
             android:ellipsize="end"
             android:textSize="10dp"
             android:gravity="center"
-            android:drawableTop="@drawable/data_selector"
+
             android:textColor="@color/wheel_text_color_1"
             android:text="数据指标"/>
 

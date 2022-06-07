@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:textColor="@color/title_color"
+
 
         android:visibility="gone"
         android:text="等待推流..."
@@ -56,7 +56,7 @@
                 android:clickable="true"
 
                 android:text="animoji"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:textSize="12dp"
                 android:visibility="gone" />
 
@@ -70,7 +70,7 @@
                 android:clickable="true"
 
                 android:text="美颜"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:textSize="12dp" />
 
             <TextView
@@ -83,7 +83,7 @@
 
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:text="背景音乐"/>
 
             <TextView
@@ -96,7 +96,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="11dp"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:text="闪光灯"/>
 
             <TextView
@@ -109,7 +109,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="11dp"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:text="摄像头"/>
 
             <TextView
@@ -122,7 +122,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:textSize="12dp"
-                android:textColor="@color/wheel_text_color_1"
+
                 android:text="截图"/>
         </LinearLayout>
     </RelativeLayout>
@@ -239,7 +239,6 @@
             android:textSize="10dp"
             android:gravity="center"
 
-            android:textColor="@color/wheel_text_color_1"
             android:text="更多设置"/>
 
         <TextView
@@ -251,7 +250,6 @@
             android:textSize="10dp"
             android:gravity="center"
 
-            android:textColor="@color/wheel_text_color_1"
             android:text="数据指标"/>
 
     </LinearLayout>

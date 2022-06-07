@@ -12,7 +12,7 @@
         android:textColor="#333333"
         android:textSize="12sp"
         android:text="1212"
-        android:background="@drawable/live_button_white"
+
         android:gravity="center"
         />
 </LinearLayout>

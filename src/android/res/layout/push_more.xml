@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wheel_white"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,9 +23,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/target_bitrate"
+
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/font_size_28px" />
+          />
 
             <TextView
                 android:id="@+id/kb_desc"
@@ -42,19 +42,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/kb_desc"
-                android:background="@color/wheel_white"
-                android:hint="@string/target_rate_value"
+
                 android:inputType="number"
                 android:paddingLeft="10dp"
                 android:textColorHint="@android:color/darker_gray"
-                android:textSize="@dimen/font_size_28px" />
+            />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="5dp"
-                android:background="@color/alivc_color_gry"></View>
+           ></View>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -68,9 +67,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/min_bitrate"
+
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/font_size_28px" />
+           />
 
             <TextView
                 android:id="@+id/min_kb_desc"
@@ -87,19 +86,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/min_kb_desc"
-                android:background="@color/wheel_white"
-                android:hint="@string/min_rate_value"
+
                 android:inputType="number"
                 android:paddingLeft="10dp"
                 android:textColorHint="@android:color/darker_gray"
-                android:textSize="@dimen/font_size_28px" />
+          />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="5dp"
-                android:background="@color/alivc_color_gry"></View>
+          ></View>
         </RelativeLayout>
     </LinearLayout>
 
@@ -113,7 +111,7 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:text="@string/share_button"
+
             android:visibility="gone"/>
 
         <Button
@@ -121,14 +119,14 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dy_add_button"/>
+   />
 
         <Button
             android:id="@+id/dynamic_remove"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dy_remove_button"/>
+   />
 
         <LinearLayout
             android:layout_height="match_parent"
@@ -141,9 +139,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="@string/auto_focus"
+
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/font_size_28px" />
+         />
 
             <Switch
                 android:id="@+id/autofocus_switch"
@@ -152,8 +150,7 @@
                 android:checked="true"
                 android:textOff=""
                 android:textOn=""
-                android:thumb="@drawable/thumb"
-                android:track="@drawable/track" />
+           />
         </LinearLayout>
     </LinearLayout>
 
@@ -171,9 +168,9 @@
             android:layout_marginTop="3dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="@string/setting_push_mirror"
+
             android:textColor="@android:color/black"
-            android:textSize="@dimen/font_size_28px" />
+         />
 
         <Switch
             android:id="@+id/push_mirror_switch"
@@ -184,15 +181,14 @@
             android:textOff=""
             android:textOn=""
             android:layout_marginRight="16dp"
-            android:thumb="@drawable/thumb"
-            android:track="@drawable/track" />
+        />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:background="@color/alivc_color_gry"></View>
+     ></View>
     </RelativeLayout>
 
     <RelativeLayout
@@ -208,9 +204,9 @@
             android:layout_marginTop="3dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="@string/setting_pre_mirror"
+
             android:textColor="@android:color/black"
-            android:textSize="@dimen/font_size_28px" />
+         />
 
         <Switch
             android:id="@+id/preview_mirror_switch"
@@ -221,15 +217,14 @@
             android:textOff=""
             android:textOn=""
             android:layout_marginRight="16dp"
-            android:thumb="@drawable/thumb"
-            android:track="@drawable/track" />
+          />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:background="@color/alivc_color_gry"></View>
+       ></View>
     </RelativeLayout>
 
     <LinearLayout
@@ -245,9 +240,9 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
-            android:text="@string/landscape_model"
+
             android:textColor="@android:color/black"
-            android:textSize="@dimen/font_size_28px" />
+       />
 
         <RadioGroup
             android:id="@+id/setting_display_mode"
@@ -260,34 +255,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/left_shape_selector"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/display_mode_full"
-                android:textSize="@dimen/font_size_28px" />
+             />
 
             <RadioButton
                 android:id="@+id/fit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/middle_shape_selector"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/display_mode_fit"
-                android:textSize="@dimen/font_size_28px" />
+               />
 
             <RadioButton
                 android:id="@+id/cut"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/right_shape_selector"
-                android:button="@null"
-                android:gravity="center"
-                android:checked="true"
-                android:text="@string/display_mode_cut"
-                android:textSize="@dimen/font_size_28px" />
+                />
 
         </RadioGroup>
     </LinearLayout>

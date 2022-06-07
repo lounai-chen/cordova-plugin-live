@@ -18,7 +18,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_weight="1"
-            android:background="@drawable/dialog_bg"
+
             android:minHeight="125dp"
             android:orientation="vertical">
 
@@ -36,7 +36,7 @@
                 android:layout_marginRight="30dp"
                 android:includeFontPadding="false"
                 android:singleLine="true"
-                android:textColor="@color/wheel_black"
+
                 android:textSize="18dp"
                 android:visibility="gone"
                 tools:text="18dp大标题"

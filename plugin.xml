@@ -22,9 +22,11 @@
         
         <framework src="src/android/lib/aliPushLive.gradle" custom="true" type="gradleReference"/>
      
+        <source-file src="src/android/res/layout/" target-dir="src/main/res/layout/" /> 
+
         <!-- 如资源文件有冲突,请您手动处理 -->
-         <source-file src="src/android/res/" target-dir="src/main/res/"   mode="overwrite" />  
-         <source-file src="src/android/assets/" target-dir="src/main/"  mode="overwrite"  /> 
+         <!-- <source-file src="src/android/res/" target-dir="src/main/res/"   mode="overwrite" />   -->
+         <!-- <source-file src="src/android/assets/" target-dir="src/main/"  mode="overwrite"  />  -->
       
 
         <config-file parent="/*" target="AndroidManifest.xml"> 

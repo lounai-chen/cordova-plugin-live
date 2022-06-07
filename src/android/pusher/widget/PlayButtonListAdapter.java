@@ -69,30 +69,30 @@ public class PlayButtonListAdapter extends RecyclerView.Adapter {
         if (mButtonEnableMap.containsKey(mListDatas.get(position))){
             enable = mButtonEnableMap.get(mListDatas.get(position));
         }
-        if(!enable){
-            if("开始推流".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_push_gray);
-            }
-            if("数据指标".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_data_gray);
-            }
-            if("麦克风".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_microphone_gray);
-            }
-            if("调节参数".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_adjust_gray);
-            }
-        }else {
-            if("开始推流".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_push);
-            }
-            if("麦克风".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_microphone);
-            }
-            if("数据指标".equalsIgnoreCase(mListDatas.get(position))){
-                viewHolder.imageView.setImageResource(R.drawable.live_data);
-            }
-        }
+//        if(!enable){
+//            if("开始推流".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_push_gray);
+//            }
+//            if("数据指标".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_data_gray);
+//            }
+//            if("麦克风".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_microphone_gray);
+//            }
+//            if("调节参数".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_adjust_gray);
+//            }
+//        }else {
+//            if("开始推流".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_push);
+//            }
+//            if("麦克风".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_microphone);
+//            }
+//            if("数据指标".equalsIgnoreCase(mListDatas.get(position))){
+//                viewHolder.imageView.setImageResource(R.drawable.live_data);
+//            }
+//        }
         viewHolder.imageView.setEnabled(enable);
         //针对数据指标做特殊处理
         if("数据指标".equalsIgnoreCase(mListDatas.get(position))){

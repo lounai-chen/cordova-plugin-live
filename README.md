@@ -58,10 +58,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 *1.注意您的cordova项目, "cordova-android" 的依赖版本起码是  10.1.2* 
 
-*2.gradle依赖库,AndroidManifest需手动对应的修改*
-
-## 0.AndroidManifest 
-
+*2. AndroidManifest需手动对应的修改*
 
 ```
 <application ==android:allowBackup="true"==    />

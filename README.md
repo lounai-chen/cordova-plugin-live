@@ -70,41 +70,6 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ```
 
  
-## 1.build.gradle (项目)
-
-```
-allprojects {
-    repositories {
-        google()
-        jcenter()
-		
-	 
-      maven { url "https://maven.aliyun.com/repository/central" }
-      maven { url "https://maven.aliyun.com/repository/public" }
-      maven { url "https://maven.aliyun.com/repository/public" }
-      maven { url "https://maven.aliyun.com/repository/google" }
-}
-```
-## 2. build.gradle (app)	
-
-```
-dependencies {
-  
-  implementation 'com.alivc.pusher:AlivcLivePusher:4.4.1'
-  implementation 'com.google.android.material:material:1.2.1'
-  implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-  testImplementation 'junit:junit:4.+'
-  implementation 'com.acker:simplezxing:1.5'
-  implementation 'com.google.code.gson:gson:2.6.2'
-  implementation fileTree(include: ['commons-lang3-3.0.jar'], dir: 'src/main/commonlibs')
-  implementation 'com.aliyun.animoji:animoji:1.2@aar'
-  implementation 'com.aliyun.sdk.android:AliyunPlayer:5.4.4.0-full'
-  implementation 'com.aliyun.sdk.android:AlivcArtc:5.4.4.0'
-  implementation 'com.aliyun.rts.android:RtsSDK:2.1.0'
-  implementation 'com.squareup.okhttp3:okhttp:4.8.1'
-
-}
-```
 
 
 ### **ios配置**

@@ -218,8 +218,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     mPushUrl= mPlugin_UrlPush;
     mPreviewOrientation = Integer.parseInt(mPlugin_PreviewOrientationEnum);
     mCameraId =  Integer.parseInt(mPlugin_CameraIsFront); // 1前置摄像头
-    mAudio = mPlugin_AudioOnly == "1"; // 纯音频
-    mVideoOnly = mPlugin_VideoOnly == "1"; //纯视频
+    mAudio = mPlugin_AudioOnly.equals("1"); // 纯音频
+    mVideoOnly = mPlugin_VideoOnly.equals("1"); //纯视频
     //mFlash = false;
     mAsync=true;
     mFps = 25;
@@ -231,6 +231,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);//分辨率540P，最大支持720P
     mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_20); //建议用户使用20fps
     mAlivcLivePushConfig.setEnableBitrateControl(true); // 打开码率自适应，默认为true
+    mAlivcLivePushConfig.setAudioOnly(mAudio);
+
     if(mPreviewOrientation==2){
       mAlivcLivePushConfig.setPreviewOrientation(AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT);
     }
@@ -290,6 +292,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     if(mPreviewView==null) {
       mPreviewView = (SurfaceView) view.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
       mPreviewView.getHolder().addCallback(mCallback);
+
     }
     return  view;
   }

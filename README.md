@@ -16,7 +16,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 //3 纯音频
 //4 纯视频
 
-      LivePlugin.init('您的推流地址',"1","1","1","0",
+      LivePlugin.init('您的推流地址',"1","1","0","0",
       function(t){  
        //to do sth
       },function(e){alert('error: '+e)})

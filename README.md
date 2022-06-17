@@ -9,7 +9,20 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ```
 
 ### 2.使用方法
-`LivePlugin.init('您的推流地址',function(s){ },function(e){alert('error: '+e)})` 
+``` 
+//0 推流URL地址
+//1 是否竖屏. 1是竖屏,2横屏朝home键,3横屏朝不朝home键
+//2 是否前置摄像头. 1是
+//3 纯音频
+//4 纯视频
+
+      LivePlugin.init('您的推流地址',"1","1","1","0",
+      function(t){  
+       //to do sth
+      },function(e){alert('error: '+e)})
+ 
+``` 
+
 ```
  *   以下配置,可以让html的UI界面显示在JAVA界面的上面
  *    body {

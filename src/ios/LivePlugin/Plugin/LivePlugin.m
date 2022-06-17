@@ -4,10 +4,10 @@
 #import "AlivcLivePushConfigViewController.h"
 #import "AlivcLivePusherViewController.h"
 #import <AlivcLivePusher/AlivcLivePusher.h>
-
+ 
 
 @interface LivePlugin : CDVPlugin {
-  // Member variables go here.
+  //   variables go here.
      
    
 }
@@ -66,12 +66,12 @@ static LivePlugin *selfplugin = nil;
         //2 是否前置摄像头. 1是
         //3 纯音频
         //4 纯视频
-    NSString* push_url =  [command.arguments objectAtIndex:0];
+        NSString* push_url =  [command.arguments objectAtIndex:0];
         NSString* orientation =  [command.arguments objectAtIndex:1];
-//        NSString* push_url =  [command.arguments objectAtIndex:0];
-//        NSString* push_url =  [command.arguments objectAtIndex:0];
-//        NSString* push_url =  [command.arguments objectAtIndex:0];
-//        NSString* push_url =  [command.arguments objectAtIndex:0];
+        NSString* i_cameraType =  [command.arguments objectAtIndex:2];
+        NSString* i_audioOnly =  [command.arguments objectAtIndex:3];
+        NSString* i_videoOnly =  [command.arguments objectAtIndex:4];
+
 
     if (push_url == nil || [push_url length] == 0) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
@@ -89,13 +89,22 @@ static LivePlugin *selfplugin = nil;
     self.pushConfig.previewMirror = false; // 默认为false，正常情况下都选择false即可。
    
     self.pushConfig.orientation = AlivcLivePushOrientationPortrait; // 默认为竖屏，可设置home键向左或向右横屏。
-    if(orientation == @"2"){
+    if( [orientation isEqualToString:  @"2" ]){
         self.pushConfig.orientation = AlivcLivePushOrientationLandscapeLeft; // 默认为竖屏，可设置home键向左或向右横屏。
     }
-    else if(orientation==@"3"){
+    else if([orientation isEqualToString:@"3"]){
         self.pushConfig.orientation = AlivcLivePushOrientationLandscapeRight; // 默认为竖屏，可设置home键向左或向右横屏。
     }
-        
+    self.pushConfig.cameraType = AlivcLivePushCameraTypeBack;
+    if([i_cameraType isEqualToString: @"1"]){
+        self.pushConfig.cameraType = AlivcLivePushCameraTypeFront;//前置摄像头
+    }
+    if([i_audioOnly isEqualToString: @"1"]){
+        self.pushConfig.audioOnly = true ;
+    }
+    if([i_videoOnly isEqualToString: @"1"]){
+        self.pushConfig.videoOnly = true;
+    }
     self.pushConfig.enableAutoResolution = YES; //分辨率自适应
   
     

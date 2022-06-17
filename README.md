@@ -90,18 +90,16 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加 
 
+4.##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需手动拷贝到对应目录* 
+
+5.由于现在可以直接用html端的页面显示操作按钮,多语言可以不用设置了 
+
+### 其他问题 
+1.如果播流没声音,需要转码模版设置RTS. 详情查看 https://help.aliyun.com/document_detail/199444.html 
+2.纯音频功能异常,播放时是没有声音 
 
 
-
-##### *注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需手动拷贝到对应目录* 
-由于现在可以直接用html端的页面显示操作按钮,多语言可以不用设置了 
-如果播流没声音,需要转码模版设置RTS. 详情查看 https://help.aliyun.com/document_detail/199444.html 
-
-
-
-
-
-参考链接 
+### 参考链接 
 
 阿里云官网文档: https://help.aliyun.com/document_detail/94844.html 
 

@@ -97,7 +97,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 ### 其他问题 
 1.如果播流没声音,需要转码模版设置RTS. 详情查看 https://help.aliyun.com/document_detail/199444.html 
 
-2.纯音频功能异常,播放时是没有声音   
+2.纯音频功能,播放时是没有声音,请参考https://help.aliyun.com/document_detail/86458.html   
  
   
   

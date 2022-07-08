@@ -70,6 +70,7 @@ public class LivePlugin extends CordovaPlugin   {
       LivePushFragment.mPlugin_CameraIsFront = args.getString(2);           //2 是否前置摄像头. 1是
       LivePushFragment.mPlugin_AudioOnly  = args.getString(3);              //3 纯音频
       LivePushFragment.mPlugin_VideoOnly = args.getString(4);               //4 纯视频
+      
       LivePushFragment.mAppContext = this.cordova.getContext();
       initLive(callbackContext);
       //todo 不锁屏

@@ -5,9 +5,14 @@ var exec = require('cordova/exec');
 //2 是否前置摄像头. 1是
 //3 纯音频
 //4 纯视频
-exports.init = function (arg0,arg1,arg2,arg3,arg4, success, error) {
+//5 是否在webview以下. 默认是在下方: true
+//6 窗口宽. -1 默认全屏
+//7 窗口高. -1 默认全屏
+//8 x坐标 默认0
+//9 y坐标 默认0
+exports.init = function (arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9, success, error) {
     cordova.require('cordova/channel').onCordovaReady.subscribe(function(){
-        exec(success, error, 'LivePlugin', 'init', [arg0,arg1,arg2,arg3,arg4]);
+        exec(success, error, 'LivePlugin', 'init', [arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9]);
     });
 };
 
@@ -56,3 +61,5 @@ exports.RestartPushAync = function ( success, error) {
 exports.StopPreview = function ( success, error) {
     exec(success, error, 'LivePlugin', 'StopPreview', []);
 };
+
+ 

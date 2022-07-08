@@ -1,5 +1,5 @@
 # cordova-plugin-live
-cordova live 直播推流插件 , 集成的是阿里云SDK
+cordova live 直播推流插件, 支持多个用户连麦 , 集成的是阿里云SDK
 
 
 ### 1.安装命令
@@ -15,6 +15,11 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 //2 是否前置摄像头. 1是
 //3 纯音频
 //4 纯视频
+//5 是否在webview以下. 默认是在下方: true
+//6 窗口宽. -1 默认全屏
+//7 窗口高. -1 默认全屏
+//8 x坐标 默认0
+//9 y坐标 默认0
 
       LivePlugin.init('您的推流地址',"1","1","0","0",
       function(t){  

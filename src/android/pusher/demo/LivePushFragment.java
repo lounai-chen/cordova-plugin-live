@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +96,12 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static String mPlugin_CameraIsFront = "1";
   public static String mPlugin_AudioOnly = "0";
   public static String mPlugin_VideoOnly = "0";
+  //布局
+  public static String mPlugin_Under = "1";   //5 是否在webview以下. 1 默认是在下方
+  public static Integer mPlugin_Width = -1;   //6 窗口宽. -1 默认全屏
+  public static Integer mPlugin_Height = -1;  //7 窗口高. -1 默认全屏
+  public static Integer mPlugin_Left = 0;     //8 x坐标 默认0
+  public static Integer mPlugin_Top = 0;      //9 y坐标 默认0
 
   public static final String TAG = "LivePushFragment";
 
@@ -279,8 +286,9 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       mDeviceOrientation = orientation;
     });
 
-
   }
+
+
 
 
   private String appResourcesPackage;
@@ -289,11 +297,37 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
     View view = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
+
     if(mPreviewView==null) {
       mPreviewView = (SurfaceView) view.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
       mPreviewView.getHolder().addCallback(mCallback);
-
     }
+
+    android.view.ViewGroup.LayoutParams lp = mPreviewView.getLayoutParams();
+    if(mPlugin_Width == -1 || mPlugin_Height == -1) {
+      lp.width =  mPreviewView.getLayoutParams().width;
+      lp.height =  mPreviewView.getLayoutParams().height;
+    }else {
+      lp.width = mPlugin_Width;
+      lp.height = mPlugin_Height;
+    }
+    mPreviewView.setLayoutParams(lp);
+    setLayout(mPreviewView,mPlugin_Left,mPlugin_Top);
+
+    //点击事件
+    mPreviewView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        // lp.width = 600;
+        // lp.height = 600;
+        // mPreviewView.setLayoutParams(lp);
+        // setLayout(mPreviewView,450,650);
+
+        LivePlugin.callJS("200|点击view");
+      }
+    });
+
+
     return  view;
   }
 
@@ -972,5 +1006,16 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     });
   }
 
+  /*
+   * 设置控件所在的位置XY，并且不改变宽高，
+   * XY为绝对位置
+   */
+  public static void setLayout(View view,int x,int y)
+  {
+    ViewGroup.MarginLayoutParams margin= new ViewGroup.MarginLayoutParams(view.getLayoutParams());
+    margin.setMargins(x,y, x+margin.width, y+margin.height);
+    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(margin);
+    view.setLayoutParams(layoutParams);
+  }
 
 }

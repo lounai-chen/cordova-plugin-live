@@ -70,7 +70,12 @@ public class LivePlugin extends CordovaPlugin   {
       LivePushFragment.mPlugin_CameraIsFront = args.getString(2);           //2 是否前置摄像头. 1是
       LivePushFragment.mPlugin_AudioOnly  = args.getString(3);              //3 纯音频
       LivePushFragment.mPlugin_VideoOnly = args.getString(4);               //4 纯视频
-      
+      LivePushFragment.mPlugin_Under = args.getString(5);                   //5 是否在webview以下. 1 默认是在下方
+      LivePushFragment.mPlugin_Width = Integer.parseInt(args.getString(6)); //6 窗口宽. -1 默认全屏
+      LivePushFragment.mPlugin_Height = Integer.parseInt(args.getString(7));//7 窗口高. -1 默认全屏
+      LivePushFragment.mPlugin_Left = Integer.parseInt(args.getString(8));  //8 x坐标 默认0
+      LivePushFragment.mPlugin_Top = Integer.parseInt(args.getString(9));   //9 y坐标 默认0
+
       LivePushFragment.mAppContext = this.cordova.getContext();
       initLive(callbackContext);
       //todo 不锁屏
@@ -262,25 +267,28 @@ public class LivePlugin extends CordovaPlugin   {
 
         view.setBackgroundColor(0x00000000);
 
-        // If parents do not match look for.
-        if(curParent.getParent() != rootParent) {
-          while(curParent != null && curParent.getParent() != rootParent) {
-            curParent = curParent.getParent();
-          }
+        //5 是否在webview以下. 1 默认是在下方
+        if(LivePushFragment.mPlugin_Under.equals("1")) {
+          // If parents do not match look for.
+          if (curParent.getParent() != rootParent) {
+            while (curParent != null && curParent.getParent() != rootParent) {
+              curParent = curParent.getParent();
+            }
 
-          if(curParent != null) {
-            ((ViewGroup)curParent).setBackgroundColor(0x00000000);
-            ((ViewGroup)curParent).bringToFront();
+            if (curParent != null) {
+              ((ViewGroup) curParent).setBackgroundColor(0x00000000);
+              ((ViewGroup) curParent).bringToFront();
+            } else {
+              // Do default...
+              curParent = view.getParent();
+              webViewParent = curParent;
+              ((ViewGroup) view).bringToFront();
+            }
           } else {
-            // Do default...
-            curParent = view.getParent();
+            // Default
             webViewParent = curParent;
-            ((ViewGroup)view).bringToFront();
+            ((ViewGroup) curParent).bringToFront();
           }
-        }else{
-          // Default
-          webViewParent = curParent;
-          ((ViewGroup)curParent).bringToFront();
         }
 
         //add the fragment to the container

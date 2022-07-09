@@ -21,10 +21,23 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 //8 x坐标 默认0
 //9 y坐标 默认0
 
-      LivePlugin.init('您的推流地址',"1","1","0","0",
-      function(t){  
-       //to do sth
-      },function(e){alert('error: '+e)})
+      
+
+  liveInit(){
+      var th = this;
+      const bodyEl:any = window.document.querySelector("#myBody"); 
+      bodyEl.style.visibility = 'hidden'
+      bodyEl.style.background = "transparent"   
+      LivePlugin.init("rtmp://rtmp.您的推流地址",
+        1,1,0,0,1,500,900,450,650,
+        function(t){ 
+          alert('ok: '+t);
+          th.liveStatus = t;    
+          // to do sth
+        },
+        function(e){alert('error: '+e)}
+      )
+  }
  
 ``` 
 

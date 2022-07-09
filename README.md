@@ -29,7 +29,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
       bodyEl.style.visibility = 'hidden'
       bodyEl.style.background = "transparent"   
       LivePlugin.init("rtmp://rtmp.您的推流地址",
-        1,1,0,0,1,500,900,450,650,
+        1,1,0,0,1,600,600,450,650,
         function(t){ 
           alert('ok: '+t);
           th.liveStatus = t;    

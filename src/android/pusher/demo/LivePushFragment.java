@@ -87,7 +87,41 @@ import com.alivc.live.pusher.widget.CommonDialog;
 import com.alivc.live.pusher.widget.DataView;
 
 import com.aliyun.animoji.utils.DeviceOrientationDetector;
+
 import com.zhongzilian.chestnutapp.R;
+
+
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.aliyun.aliliveplayersdk.adapter.AliLivePlayerCallbackAdapter;
+import com.aliyun.aliliveplayersdk.dialogFragment.MoreDialogFragment;
+import com.aliyun.aliliveplayersdk.dialogFragment.SnapShotDialogFragment;
+import com.aliyun.aliliveplayersdk.util.DensityUtil;
+import com.aliyun.liveplayer.define.MirrorMode;
+import com.aliyun.liveplayer.define.RotateMode;
+import com.aliyun.liveplayer.define.ScaleMode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static Context mAppContext;
@@ -96,6 +130,7 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static String mPlugin_CameraIsFront = "1";
   public static String mPlugin_AudioOnly = "0";
   public static String mPlugin_VideoOnly = "0";
+  public static String mPlugin_UrlPlayer = "";
   //布局
   public static String mPlugin_Under = "1";   //5 是否在webview以下. 1 默认是在下方
   public static Integer mPlugin_Width = -1;   //6 窗口宽. -1 默认全屏
@@ -146,8 +181,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private boolean audioThreadOn = false;
   private boolean mIsStartAsnycPushing = false;
 
-
-
   private String mAuthString = "?auth_key=%1$d-%2$d-%3$d-%4$s";
   private String mMd5String = "%1$s-%2$d-%3$d-%4$d-%5$s";
   private String mTempUrl = null;
@@ -177,6 +210,25 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private SurfaceView mPreviewView;
   private SurfaceStatus mSurfaceStatus = SurfaceStatus.UNINITED;
   private boolean videoThreadOn = false;
+  private View PageView;
+
+//  begin player
+private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
+
+  private final List<String> mEventDatas = new ArrayList<>();
+  private final List<String> mRenderFrameDatas = new ArrayList<>();
+
+  private AliLivePlayerCallbackAdapter mEventAdapter,mRenderFrameAdapter;
+  private MoreDialogFragment mMoreDialogFragment;
+  private SnapShotDialogFragment mSnapShotDialogFragment;
+
+  //开始、暂停、恢复、停止、截图
+  private TextView mStartTextView,mPauseTextView,mResumeTextView,mStopTextView,mSnapShotTextView;
+  private RecyclerView mEventRecyclerView, mRenderFrameRecyclerView;
+  private ImageView mScreenModeImageView,mMoreImageView,mBackImageView;
+  private SurfaceView mSurfaceView;
+  private Group mOtherViewGroup;
+//  end   player
 
   public static LivePushFragment newInstance(String url, boolean async, boolean mAudio, boolean mVideoOnly, int cameraId, boolean isFlash, int mode, String authTime, String privacyKey, boolean mixExtern, boolean mixMain, boolean beautyOn, int fps, int previewOrientation) {
     LivePushFragment livePushFragment = new LivePushFragment();
@@ -288,18 +340,15 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
 
   }
 
-
-
-
   private String appResourcesPackage;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
-    View view = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
+     PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
 
     if(mPreviewView==null) {
-      mPreviewView = (SurfaceView) view.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
+      mPreviewView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
       mPreviewView.getHolder().addCallback(mCallback);
     }
 
@@ -327,8 +376,9 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
       }
     });
 
+    player_init(); // todo 注释
 
-    return  view;
+    return  PageView;
   }
 
   SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
@@ -378,6 +428,29 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
     view.bringToFront();
 
   }
+
+  // begin player
+  public  void player_init()
+  {
+    System.loadLibrary("RtsSDK");
+
+
+    if(mSurfaceView==null){
+      mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
+    }
+
+    com.aliyun.aliliveplayersdk.data.AliLiveData.URL =  mPlugin_UrlPlayer;
+
+    mController = new com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController();
+    mController.createAliLivePlayer(mAppContext,mSurfaceView);
+
+  }
+
+  public void player_start() {
+    mController.start();
+  }
+  // end player
+
 
   public   void StartPreview(){
     mAlivcLivePusher.startPreviewAysnc(mPreviewView);
@@ -1013,7 +1086,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static void setLayout(View view,int x,int y)
   {
     ViewGroup.MarginLayoutParams margin= new ViewGroup.MarginLayoutParams(view.getLayoutParams());
-    margin.setMargins(x,y, x+margin.width, y+margin.height);
+    //margin.setMargins(x,y, x+margin.width, y+margin.height);
+    margin.setMargins(x,y, 0, 0);
     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(margin);
     view.setLayoutParams(layoutParams);
   }

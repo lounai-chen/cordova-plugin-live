@@ -3,6 +3,7 @@ package com.alivc.live.pusher.demo;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.view.View;
@@ -41,6 +42,7 @@ import org.json.JSONException;
 public class LivePlugin extends CordovaPlugin   {
 
 
+
   private  LivePushFragment  fragment_live;
 
   private int containerViewId = 20; //<- set to random number to prevent conflict with other plugins
@@ -60,6 +62,7 @@ public class LivePlugin extends CordovaPlugin   {
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     if (action.equals("init")) {
+
       mCallbackContext = callbackContext;    //拿到回调对象并保存
       if(initPermissionCheck() == false){
         return  false;
@@ -98,6 +101,7 @@ public class LivePlugin extends CordovaPlugin   {
         return false;
       }
       fragment_live.StartPushLive();
+
       this.coolMethod("成功", callbackContext);
       return true;
     }
@@ -172,6 +176,17 @@ public class LivePlugin extends CordovaPlugin   {
       this.coolMethod("成功", callbackContext);
       return true;
     }
+    //初始化播放器
+    else if (action.equals("InitPlayer")){
+      LivePushFragment.mPlugin_UrlPlayer = args.getString(0);                 //0  播流URL地址
+      if (fragment_live == null) {
+        initLive(callbackContext);
+      }
+      fragment_live.player_init();
+    }
+    else if (action.equals("PlayerStart")){
+      fragment_live.player_start();
+    }
 //    else if (action.equals("init_old")) {
 //      String urlPush = args.getString(0);
 //      // Intent pIntent = new Intent(this.cordova.getActivity(), MainLiveActivity.class);
@@ -188,6 +203,8 @@ public class LivePlugin extends CordovaPlugin   {
 
     return false;
   }
+
+
 
   private boolean stopLiveView(CallbackContext callbackContext) {
     if(webViewParent != null) {
@@ -327,7 +344,7 @@ public class LivePlugin extends CordovaPlugin   {
         ActivityCompat.requestPermissions(this.cordova.getActivity(), permissionManifest, PERMISSION_REQUEST_CODE);
       } else {
         mCallbackContext.error("0|请授权");
-        return false; 
+        return false;
       }
     }
     return  true;
@@ -345,7 +362,7 @@ public class LivePlugin extends CordovaPlugin   {
     Manifest.permission.INTERNET,
   };
 
- 
+
 
   private boolean permissionCheck() {
     int permissionCheck = PackageManager.PERMISSION_GRANTED;

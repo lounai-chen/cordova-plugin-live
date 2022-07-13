@@ -18,8 +18,9 @@ dependencies {
   implementation 'com.acker:simplezxing:1.5'
   implementation 'com.google.code.gson:gson:2.6.2'
   implementation fileTree(include: ['commons-lang3-3.0.jar'], dir: 'src/main/commonlibs')
+  implementation fileTree(include: ['*.aar'], dir: 'src/main/commonlibs')
   implementation 'com.aliyun.animoji:animoji:1.2@aar'
-  implementation 'com.aliyun.sdk.android:AliyunPlayer:5.4.4.0-full'
+  //implementation 'com.aliyun.sdk.android:AliyunPlayer:5.4.4.0-full'
   implementation 'com.aliyun.sdk.android:AlivcArtc:5.4.4.0'
   implementation 'com.aliyun.rts.android:RtsSDK:2.1.0'
   implementation 'com.squareup.okhttp3:okhttp:4.8.1'

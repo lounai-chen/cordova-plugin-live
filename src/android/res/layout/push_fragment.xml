@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+  tools:context="com.aliyun.aliliveplayersdk.LivePlayerAPIActivity">
+
+  <!--  begin player-->
+  <androidx.constraintlayout.widget.Group
+    android:id="@+id/group_other_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:constraint_referenced_ids="tv_start,tv_pause,tv_resume,
+        tv_stop,tv_snapshot,view_divider,tv_player_event,
+        event_recyclerview,tv_render_frame,render_frame_recyclerview"/>
+
+  <SurfaceView
+    android:id="@+id/surface_view"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+
+<!--  end player-->
+
+
+
+
+
+
 
   <SurfaceView
     android:id="@+id/frg_preview_view"

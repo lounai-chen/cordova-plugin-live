@@ -130,13 +130,19 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static String mPlugin_CameraIsFront = "1";
   public static String mPlugin_AudioOnly = "0";
   public static String mPlugin_VideoOnly = "0";
-  public static String mPlugin_UrlPlayer = "";
+
   //布局
   public static String mPlugin_Under = "1";   //5 是否在webview以下. 1 默认是在下方
   public static Integer mPlugin_Width = -1;   //6 窗口宽. -1 默认全屏
   public static Integer mPlugin_Height = -1;  //7 窗口高. -1 默认全屏
   public static Integer mPlugin_Left = 0;     //8 x坐标 默认0
   public static Integer mPlugin_Top = 0;      //9 y坐标 默认0
+
+  public static String mPlugin_UrlPlayer = "";
+  public static Integer mPlugin_WidthPlayer = -1;   //6 窗口宽. -1 默认全屏
+  public static Integer mPlugin_HeightPlayer = -1;  //7 窗口高. -1 默认全屏的25%
+  public static Integer mPlugin_LeftPlayer = 0;     //8 x坐标 默认0
+  public static Integer mPlugin_TopPlayer = 0;      //9 y坐标 默认0
 
   public static final String TAG = "LivePushFragment";
 
@@ -438,16 +444,64 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     if(mSurfaceView==null){
       mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
     }
+    android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
+    if(mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
+      lp.width =  mSurfaceView.getLayoutParams().width;
+      lp.height =  mSurfaceView.getLayoutParams().height;
+    }else {
+      lp.width = mPlugin_WidthPlayer;
+      lp.height = mPlugin_HeightPlayer;
+    }
+    mSurfaceView.setLayoutParams(lp);
+    setLayout(mSurfaceView,mPlugin_LeftPlayer,mPlugin_TopPlayer);
 
     com.aliyun.aliliveplayersdk.data.AliLiveData.URL =  mPlugin_UrlPlayer;
 
     mController = new com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController();
     mController.createAliLivePlayer(mAppContext,mSurfaceView);
 
+    LivePlugin.callJS("600|初始化播放器成功");
+
   }
 
-  public void player_start() {
+  public void PlayerStart() {
     mController.start();
+  }
+
+  public void PlayerPause() {
+    mController.pause();
+  }
+
+  public void PlayerResume() {
+    mController.resume();
+  }
+
+  public void PlayerStop() {
+    mController.stop();
+  }
+
+  public void PlayerSnapshot() {
+    mController.snapshot();
+  }
+
+  public void PlayerIsMute(boolean isMute) {
+    mController.setMute(isMute);
+  }
+
+  public void PlayerSetVolume(float volume) {
+    mController.setVolume(volume);
+  }
+
+  public void PlayerMirrorMode(MirrorMode mirrorMode) {
+    mController.setMirrorMode(mirrorMode);
+  }
+
+  public void PlayerScaleMode(ScaleMode scaleMode) {
+    mController.setScaleMode(scaleMode);
+  }
+
+  public void PlayerRotateMode(RotateMode rotateMode) {
+    mController.setRotateMode(rotateMode);
   }
   // end player
 

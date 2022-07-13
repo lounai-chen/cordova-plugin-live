@@ -64,6 +64,9 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
  106|重新推流成功 
 
  200|点击view   //5 是否在webview以下. 默认是在下方: true [该参数为0,也就是在webview上方才生效]
+
+
+ 600|初始化播放器成功 
  
 
  -10|推流未知错误  

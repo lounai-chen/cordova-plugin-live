@@ -15,6 +15,9 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 
+import com.aliyun.liveplayer.define.MirrorMode;
+import com.aliyun.liveplayer.define.RotateMode;
+import com.aliyun.liveplayer.define.ScaleMode;
 import com.zhongzilian.chestnutapp.R;
 
 
@@ -61,6 +64,7 @@ public class LivePlugin extends CordovaPlugin   {
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    //////// begin live push 直播推流 ///////
     if (action.equals("init")) {
 
       mCallbackContext = callbackContext;    //拿到回调对象并保存
@@ -176,30 +180,71 @@ public class LivePlugin extends CordovaPlugin   {
       this.coolMethod("成功", callbackContext);
       return true;
     }
+    //////// end live push 直播推流 ///////
+
+    //////// begin player 播放器 ///////
     //初始化播放器
     else if (action.equals("InitPlayer")){
+      mCallbackContext = callbackContext;    //拿到回调对象并保存
       LivePushFragment.mPlugin_UrlPlayer = args.getString(0);                 //0  播流URL地址
+      LivePushFragment.mPlugin_WidthPlayer = Integer.parseInt(args.getString(1)); //1 窗口宽. -1 默认全屏
+      LivePushFragment.mPlugin_HeightPlayer = Integer.parseInt(args.getString(2));//2 窗口高. -1  默认全屏的25%
+      LivePushFragment.mPlugin_LeftPlayer = Integer.parseInt(args.getString(3));  //3 x坐标 默认0
+      LivePushFragment.mPlugin_TopPlayer = Integer.parseInt(args.getString(4));   //4 y坐标 默认0
+
       if (fragment_live == null) {
         initLive(callbackContext);
       }
       fragment_live.player_init();
     }
     else if (action.equals("PlayerStart")){
-      fragment_live.player_start();
+      fragment_live.PlayerStart();
+      this.coolMethod("成功", callbackContext);
     }
-//    else if (action.equals("init_old")) {
-//      String urlPush = args.getString(0);
-//      // Intent pIntent = new Intent(this.cordova.getActivity(), MainLiveActivity.class);
-//      // Intent pIntent = new Intent(this.cordova.getActivity(), PushConfigActivity.class);
-//      Intent pIntent = new Intent(this.cordova.getActivity(), LivePushActivity.class);
-//      // Intent notificationIntent = new Intent(this.cordova.getActivity(), LivePushActivity.class);
-//      LivePushActivity._urlPlush = urlPush;
-//      LivePushActivity._this_cordova = this.cordova;
-//      LivePushActivity._this_plugin = this;
-//      this.cordova.getActivity().startActivity(pIntent);
-//      this.coolMethod("成功", callbackContext);
-//      return true;
-//    }
+    else if (action.equals("PlayerPause")){
+      fragment_live.PlayerPause();
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerResume")){
+      fragment_live.PlayerResume();
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerStop")){
+      fragment_live.PlayerStop();
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerSnapshot")){
+      fragment_live.PlayerSnapshot();
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerIsMute")){
+      boolean b = args.getString(0).equals("1");
+      fragment_live.PlayerIsMute(b);
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerSetVolume")){
+      Float f = Float.parseFloat(args.getString(0));
+      fragment_live.PlayerSetVolume(f);
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerMirrorMode")){
+      MirrorMode mirrorMode = MirrorMode.MIRROR_MODE_HORIZONTAL; // todo
+      fragment_live.PlayerMirrorMode(mirrorMode);
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerScaleMode")){
+      ScaleMode scaleMode = ScaleMode.SCALE_TO_FILL; // todo
+      fragment_live.PlayerScaleMode(scaleMode);
+      this.coolMethod("成功", callbackContext);
+    }
+    else if (action.equals("PlayerRotateMode")){
+      RotateMode rotateMode = RotateMode.ROTATE_90; // todo
+      fragment_live.PlayerRotateMode(rotateMode);
+      this.coolMethod("成功", callbackContext);
+    }
+
+    //////// end player ///////
+
 
     return false;
   }

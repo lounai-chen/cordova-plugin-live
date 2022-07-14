@@ -447,7 +447,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
     if(mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
       lp.width =  mSurfaceView.getLayoutParams().width;
-      lp.height =  mSurfaceView.getLayoutParams().height;
+      lp.height = Integer.parseInt( String.valueOf (mSurfaceView.getLayoutParams().height * 0.25) );
     }else {
       lp.width = mPlugin_WidthPlayer;
       lp.height = mPlugin_HeightPlayer;

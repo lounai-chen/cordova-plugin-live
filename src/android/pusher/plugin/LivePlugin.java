@@ -9,6 +9,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.RequiresApi;
@@ -82,6 +83,8 @@ public class LivePlugin extends CordovaPlugin   {
       LivePushFragment.mPlugin_Height = Integer.parseInt(args.getString(7));//7 窗口高. -1 默认全屏
       LivePushFragment.mPlugin_Left = Integer.parseInt(args.getString(8));  //8 x坐标 默认0
       LivePushFragment.mPlugin_Top = Integer.parseInt(args.getString(9));   //9 y坐标 默认0
+
+      LivePushFragment.mPlugin_IsJustPlayer = 1; //需要播放器碎片布局
 
       LivePushFragment.mAppContext = this.cordova.getContext();
       initLive(callbackContext);
@@ -186,61 +189,89 @@ public class LivePlugin extends CordovaPlugin   {
     //初始化播放器
     else if (action.equals("InitPlayer")){
       mCallbackContext = callbackContext;    //拿到回调对象并保存
+      if(initPermissionCheck() == false){
+        return  false;
+      }
+
       LivePushFragment.mPlugin_UrlPlayer = args.getString(0);                 //0  播流URL地址
       LivePushFragment.mPlugin_WidthPlayer = Integer.parseInt(args.getString(1)); //1 窗口宽. -1 默认全屏
       LivePushFragment.mPlugin_HeightPlayer = Integer.parseInt(args.getString(2));//2 窗口高. -1  默认全屏的25%
       LivePushFragment.mPlugin_LeftPlayer = Integer.parseInt(args.getString(3));  //3 x坐标 默认0
       LivePushFragment.mPlugin_TopPlayer = Integer.parseInt(args.getString(4));   //4 y坐标 默认0
 
+
       if (fragment_live == null) {
+        if(LivePushFragment.mPlugin_IsJustPlayer==0){
+          LivePushFragment.mPlugin_IsJustPlayer = 1; //需要播放器碎片布局
+        }
+        LivePushFragment.mAppContext = this.cordova.getContext();
         initLive(callbackContext);
       }
-      fragment_live.player_init();
+      else {
+        LivePushFragment.mPlugin_IsJustPlayer = 0;
+        cordova.getActivity().runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            fragment_live.player_init();
+          }
+        });
+      }
+      return true;
     }
     else if (action.equals("PlayerStart")){
       fragment_live.PlayerStart();
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerPause")){
       fragment_live.PlayerPause();
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerResume")){
       fragment_live.PlayerResume();
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerStop")){
       fragment_live.PlayerStop();
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerSnapshot")){
       fragment_live.PlayerSnapshot();
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerIsMute")){
       boolean b = args.getString(0).equals("1");
       fragment_live.PlayerIsMute(b);
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerSetVolume")){
       Float f = Float.parseFloat(args.getString(0));
       fragment_live.PlayerSetVolume(f);
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerMirrorMode")){
       MirrorMode mirrorMode = MirrorMode.MIRROR_MODE_HORIZONTAL; // todo
       fragment_live.PlayerMirrorMode(mirrorMode);
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerScaleMode")){
       ScaleMode scaleMode = ScaleMode.SCALE_TO_FILL; // todo
       fragment_live.PlayerScaleMode(scaleMode);
       this.coolMethod("成功", callbackContext);
+      return true;
     }
     else if (action.equals("PlayerRotateMode")){
       RotateMode rotateMode = RotateMode.ROTATE_90; // todo
       fragment_live.PlayerRotateMode(rotateMode);
       this.coolMethod("成功", callbackContext);
+      return true;
     }
 
     //////// end player ///////

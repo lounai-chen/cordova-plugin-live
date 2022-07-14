@@ -125,7 +125,7 @@ import java.util.List;
 
 public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static Context mAppContext;
-  public static String mPlugin_UrlPush;
+  public static String mPlugin_UrlPush = "";
   public static String mPlugin_PreviewOrientationEnum = "1";
   public static String mPlugin_CameraIsFront = "1";
   public static String mPlugin_AudioOnly = "0";
@@ -133,8 +133,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
 
   //布局
   public static String mPlugin_Under = "1";   //5 是否在webview以下. 1 默认是在下方
-  public static Integer mPlugin_Width = -1;   //6 窗口宽. -1 默认全屏
-  public static Integer mPlugin_Height = -1;  //7 窗口高. -1 默认全屏
+  public static Integer mPlugin_Width = 600;   //6 窗口宽. -1 默认全屏
+  public static Integer mPlugin_Height = 600;  //7 窗口高. -1 默认全屏
   public static Integer mPlugin_Left = 0;     //8 x坐标 默认0
   public static Integer mPlugin_Top = 0;      //9 y坐标 默认0
 
@@ -143,6 +143,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   public static Integer mPlugin_HeightPlayer = -1;  //7 窗口高. -1 默认全屏的25%
   public static Integer mPlugin_LeftPlayer = 0;     //8 x坐标 默认0
   public static Integer mPlugin_TopPlayer = 0;      //9 y坐标 默认0
+
+  public static Integer mPlugin_IsJustPlayer = 0; // 1 //需要播放器碎片布局
 
   public static final String TAG = "LivePushFragment";
 
@@ -280,6 +282,10 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
+    if(mPlugin_UrlPush.isEmpty() ) {
+      return;
+    }
+
     mPushUrl= mPlugin_UrlPush;
     mPreviewOrientation = Integer.parseInt(mPlugin_PreviewOrientationEnum);
     mCameraId =  Integer.parseInt(mPlugin_CameraIsFront); // 1前置摄像头
@@ -353,36 +359,43 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     appResourcesPackage = getActivity().getPackageName();
      PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
 
-    if(mPreviewView==null) {
-      mPreviewView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
-      mPreviewView.getHolder().addCallback(mCallback);
+    if(mSurfaceView==null){
+      mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
     }
 
-    android.view.ViewGroup.LayoutParams lp = mPreviewView.getLayoutParams();
-    if(mPlugin_Width == -1 || mPlugin_Height == -1) {
-      lp.width =  mPreviewView.getLayoutParams().width;
-      lp.height =  mPreviewView.getLayoutParams().height;
-    }else {
-      lp.width = mPlugin_Width;
-      lp.height = mPlugin_Height;
-    }
-    mPreviewView.setLayoutParams(lp);
-    setLayout(mPreviewView,mPlugin_Left,mPlugin_Top);
+    if( ! mPlugin_UrlPush.isEmpty() ) {
 
-    //点击事件
-    mPreviewView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        // lp.width = 600;
-        // lp.height = 600;
-        // mPreviewView.setLayoutParams(lp);
-        // setLayout(mPreviewView,450,650);
-
-        LivePlugin.callJS("200|点击view");
+      if(mPreviewView==null) {
+        mPreviewView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("frg_preview_view", "id", appResourcesPackage));
+        mPreviewView.getHolder().addCallback(mCallback);
       }
-    });
 
-    player_init(); // todo 注释
+      android.view.ViewGroup.LayoutParams lp = mPreviewView.getLayoutParams();
+      if (mPlugin_Width == -1 || mPlugin_Height == -1) {
+        lp.width = mPreviewView.getLayoutParams().width;
+        lp.height = mPreviewView.getLayoutParams().height;
+      } else {
+        lp.width = mPlugin_Width;
+        lp.height = mPlugin_Height;
+      }
+      mPreviewView.setLayoutParams(lp);
+      setLayout(mPreviewView, mPlugin_Left, mPlugin_Top);
+
+      //点击事件
+      mPreviewView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          // lp.width = 600;
+          // lp.height = 600;
+          // mPreviewView.setLayoutParams(lp);
+          // setLayout(mPreviewView,450,650);
+
+          LivePlugin.callJS("200|点击view");
+        }
+      });
+    }
+
+    player_init(); // 初始化播放器
 
     return  PageView;
   }
@@ -436,32 +449,38 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
   }
 
   // begin player
-  public  void player_init()
-  {
+  public  void player_init() {
     System.loadLibrary("RtsSDK");
 
+    if (mPlugin_IsJustPlayer == 1) { //需要播放器碎片布局
+      if (mSurfaceView == null) {
+        mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
+      }
+      android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
+      if (mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
+        lp.width = mAppContext.getResources().getDisplayMetrics().widthPixels - 10;
+        lp.height = (int) (mAppContext.getResources().getDisplayMetrics().heightPixels * 0.25);
+      } else {
+        lp.width = mPlugin_WidthPlayer;
+        lp.height = mPlugin_HeightPlayer;
+      }
 
-    if(mSurfaceView==null){
-      mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
+      mSurfaceView.setLayoutParams(lp);
+      setLayout(mSurfaceView, mPlugin_LeftPlayer, mPlugin_TopPlayer);
     }
-    android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
-    if(mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
-      lp.width =  mSurfaceView.getLayoutParams().width;
-      lp.height = Integer.parseInt( String.valueOf (mSurfaceView.getLayoutParams().height * 0.25) );
-    }else {
-      lp.width = mPlugin_WidthPlayer;
-      lp.height = mPlugin_HeightPlayer;
+
+    if (!mPlugin_UrlPlayer.isEmpty()) {
+      com.aliyun.aliliveplayersdk.data.AliLiveData.URL = mPlugin_UrlPlayer;
     }
-    mSurfaceView.setLayoutParams(lp);
-    setLayout(mSurfaceView,mPlugin_LeftPlayer,mPlugin_TopPlayer);
 
-    com.aliyun.aliliveplayersdk.data.AliLiveData.URL =  mPlugin_UrlPlayer;
+    if (mController == null) {
+      mController = new com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController();
+      mController.createAliLivePlayer(mAppContext, mSurfaceView);
+    }
 
-    mController = new com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController();
-    mController.createAliLivePlayer(mAppContext,mSurfaceView);
-
-    LivePlugin.callJS("600|初始化播放器成功");
-
+    if (mController != null && !mPlugin_UrlPlayer.isEmpty()) {
+      LivePlugin.callJS("600|初始化播放器成功");
+    }
   }
 
   public void PlayerStart() {

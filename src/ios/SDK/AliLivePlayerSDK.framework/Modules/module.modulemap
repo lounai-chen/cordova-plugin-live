@@ -1,0 +1,6 @@
+framework module AliLivePlayerSDK {
+  umbrella header "AliLivePlayerSDK.h"
+
+  export *
+  module * { export * }
+}

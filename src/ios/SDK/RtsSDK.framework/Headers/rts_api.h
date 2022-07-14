@@ -15,7 +15,6 @@
 #define ARTC_VIDEO_CACHE_SIZE  1
 #define ARTC_AUDIO_CACHE_SIZE  2
 #define ARTC_NET_DOWNLOADSPEED 3
-#define ARTC_CDN_IP            4
 #endif
 
 /* Example:

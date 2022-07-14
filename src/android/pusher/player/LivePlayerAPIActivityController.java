@@ -58,6 +58,11 @@ public class LivePlayerAPIActivityController {
                     //When occurs network error, start again
                     start();
                 }
+
+                LivePlugin.callJS("601|播放异常 errorCode:" +
+                errorInfo.getCode() +
+                " , errorMsg:" +
+                errorInfo.getMsg() );
             }
 
             @Override

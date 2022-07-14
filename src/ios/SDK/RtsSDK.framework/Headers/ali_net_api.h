@@ -14,7 +14,6 @@ extern "C" {
 #endif
 
 enum NET_API_LOG_LEVEL {
-    NET_API_LOG_NONE  = 100,
     NET_API_LOG_ERROR = 0,
     NET_API_LOG_WARN  = 1,
     NET_API_LOG_INFO  = 2,

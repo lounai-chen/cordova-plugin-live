@@ -40,7 +40,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 
 
-  
+
 
 //0 播流URL地址
 //1 窗口宽. -1 默认全屏
@@ -92,10 +92,11 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
  105|停止推流 
  106|重新推流成功 
 
- 200|点击view   //5 是否在webview以下. 默认是在下方: true [该参数为0,也就是在webview上方才生效]
+ 200|点击view   //5 是否在webview以下. 默认是在下方: true [备注;该参数为0,也就是在webview上方才生效]
 
 
  600|初始化播放器成功 
+ 601|播放异常 errorCode:   , errorMsg:    [备注;当停止推流|没有网络,也会触发该回调,errorCode:537067524]
  
 
  -10|推流未知错误  
@@ -159,7 +160,6 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 阿里云官网文档;  
  推流: https://help.aliyun.com/document_detail/94844.html ,  
-
  播流: https://help.aliyun.com/document_detail/404871.htm 
 
 

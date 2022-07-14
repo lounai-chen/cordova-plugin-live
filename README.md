@@ -19,9 +19,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 //6 窗口宽. -1 默认全屏
 //7 窗口高. -1 默认全屏
 //8 x坐标 默认0
-//9 y坐标 默认0
-
-      
+//9 y坐标 默认0      
 
   liveInit(){
     //初始化推流
@@ -40,6 +38,15 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
       )
   } 
 
+
+
+  
+
+//0 播流URL地址
+//1 窗口宽. -1 默认全屏
+//2 窗口高. -1 默认全屏的25%
+//3 x坐标 默认0
+//4 y坐标 默认0 
 
   PlayerInit(){
     //初始化播放器
@@ -150,7 +157,10 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 ### 参考链接 
 
-阿里云官网文档; 推流: https://help.aliyun.com/document_detail/94844.html , 播流: https://help.aliyun.com/document_detail/404871.htm 
+阿里云官网文档;  
+ 推流: https://help.aliyun.com/document_detail/94844.html ,  
+
+ 播流: https://help.aliyun.com/document_detail/404871.htm 
 
 
 IOS全球化多语言配置: https://www.jianshu.com/p/7232940d3e3f 

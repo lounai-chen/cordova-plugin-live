@@ -15,7 +15,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 //2 是否前置摄像头. 1是
 //3 纯音频
 //4 纯视频
-//5 是否在webview以下. 默认是在下方: true
+//5 是否在webview以下. 1 默认是在下方
 //6 窗口宽. -1 默认全屏
 //7 窗口高. -1 默认全屏
 //8 x坐标 默认0
@@ -24,12 +24,13 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
       
 
   liveInit(){
+    //初始化推流
       var th = this;
       const bodyEl:any = window.document.querySelector("#myBody"); 
       bodyEl.style.visibility = 'hidden'
       bodyEl.style.background = "transparent"   
       LivePlugin.init("rtmp://rtmp.您的推流地址",
-        1,1,0,0,1,600,600,450,650,
+        '1','1','0','0','1','600','600','450,'650',
         function(t){ 
           alert('ok: '+t);
           th.liveStatus = t;    
@@ -37,7 +38,28 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
         },
         function(e){alert('error: '+e)}
       )
+  } 
+
+
+  PlayerInit(){
+    //初始化播放器
+    var th = this;
+    const bodyEl:any = window.document.querySelector("#myBody"); 
+    bodyEl.style.visibility = 'hidden'
+    bodyEl.style.background = "transparent"  
+    LivePlugin.InitPlayer(
+      'artc://alibo.您的播流地址',
+       '-1','-1', '0' , '50' ,
+       function(t){ 
+        alert('ok: '+t);
+        th.liveStatus = t;   
+        // to do sth
+      },
+      function(e){alert('error: '+e)}
+    );
   }
+
+
  
 ``` 
 
@@ -128,10 +150,16 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 ### 参考链接 
 
-阿里云官网文档: https://help.aliyun.com/document_detail/94844.html 
+阿里云官网文档; 推流: https://help.aliyun.com/document_detail/94844.html , 播流: https://help.aliyun.com/document_detail/404871.htm 
+
 
 IOS全球化多语言配置: https://www.jianshu.com/p/7232940d3e3f 
 
-view置顶: https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git 
+view置顶: https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git  
+
+ 
+   
+
+![avatar](/demo/picture/1.jpg)
 
 

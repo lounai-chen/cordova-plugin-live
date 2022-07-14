@@ -1,5 +1,5 @@
 # cordova-plugin-live
-cordova live 直播推流插件, 支持多个用户连麦 , 集成的是阿里云SDK
+cordova live 直播推流 , 直播播流 , 可支持多个用户连麦 , 集成的是阿里云SDK
 
 
 ### 1.安装命令

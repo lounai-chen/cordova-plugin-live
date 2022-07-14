@@ -1,0 +1,389 @@
+<!--
+  Generated template for the Member page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.*ngIf="member.IsLogined()"
+-->
+<!-- <ion-header #header>
+  <ion-navbar>
+    <ion-title >{{Lang.personalcenter}}</ion-title>
+    <ion-buttons end #ionbutons>
+      <button (click)="gotoNotifications()">
+        <i class="zzl-appicons zion-message-new"></i>
+        <span  *ngIf="noReadyMessageCount>0">{{noReadyMessageCount>99?'99+':noReadyMessageCount}}</span>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
+
+
+
+<ion-content [ngClass]="{'no-margin-bottom':Util.homePageCouponList.length>0}">
+  <div
+    class="member-info-wrap"
+    [ngStyle]="{'background-image':'url('+Util.formatLocalImgPath('assets/img/personal_bg.png')+')',height:Util.isMicroMessager?(412 / 750 * 100+'vw'):'62.9vw',padding:Util.isMicroMessager?(98 / 750 * 100+'vw')+' 0 0 4.8vw':'21vw 0 0 4.8vw'}"
+  >
+    <div class="member-info-content">
+      <div class="top-wrap-info " (tap)="gotoPersonData()">
+        <div class="member-avatar">
+          <img class="headportrait" [src]="member.headportrait" />
+          <img
+            class="edit"
+            [src]="Util.formatLocalImgPath('assets/img/personal_edit.png')"
+          />
+        </div>
+        <div class="member-inform">
+          <!-- <h3>{{member.realname || member.name}}</h3> -->
+          <div class="member-name">
+            <span>{{member.realname || member.name}}</span>
+            <img
+              [src]="Util.formatLocalImgPath(member.realname_authed == 1?'assets/img/personal_ic_yirenzheng.png':'assets/img/personal_ic_weirenzheng.png')"
+            />
+          </div>
+          <p *ngIf="member.realname_authed == 1 &&member.companyname">
+            {{ member.companyname }}
+          </p>
+        </div>
+      </div>
+      <div class="member-other">
+        <div class="other-item" (tap)="gotoMyClockIn()">
+          <img
+            [src]="Util.formatLocalImgPath('assets/img/personal_ic_dakacishu.png')"
+          />
+          <span class="num">{{total_days}}</span><span>{{Lang.time}}</span>
+        </div>
+        <div
+          class="other-item"
+          *ngIf="!Util.isBaojian&&this.Util.medalSwitch&&!config.IsZhiNengPaltform"
+          (tap)="gotoMyMedal()"
+        >
+          <img
+            [src]="Util.formatLocalImgPath('assets/img/personal_ic_xunzhanggeshu.png')"
+          />
+          <span class="num">{{winmedalcount}}</span><span>枚</span>
+        </div>
+        <div
+          class="other-item"
+          *ngIf="Util.isopenlevelInstid||Util.curLevelInstid.indexOf(Util.AppEdition)>=0"
+          (tap)="gotoMyLevel()"
+        >
+          <img
+            [src]="Util.formatLocalImgPath('assets/img/personal_ic_zhiyedengji.png')"
+          />
+          <span>{{Util.memberLevelLabel}}</span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="top-wrap-notice"
+      [ngClass]="{'active':noReadyMessageCount>0}"
+      (click)="gotoNotifications()"
+      [style.top]="Util.isMicroMessager?(43 / 750 * 100+'vw'):'13.7vw'"
+    >
+      <i class="zzl-appicons zion-personal_ic_inform"></i>
+      <span *ngIf="noReadyMessageCount>0"></span>
+    </div>
+  </div>
+  <div class="user-achievements" *ngIf="member.IsLogined()">
+    <div
+      (tap)="gotoWecom()"
+      *ngIf="Util.showWecom"
+      class="user-achievements-item"
+    >
+      <img [src]="Util.formatLocalImgPath('assets/img/personal_wechat.png')" />
+      <span>{{Lang.customerwechat}}</span>
+    </div>
+    <div
+      class="user-achievements-item"
+      *ngIf="!Util.isBaojian && Util.AppEdition != 'EE'"
+      (tap)="gotoMyPayRecord()"
+    >
+      <img [src]="Util.formatLocalImgPath('assets/img/personal_wallet.png')" />
+      <span>{{Lang.mywallet}}</span>
+    </div>
+    <div
+      class="user-achievements-item"
+      (tap)="gotoMyCertificate()"
+      *ngIf="!Util.isBaojian&& Util.AppEdition != 'EE'"
+    >
+      <img
+        [src]="Util.formatLocalImgPath('assets/img/personal_zhengshu.png')"
+      />
+      <span>{{Lang.mycertificate}}</span>
+    </div>
+    <div
+      class="user-achievements-item"
+      *ngIf="!Util.isBaojian&&this.Util.medalSwitch&&!config.IsZhiNengPaltform&& Util.AppEdition != 'EE'"
+      (tap)="gotoMyMedal()"
+    >
+      <img [src]="Util.formatLocalImgPath('assets/img/personal_mebal.png')" />
+      <span>{{Lang.usermedal}}</span>
+    </div>
+    <!-- <div class="user-achievements-item" (tap)="gotoMyClockIn()">
+      <img [src]="Util.formatLocalImgPath('assets/img/user_sign_icon.png')" />
+      <span
+        >{{Lang[!config.IsZhiNengPaltform?"cumulativecheckin":"cumulativesignin"]}}</span
+      >
+    </div> -->
+  </div>
+
+  <!-- <div class="prism-player"  id="videoPlay"></div> -->
+ 
+ 
+  <div class="currency-wrap" *ngIf="member.IsLogined()">
+    <!-- {{Lang.currency}} -->
+    <div class="currency-title">{{Lang.morefunction}}</div>
+    <div class="currency-content">
+
+      <div class="currency-item" (tap)="liveTest()">
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_setting.png')"
+        />
+        <span>liveInit </span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item" (tap)="liveTest2()">
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_setting.png')"
+        />
+        <span>liveInit view above </span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show"   >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>{{liveStatus}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      
+      <div class="currency-item live-btn-show" (tap)="PlayerInit()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>初始化播放器</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="PlayerStart()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>播放视频</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="PlayerPause()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>暂停视频</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="PlayerResume()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>恢复视频</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+
+
+      <div class="currency-item live-btn-show" (tap)="gotoMyLectureHall2()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>开启直播推流</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div
+      class="currency-item live-btn-show"
+      (tap)="gotoMyBusinessCard2()"
+      *ngIf="!Util.isBaojian&&!config.IsZhiNengPaltform"
+    >
+      <img [src]="Util.formatLocalImgPath('assets/img/personal_card.png')" />
+      <span>关闭直播推流</span>
+      <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+    </div>
+
+      <div class="currency-item live-btn-show" (tap)="preview()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>开启预览</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="StopPreview()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>关闭预览</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="Pause()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>暂停</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="ResumeAsync()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>恢复</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="RestartPushAync()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>重新推流</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="CameraDirection()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>摄像头</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item live-btn-show" (tap)="LiveFlash()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>闪光灯</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+           <div class="currency-item live-btn-show" (tap)="shareWecom()"  >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_wwojiaingtang.png')"
+        />
+        <span>企业微信分享</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <!-- <div
+        class="currency-item live-btn-show"
+        (tap)="gotoUserStatistics2()"
+        
+      >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_tongji.png')"
+        />
+        <span> 预览直播 </span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div> -->
+      <div
+        class="currency-item"
+        (click)="gotoMyStudyReport($event)"
+        *ngIf="!Util.isBaojian&&!config.IsZhiNengPaltform"
+      >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_report.png')"
+        />
+        <span>{{Lang.studyreport}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+      <div
+        class="currency-item   "
+        (tap)="gotoMyCoupon()"
+        *ngIf="!Util.isBaojian &&!Util.closeCoupon"
+      >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_coupons.png')"
+        />
+        <span>{{Lang.coupon}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+      <div
+        class="currency-item"
+        (tap)="gotoSimulateExam()"
+        *ngIf="!config.IsZhiNengPaltform&&(!isBaojianVersion && (Util.AppEdition != 'EE' || Util.AppEdnSwitchMode == 'M1'))&&!((Util.learningTeamList.length>0||Util.learningTeamRight==1)&&isNewVer)"
+      >
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_monikao.png')"
+        />
+        <span>{{Lang.executivesmodelexam}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+      <div class="currency-item" (tap)="gotoContactUs()">
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_contact.png')"
+        />
+        <span>{{Lang.contactus}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+      <div class="currency-item" (tap)="gotoSetting()">
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_setting.png')"
+        />
+        <span>{{Lang.setting}}</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+
+      <div class="currency-item" (tap)="liveStart()">
+        <img
+          [src]="Util.formatLocalImgPath('assets/img/personal_setting.png')"
+        />
+        <span> liveStart</span>
+        <ion-icon><i class="zzl-appicons zion-home_ic_arrow"></i></ion-icon>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<div
+  *ngIf="!hasLizitree && chestnuttree_module"
+  class="liZiBox"
+  (tap)="getLiziSeed()"
+  [ngClass]="{'liZiNarrow': positionAnimation}"
+>
+  <div
+    class="liZiLight"
+    *ngIf="!hasLizitree"
+    [style.background-image]="'url('+Util.formatLocalImgPath('assets/img/light1.png')+')'"
+  >
+    <img
+      class="liZi"
+      [src]="Util.formatLocalImgPath('assets/img/liziseed.png')"
+    />
+    <img
+      class="getLiZi"
+      [src]="Util.formatLocalImgPath('assets/img/getliziseedmessage.png')"
+    />
+  </div>
+</div>
+<div
+  *ngIf="!hasLizitree && chestnuttree_module"
+  ontouchmove="event.preventDefault();event.stopPropagation();"
+>
+  <ion-backdrop
+    disable-activated
+    role="presentation"
+    tappable
+    style="
+      background-color: transparent;
+      transition-delay: initial;
+      transition-property: none;
+    "
+  ></ion-backdrop>
+</div>
+<chestnut-coupon
+  *ngIf="Util.homePageCouponList.length>0"
+  [couponsList]="Util.homePageCouponList"
+  (ionAction)="gotoAction()"
+></chestnut-coupon>

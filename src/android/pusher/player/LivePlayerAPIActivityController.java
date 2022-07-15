@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.SurfaceView;
 
+import com.alivc.live.pusher.demo.LivePlugin;
 import com.aliyun.aliliveplayersdk.data.AliLiveData;
 import com.aliyun.aliliveplayersdk.data.AliLiveScreenMode;
 import com.aliyun.liveplayer.AliLivePlayer;

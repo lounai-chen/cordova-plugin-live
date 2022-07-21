@@ -83,6 +83,7 @@ int64_t getCurrentTimeUs()
 @implementation AlivcLivePusherViewController
 
 - (void)viewDidLoad {
+     
     [super viewDidLoad];
 
     // zzy 20220316 横屏问题 add begin
@@ -127,6 +128,8 @@ int64_t getCurrentTimeUs()
      _monitorView.backgroundColor = [UIColor clearColor];
      [self.view addSubview:_monitorView];
     _monitorView.hidden = YES;
+    
+    //self.view.backgroundColor  = [UIColor orangeColor  ];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -1485,9 +1488,23 @@ int64_t getCurrentTimeUs()
 #pragma - UI
 - (void)setupSubviews {
     
-    self.view.backgroundColor = [UIColor grayColor];
+    UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
+    view1.backgroundColor = [UIColor greenColor];
+    
+    
+    self.view.frame  = [self getFullScreenFrame];
+    
+    [view1 addSubview:self.previewView];
+    
+    //[self.view addSubview: view1];
+    
+    
     [self.view addSubview: self.previewView];
-   // [self.view addSubview: self.publisherView];
+    
+   
+   
+    
+    // [self.view addSubview: self.publisherView];
 }
 
 - (void)showPusherInitErrorAlert:(int)error {
@@ -1646,7 +1663,8 @@ int64_t getCurrentTimeUs()
         _publisherView = [[AlivcPublisherView alloc] initWithFrame:[self getFullScreenFrame]
                                                             config:self.pushConfig];
         [_publisherView setPushViewsDelegate:self];
-        _publisherView.backgroundColor = [UIColor clearColor];
+        //_publisherView.backgroundColor = [UIColor clearColor];
+        _publisherView.backgroundColor = [UIColor redColor];
     }
     return _publisherView;
 }
@@ -1663,14 +1681,48 @@ int64_t getCurrentTimeUs()
 
 - (UIView *)previewView {
     
+//    if (!_previewView) {
+//        _previewView = [[UIView alloc] init];
+//        //_previewView.opaque = NO;
+//        _previewView.backgroundColor = [UIColor clearColor];
+//        //_previewView.backgroundColor = [UIColor blueColor];
+//        //_previewView.frame = [self getFullScreenFrame_previewView];
+//
+//        //[self.webView.superview addSubview: _previewView];
+//       // [self.webView bringSubviewToFront: _previewView];
+//    }
+//    return _previewView;
+    
+    
     if (!_previewView) {
-        _previewView = [[UIView alloc] init];
-        _previewView.backgroundColor = [UIColor clearColor];
-        _previewView.frame = [self getFullScreenFrame];
-    }
-    return _previewView;
+            _previewView = [[UIView alloc] init];
+            _previewView.backgroundColor = [UIColor clearColor];
+       // _previewView.superview.backgroundColor = [UIColor yellowColor];
+            _previewView.frame = [self getFullScreenFrame_previewView];
+        }
+        return _previewView;
 }
 
+- (CGRect)getFullScreenFrame_previewView {
+    
+    CGRect frame = self.view.bounds;
+//    if (IPHONEX) {
+//        // iPhone X UI适配
+//        frame = CGRectMake(0, 0, AlivcScreenWidth, AlivcScreenHeight);
+//    }
+    
+    //if (self.pushConfig.orientation != AlivcLivePushOrientationPortrait) {
+        CGFloat temSize = frame.size.height;
+    frame.size.height =  300;
+        frame.size.width = 300;
+        
+        CGFloat temPoint = frame.origin.y;
+    frame.origin.y =100; //frame.origin.x;
+    frame.origin.x = 100;//temPoint;
+
+   // }
+    return frame;
+}
 
 - (CGRect)getFullScreenFrame {
     
@@ -1679,9 +1731,10 @@ int64_t getCurrentTimeUs()
 //        // iPhone X UI适配
 //        frame = CGRectMake(0, 0, AlivcScreenWidth, AlivcScreenHeight);
 //    }
+    
     if (self.pushConfig.orientation != AlivcLivePushOrientationPortrait) {
         CGFloat temSize = frame.size.height;
-        frame.size.height = frame.size.width;
+    frame.size.height =  frame.size.width;
         frame.size.width = temSize;
         
         CGFloat temPoint = frame.origin.y;

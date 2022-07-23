@@ -52,6 +52,9 @@
 @property (nonatomic ,strong) LivePlugin *pluginCallBack;
 
 // UI
+@property (nonatomic, strong) AliLivePlayer *livePlayer;
+@property (nonatomic, strong) UIView *playView;
+@property (nonatomic, copy) NSString *playUrl;
 @property (nonatomic, strong) AlivcPublisherView *publisherView;
 @property (nonatomic, strong) AliyunQueenPanelController *beautyPanelController;
 @property (nonatomic, strong) UIView *previewView;
@@ -98,6 +101,8 @@ int64_t getCurrentTimeUs()
 
     
     [self setupSubviews];
+
+    [self setupPlayer];
     
     [self setupDefaultValues];
     
@@ -585,6 +590,12 @@ int64_t getCurrentTimeUs()
         ret = [self.livePusher restartPush];
     }
     return ret;
+}
+
+//播放视频
+- (void)PlayerStart {
+    
+      [self.livePlayer startWithURL: self.playUrl];
 }
 
 
@@ -1486,15 +1497,31 @@ int64_t getCurrentTimeUs()
 }
 
 #pragma - UI
+
+- (void)setupPlayer {
+
+    //self.livePlayer = [[AliLivePlayer alloc] initWithConfiguration:self.configuration];
+    // 初始化 livePlayer
+    self.livePlayer = [[AliLivePlayer alloc] init];
+    self.livePlayer.delegate = self;
+    [self.livePlayer setSetRenderView:self.playView];
+}
+
 - (void)setupSubviews {
     
     UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
     view1.backgroundColor = [UIColor greenColor];
+
+    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 50, [self width] - 10, 200)];
+    self.playView.backgroundColor = [UIColor lightGrayColor];
+    self.playView.translatesAutoresizingMaskIntoConstraints = false;
     
     
     self.view.frame  = [self getFullScreenFrame];
     
     [view1 addSubview:self.previewView];
+
+    [view1 addSubview:self.playView];
     
     //[self.view addSubview: view1];
     
@@ -1603,6 +1630,14 @@ int64_t getCurrentTimeUs()
         }
         [alert show];
     });
+}
+
+- (CGFloat)width {
+    return self.view.frame.size.width;
+}
+
+- (CGFloat)height {
+    return self.view.frame.size.height;
 }
 
 

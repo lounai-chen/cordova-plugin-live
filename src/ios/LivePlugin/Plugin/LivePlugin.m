@@ -173,7 +173,8 @@ static LivePlugin *selfplugin = nil;
 
 - (void)ResumeAsync:(CDVInvokedUrlCommand *) command
 {
-    [self.publisherVC  resumePushPlugin];
+     [self.publisherVC  resumePushPlugin];
+
 }
 
 
@@ -188,6 +189,19 @@ static LivePlugin *selfplugin = nil;
 
 - (void)LiveFlash:(CDVInvokedUrlCommand*)command{
     [self.publisherVC LiveFlash];
+}
+
+//初始化播放器
+- (void)InitPlayer:(CDVInvokedUrlCommand *) command
+{   
+     NSString* play_url =  [command.arguments objectAtIndex:0];
+     self.publisherVC.playUrl = play_url;
+}
+
+//播放
+- (void)PlayerStart:(CDVInvokedUrlCommand *) command
+{
+    [self.publisherVC  PlayerStart];
 }
 
 

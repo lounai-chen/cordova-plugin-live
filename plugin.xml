@@ -63,7 +63,7 @@
             </feature>
         </config-file>
        
-        <source-file src="src/ios/LivePlugin/" />
+        <!-- <source-file src="src/ios/LivePlugin/" /> -->
         <!-- <source-file src="src/ios/LivePlugin/LivePlugin.m" /> -->
 
 
@@ -82,6 +82,7 @@
         <framework src="src/ios/SDK/alivcffmpeg.framework" custom="true" />
         <framework src="src/ios/SDK/AlivcLibReplayKitExt.framework" custom="true" />
         <framework src="src/ios/SDK/AlivcLivePusher.framework" custom="true" />
+        <framework src="src/ios/SDK/AliLivePlayerSDK.framework" custom="true" />
         <framework src="src/ios/SDK/AliyunPlayer.framework" custom="true"/>
         <framework src="src/ios/SDK/AliyunQueenUIKit.framework" custom="true"/>
         <framework src="src/ios/SDK/artcSource.framework" custom="true"/>

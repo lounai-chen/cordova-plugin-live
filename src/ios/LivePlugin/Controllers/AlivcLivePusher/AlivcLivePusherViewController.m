@@ -31,7 +31,7 @@
 #define TEST_EXTERN_PCM_DURATION 30000
 
 
-@interface AlivcLivePusherViewController () <AlivcPublisherViewDelegate, AlivcMusicViewDelegate,AlivcAnswerGameViewDelegate,UIAlertViewDelegate,AlivcLivePusherInfoDelegate,AlivcLivePusherErrorDelegate,AlivcLivePusherNetworkDelegate,AlivcLivePusherBGMDelegate,AlivcLivePusherCustomFilterDelegate,AlivcLivePusherCustomDetectorDelegate, AlivcLivePusherSnapshotDelegate>{
+@interface AlivcLivePusherViewController () <AlivcPublisherViewDelegate, AlivcMusicViewDelegate,AlivcAnswerGameViewDelegate,UIAlertViewDelegate,AlivcLivePusherInfoDelegate,AlivcLivePusherErrorDelegate,AlivcLivePusherNetworkDelegate,AlivcLivePusherBGMDelegate,AlivcLivePusherCustomFilterDelegate,AlivcLivePusherCustomDetectorDelegate, AlivcLivePusherSnapshotDelegate,AliLivePlayerDelegate>{
     
     dispatch_source_t _streamingTimer;
     int _userVideoStreamHandle;
@@ -52,9 +52,8 @@
 @property (nonatomic ,strong) LivePlugin *pluginCallBack;
 
 // UI
-@property (nonatomic, strong) AliLivePlayer *livePlayer;
 @property (nonatomic, strong) UIView *playView;
-@property (nonatomic, copy) NSString *playUrl;
+
 @property (nonatomic, strong) AlivcPublisherView *publisherView;
 @property (nonatomic, strong) AliyunQueenPanelController *beautyPanelController;
 @property (nonatomic, strong) UIView *previewView;
@@ -593,9 +592,10 @@ int64_t getCurrentTimeUs()
 }
 
 //播放视频
-- (void)PlayerStart {
+- (void) PlayerStart {
     
-      [self.livePlayer startWithURL: self.playUrl];
+    [self.livePlayer startWithURL: self.playUrl];
+   
 }
 
 
@@ -1502,6 +1502,7 @@ int64_t getCurrentTimeUs()
 
     //self.livePlayer = [[AliLivePlayer alloc] initWithConfiguration:self.configuration];
     // 初始化 livePlayer
+    
     self.livePlayer = [[AliLivePlayer alloc] init];
     self.livePlayer.delegate = self;
     [self.livePlayer setSetRenderView:self.playView];
@@ -1523,10 +1524,10 @@ int64_t getCurrentTimeUs()
 
     [view1 addSubview:self.playView];
     
-    //[self.view addSubview: view1];
+    [self.view addSubview: view1];
     
     
-    [self.view addSubview: self.previewView];
+   // [self.view addSubview: self.previewView];
     
    
    

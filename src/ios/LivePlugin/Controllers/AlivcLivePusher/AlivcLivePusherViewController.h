@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Cordova/CDV.h>
+#import <AliLivePlayerSDK/AliLivePlayerSDK.h>
 
 @class AlivcLivePushConfig;
 
@@ -15,6 +16,7 @@
 
 // URL
 @property (nonatomic, strong) NSString *pushURL;
+@property (nonatomic, strong) NSString *playUrl;
 // SDK
 @property (nonatomic, strong) AlivcLivePushConfig *pushConfig;
 
@@ -26,6 +28,7 @@
 
 @property (nonatomic, assign) BOOL isUserMainStream;
 
+@property (nonatomic, strong) AliLivePlayer *livePlayer;
 
 
 - (int) start;
@@ -40,5 +43,8 @@
 
 - (void)CameraDirection;
 - (void)LiveFlash;
+
+- (void)PlayerStart;
+
 
 @end

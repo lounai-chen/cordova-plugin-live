@@ -101,7 +101,7 @@ int64_t getCurrentTimeUs()
     
     [self setupSubviews];
 
-    [self setupPlayer];
+    //[self setupPlayer];
     
     [self setupDefaultValues];
     
@@ -598,6 +598,44 @@ int64_t getCurrentTimeUs()
    
 }
 
+//暂停播放
+- (void) PlayerPause {
+    
+    [self.livePlayer pause];
+
+}
+
+//恢复播放
+- (void) PlayerResume {
+     [self.livePlayer resume];
+}
+
+//停止播放
+- (void) PlayerStop {
+  [self.livePlayer stop];   
+}
+
+//播放器截图
+- (void) PlayerSnapshot {
+    [self.livePlayer snapshot];
+}
+
+//是否静音 1静音
+- (void) PlayerIsMute {
+ 
+}
+
+//设置播放器音量
+- (void) PlayerSetVolume : (float )playVolume {
+   [self.livePlayer setVolume: playVolume];
+}
+
+- (void) PlayerMirrorMode {
+}
+- (void) PlayerScaleMode {
+}
+- (void) PlayerRotateMode {
+}
 
 - (void)reconnectPush {
     
@@ -1503,6 +1541,17 @@ int64_t getCurrentTimeUs()
     //self.livePlayer = [[AliLivePlayer alloc] initWithConfiguration:self.configuration];
     // 初始化 livePlayer
     
+    UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
+    view1.backgroundColor = [UIColor clearColor];
+
+    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 5, [self width] - 10, 200)];
+    self.playView.backgroundColor = [UIColor lightGrayColor];
+    self.playView.translatesAutoresizingMaskIntoConstraints = false;
+    
+    [view1 addSubview:self.playView];
+    [self.view addSubview: view1];
+    
+    
     self.livePlayer = [[AliLivePlayer alloc] init];
     self.livePlayer.delegate = self;
     [self.livePlayer setSetRenderView:self.playView];
@@ -1511,18 +1560,18 @@ int64_t getCurrentTimeUs()
 - (void)setupSubviews {
     
     UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
-    view1.backgroundColor = [UIColor greenColor];
-
-    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 50, [self width] - 10, 200)];
-    self.playView.backgroundColor = [UIColor lightGrayColor];
-    self.playView.translatesAutoresizingMaskIntoConstraints = false;
-    
+    view1.backgroundColor = [UIColor blackColor];
+//
+//    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 50, [self width] - 10, 200)];
+//    self.playView.backgroundColor = [UIColor lightGrayColor];
+//    self.playView.translatesAutoresizingMaskIntoConstraints = false;
+//
     
     self.view.frame  = [self getFullScreenFrame];
     
     [view1 addSubview:self.previewView];
 
-    [view1 addSubview:self.playView];
+    //[view1 addSubview:self.playView];
     
     [self.view addSubview: view1];
     

@@ -46,9 +46,6 @@ static LivePlugin *selfplugin = nil;
 - (void)init:(CDVInvokedUrlCommand*)command
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-      
-        
-        
         // If a popover is already open, close it; we only want one at a time.
         if (self.publisherVC != nil) {
              
@@ -56,7 +53,6 @@ static LivePlugin *selfplugin = nil;
             self.publisherVC = nil;
         }
       
-        
         if(self.publisherVC == nil){
             self.publisherVC = [[AlivcLivePusherViewController alloc] init];
         }
@@ -66,11 +62,22 @@ static LivePlugin *selfplugin = nil;
         //2 是否前置摄像头. 1是
         //3 纯音频
         //4 纯视频
+        //5 是否在webview以下. 1 默认是在下方
+        //6 窗口宽. -1 默认全屏
+        //7 窗口高. -1 默认全屏
+        //8 x坐标 默认0
+        //9 y坐标 默认0
         NSString* push_url =  [command.arguments objectAtIndex:0];
         NSString* orientation =  [command.arguments objectAtIndex:1];
         NSString* i_cameraType =  [command.arguments objectAtIndex:2];
         NSString* i_audioOnly =  [command.arguments objectAtIndex:3];
         NSString* i_videoOnly =  [command.arguments objectAtIndex:4];
+
+        NSString* i_under =  [command.arguments objectAtIndex:5];
+        NSString* i_width =  [command.arguments objectAtIndex:6];
+        NSString* i_height =  [command.arguments objectAtIndex:7];
+        NSString* i_left =  [command.arguments objectAtIndex:8];
+        NSString* i_top =  [command.arguments objectAtIndex:9];
 
 
     if (push_url == nil || [push_url length] == 0) {
@@ -116,6 +123,12 @@ static LivePlugin *selfplugin = nil;
         self.publisherVC.authDuration = nil;
         self.publisherVC.isUserMainStream = false;
         self.publisherVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        
+        self.publisherVC.pushUnder = i_under;
+        self.publisherVC.pushWidth = [i_width integerValue];
+        self.publisherVC.pushHeight = [i_height integerValue];
+        self.publisherVC.pushLeft = [i_left integerValue];
+        self.publisherVC.pushTop = [i_top integerValue];
     
     // [self.viewController presentViewController:self.publisherVC animated:YES completion:^{
     //     //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
@@ -194,14 +207,87 @@ static LivePlugin *selfplugin = nil;
 //初始化播放器
 - (void)InitPlayer:(CDVInvokedUrlCommand *) command
 {   
-     NSString* play_url =  [command.arguments objectAtIndex:0];
-     self.publisherVC.playUrl = play_url;
+    //0 播流URL地址
+    //1 窗口宽. -1 默认全屏
+    //2 窗口高. -1 默认全屏的25%
+    //3 x坐标 默认0
+    //4 y坐标 默认0
+
+    NSString* play_url =  [command.arguments objectAtIndex:0];   
+    NSString* i_width =  [command.arguments objectAtIndex:1];
+    NSString* i_height =  [command.arguments objectAtIndex:2];
+    NSString* i_left =  [command.arguments objectAtIndex:3];
+    NSString* i_top =  [command.arguments objectAtIndex:4];
+
+    self.publisherVC.playUrl = play_url;
+    self.publisherVC.playerWidth = [i_width integerValue];
+    self.publisherVC.playerHeight = [i_height integerValue];
+    self.publisherVC.playerLeft = [i_left integerValue];
+    self.publisherVC.playerTop = [i_top integerValue];
+    
+    [self.publisherVC setupPlayer];
 }
 
-//播放
+//开启播放
 - (void)PlayerStart:(CDVInvokedUrlCommand *) command
 {
     [self.publisherVC  PlayerStart];
+}
+
+//暂停播放
+- (void)PlayerPause:(CDVInvokedUrlCommand *) command
+{
+    [self.publisherVC  PlayerPause];
+}
+
+//恢复播放
+- (void)PlayerResume:(CDVInvokedUrlCommand *) command
+{
+    [self.publisherVC  PlayerResume];
+}
+
+//停止播放
+- (void)PlayerStop:(CDVInvokedUrlCommand *) command
+{
+    [self.publisherVC  PlayerStop];
+}
+
+
+//播放器截图
+- (void)PlayerSnapshot:(CDVInvokedUrlCommand *) command
+{
+    [self.publisherVC  PlayerSnapshot];
+}
+
+//是否静音 1静音
+- (void)PlayerIsMute:(CDVInvokedUrlCommand *) command
+{
+    NSString* play_IsMute =  [command.arguments objectAtIndex:0];
+    [self.publisherVC  PlayerIsMute];
+}
+
+//设置播放器音量
+//arg0 音量大小
+- (void)PlayerSetVolume :(CDVInvokedUrlCommand *) command
+{
+    NSString* play_Volume =  [command.arguments objectAtIndex:0];
+    [self.publisherVC  PlayerSetVolume : [play_Volume floatValue] ];
+}
+
+ 
+- (void)PlayerMirrorMode:(CDVInvokedUrlCommand *) command
+{
+   // [self.publisherVC  PlayerMirrorMode];
+}
+
+- (void)PlayerScaleMode:(CDVInvokedUrlCommand *) command
+{
+   // [self.publisherVC  PlayerScaleMode];
+}
+
+- (void)PlayerRotateMode:(CDVInvokedUrlCommand *) command
+{
+   // [self.publisherVC  PlayerRotateMode];
 }
 
 

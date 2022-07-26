@@ -17,6 +17,22 @@
 // URL
 @property (nonatomic, strong) NSString *pushURL;
 @property (nonatomic, strong) NSString *playUrl;
+
+// Push
+@property (nonatomic, strong) NSString *pushUnder;
+@property (nonatomic, assign) NSInteger *pushWidth;
+@property (nonatomic, assign) NSInteger *pushHeight;
+@property (nonatomic, assign) NSInteger *pushLeft;
+@property (nonatomic, assign) NSInteger *pushTop;
+
+
+// Player
+@property (nonatomic, assign) NSInteger *playerWidth;
+@property (nonatomic, assign) NSInteger *playerHeight;
+@property (nonatomic, assign) NSInteger *playerLeft;
+@property (nonatomic, assign) NSInteger *playerTop;
+
+
 // SDK
 @property (nonatomic, strong) AlivcLivePushConfig *pushConfig;
 
@@ -44,7 +60,16 @@
 - (void)CameraDirection;
 - (void)LiveFlash;
 
+- (void)setupPlayer;
+
 - (void)PlayerStart;
-
-
+- (void)PlayerPause;
+- (void)PlayerResume;
+- (void)PlayerStop;
+- (void)PlayerSnapshot;
+- (void)PlayerIsMute;
+- (void)PlayerSetVolume: (float )playVolume;
+- (void)PlayerMirrorMode;
+- (void)PlayerScaleMode;
+- (void)PlayerRotateMode;
 @end

@@ -14,23 +14,25 @@
 
 @interface AlivcLivePusherViewController : CDVViewController// UIViewController
 
+@property (nonatomic, strong)NSString *hasePush;
+
 // URL
 @property (nonatomic, strong) NSString *pushURL;
 @property (nonatomic, strong) NSString *playUrl;
 
 // Push
 @property (nonatomic, strong) NSString *pushUnder;
-@property (nonatomic, assign) NSInteger *pushWidth;
-@property (nonatomic, assign) NSInteger *pushHeight;
-@property (nonatomic, assign) NSInteger *pushLeft;
-@property (nonatomic, assign) NSInteger *pushTop;
+@property (nonatomic, assign) NSString *pushWidth;
+@property (nonatomic, assign) NSString *pushHeight;
+@property (nonatomic, assign) NSString *pushLeft;
+@property (nonatomic, assign) NSString *pushTop;
 
 
 // Player
-@property (nonatomic, assign) NSInteger *playerWidth;
-@property (nonatomic, assign) NSInteger *playerHeight;
-@property (nonatomic, assign) NSInteger *playerLeft;
-@property (nonatomic, assign) NSInteger *playerTop;
+@property (nonatomic, assign) NSString *playerWidth;
+@property (nonatomic, assign) NSString *playerHeight;
+@property (nonatomic, assign) NSString *playerLeft;
+@property (nonatomic, assign) NSString *playerTop;
 
 
 // SDK

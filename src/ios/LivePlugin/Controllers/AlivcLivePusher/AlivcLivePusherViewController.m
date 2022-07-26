@@ -91,8 +91,9 @@ int64_t getCurrentTimeUs()
     // zzy 20220316 横屏问题 add begin
     //self.allowSelectInterfaceOrientation = YES;
     // zzy 20220316 横屏问题 add end
-    
+  if([self.hasePush  isEqualToString: @"push"]){
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    
     [self initMotionManager];
 
     // 如果不需要退后台继续推流，可以参考这套退后台通知的实现。
@@ -101,7 +102,7 @@ int64_t getCurrentTimeUs()
     
     [self setupSubviews];
 
-    //[self setupPlayer];
+  
     
     [self setupDefaultValues];
     
@@ -133,7 +134,7 @@ int64_t getCurrentTimeUs()
      [self.view addSubview:_monitorView];
     _monitorView.hidden = YES;
     
-    //self.view.backgroundColor  = [UIColor orangeColor  ];
+  }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -1542,9 +1543,19 @@ int64_t getCurrentTimeUs()
     // 初始化 livePlayer
     
     UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
-    view1.backgroundColor = [UIColor clearColor];
-
-    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 5, [self width] - 10, 200)];
+    if([self.hasePush  isEqualToString: @"push"]){
+        view1.backgroundColor = [UIColor clearColor];
+    }
+    else{
+        view1.backgroundColor = [UIColor blackColor];
+    }
+ 
+    if( [self.playerWidth isEqualToString : @"-1" ] || [self.playerHeight isEqualToString : @"-1" ]  ){
+        self.playView = [[UIView alloc] initWithFrame:CGRectMake((CGFloat)[self.playerLeft floatValue], (CGFloat)[self.playerTop floatValue], [self width] - 10, 200)];
+    }
+    else{
+        self.playView = [[UIView alloc] initWithFrame:CGRectMake((CGFloat)[self.playerLeft floatValue], (CGFloat)[self.playerTop floatValue], (CGFloat)[self.playerWidth floatValue], (CGFloat)[self.playerHeight floatValue])];
+    }
     self.playView.backgroundColor = [UIColor lightGrayColor];
     self.playView.translatesAutoresizingMaskIntoConstraints = false;
     
@@ -1561,27 +1572,14 @@ int64_t getCurrentTimeUs()
     
     UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
     view1.backgroundColor = [UIColor blackColor];
-//
-//    self.playView = [[UIView alloc] initWithFrame:CGRectMake(5, 50, [self width] - 10, 200)];
-//    self.playView.backgroundColor = [UIColor lightGrayColor];
-//    self.playView.translatesAutoresizingMaskIntoConstraints = false;
-//
+
     
     self.view.frame  = [self getFullScreenFrame];
     
     [view1 addSubview:self.previewView];
-
-    //[view1 addSubview:self.playView];
-    
+ 
     [self.view addSubview: view1];
-    
-    
-   // [self.view addSubview: self.previewView];
-    
-   
-   
-    
-    // [self.view addSubview: self.publisherView];
+
 }
 
 - (void)showPusherInitErrorAlert:(int)error {
@@ -1789,6 +1787,28 @@ int64_t getCurrentTimeUs()
 }
 
 - (CGRect)getFullScreenFrame_previewView {
+
+    CGRect frame = self.view.bounds;
+ 
+    CGFloat temSize = frame.size.height;
+    CGFloat temPoint = frame.origin.y;
+    if( [self.playerWidth isEqualToString : @"-1" ] || [self.playerHeight isEqualToString : @"-1" ]  ){
+        frame.size.height =  frame.size.width;
+        frame.size.width = temSize;
+        frame.origin.y = frame.origin.x;
+        frame.origin.x = temPoint;
+    }
+    else{
+        frame.size.height = (CGFloat)[self.pushHeight floatValue];
+        frame.size.width =  (CGFloat)[self.pushLeft floatValue];
+        frame.origin.x = (CGFloat)[self.pushLeft floatValue];
+        frame.origin.y = (CGFloat)[self.pushTop floatValue];
+    }
+
+    return frame;
+}
+
+- (CGRect)getFullScreenFrame {
     
     CGRect frame = self.view.bounds;
 //    if (IPHONEX) {
@@ -1796,20 +1816,20 @@ int64_t getCurrentTimeUs()
 //        frame = CGRectMake(0, 0, AlivcScreenWidth, AlivcScreenHeight);
 //    }
     
-    //if (self.pushConfig.orientation != AlivcLivePushOrientationPortrait) {
+    if (self.pushConfig.orientation != AlivcLivePushOrientationPortrait) {
         CGFloat temSize = frame.size.height;
-    frame.size.height =  300;
-        frame.size.width = 300;
+        frame.size.height =  frame.size.width;
+        frame.size.width = temSize;
         
         CGFloat temPoint = frame.origin.y;
-    frame.origin.y =100; //frame.origin.x;
-    frame.origin.x = 100;//temPoint;
+        frame.origin.y = frame.origin.x;
+        frame.origin.x = temPoint;
 
-   // }
+    }
     return frame;
 }
 
-- (CGRect)getFullScreenFrame {
+- (CGRect)setFullScreenFrame    {
     
     CGRect frame = self.view.bounds;
 //    if (IPHONEX) {
@@ -1829,7 +1849,6 @@ int64_t getCurrentTimeUs()
     }
     return frame;
 }
-
 
 #pragma mark - Auth
 

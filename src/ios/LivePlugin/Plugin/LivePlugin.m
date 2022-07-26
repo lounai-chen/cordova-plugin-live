@@ -33,7 +33,7 @@
 
 @implementation LivePlugin
 
-
+//static NSString* hasePush = @"0";
 static NSString* myAsyncCallBackId = nil;
 static CDVPluginResult *pluginResult = nil;
 static LivePlugin *selfplugin = nil;
@@ -45,6 +45,7 @@ static LivePlugin *selfplugin = nil;
 
 - (void)init:(CDVInvokedUrlCommand*)command
 {
+   
     dispatch_async(dispatch_get_main_queue(), ^{
         // If a popover is already open, close it; we only want one at a time.
         if (self.publisherVC != nil) {
@@ -56,7 +57,7 @@ static LivePlugin *selfplugin = nil;
         if(self.publisherVC == nil){
             self.publisherVC = [[AlivcLivePusherViewController alloc] init];
         }
-        
+        self.publisherVC.hasePush = @"push";
         //0 推流URL地址
         //1 是否竖屏. 1是竖屏,2横屏朝home键,3横屏朝不朝home键
         //2 是否前置摄像头. 1是
@@ -73,12 +74,14 @@ static LivePlugin *selfplugin = nil;
         NSString* i_audioOnly =  [command.arguments objectAtIndex:3];
         NSString* i_videoOnly =  [command.arguments objectAtIndex:4];
 
-        NSString* i_under =  [command.arguments objectAtIndex:5];
-        NSString* i_width =  [command.arguments objectAtIndex:6];
-        NSString* i_height =  [command.arguments objectAtIndex:7];
-        NSString* i_left =  [command.arguments objectAtIndex:8];
-        NSString* i_top =  [command.arguments objectAtIndex:9];
+        self.publisherVC.pushUnder = [command.arguments objectAtIndex:5];
+        self.publisherVC.pushWidth =   [command.arguments objectAtIndex:6];
+        self.publisherVC.pushHeight =  [command.arguments objectAtIndex:7];
+        self.publisherVC.pushLeft = [command.arguments objectAtIndex:8];
+        self.publisherVC.pushTop =  [command.arguments objectAtIndex:9];
 
+         
+        
 
     if (push_url == nil || [push_url length] == 0) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
@@ -124,11 +127,7 @@ static LivePlugin *selfplugin = nil;
         self.publisherVC.isUserMainStream = false;
         self.publisherVC.modalPresentationStyle = UIModalPresentationFullScreen;
         
-        self.publisherVC.pushUnder = i_under;
-        self.publisherVC.pushWidth = [i_width integerValue];
-        self.publisherVC.pushHeight = [i_height integerValue];
-        self.publisherVC.pushLeft = [i_left integerValue];
-        self.publisherVC.pushTop = [i_top integerValue];
+       
     
     // [self.viewController presentViewController:self.publisherVC animated:YES completion:^{
     //     //[self.publisherVC dismissViewControllerAnimated:YES completion:nil];
@@ -207,25 +206,46 @@ static LivePlugin *selfplugin = nil;
 //初始化播放器
 - (void)InitPlayer:(CDVInvokedUrlCommand *) command
 {   
-    //0 播流URL地址
-    //1 窗口宽. -1 默认全屏
-    //2 窗口高. -1 默认全屏的25%
-    //3 x坐标 默认0
-    //4 y坐标 默认0
-
-    NSString* play_url =  [command.arguments objectAtIndex:0];   
-    NSString* i_width =  [command.arguments objectAtIndex:1];
-    NSString* i_height =  [command.arguments objectAtIndex:2];
-    NSString* i_left =  [command.arguments objectAtIndex:3];
-    NSString* i_top =  [command.arguments objectAtIndex:4];
-
-    self.publisherVC.playUrl = play_url;
-    self.publisherVC.playerWidth = [i_width integerValue];
-    self.publisherVC.playerHeight = [i_height integerValue];
-    self.publisherVC.playerLeft = [i_left integerValue];
-    self.publisherVC.playerTop = [i_top integerValue];
     
-    [self.publisherVC setupPlayer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        if(self.publisherVC == nil){
+            self.publisherVC = [[AlivcLivePusherViewController alloc] init];
+            
+            self.publisherVC.hasePush = @"player";
+           
+            // 插件 view 置顶 & 透明
+            [self.viewController addChildViewController:self.publisherVC];
+            self.webView.opaque = NO;
+            self.webView.backgroundColor = [UIColor clearColor];
+
+            [self.webView.superview addSubview:self.publisherVC.view];
+            [self.webView.superview bringSubviewToFront:self.webView];
+                
+            myAsyncCallBackId = command.callbackId;
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];
+            [pluginResult setKeepCallbackAsBool:YES]; //不销毁，保存监听回调
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+        }
+        
+        //0 播流URL地址
+        //1 窗口宽. -1 默认全屏
+        //2 窗口高. -1 默认全屏的25%
+        //3 x坐标 默认0
+        //4 y坐标 默认0
+
+        self.publisherVC.playUrl =  [command.arguments objectAtIndex:0];
+        self.publisherVC.playerWidth=  [command.arguments objectAtIndex:1];
+        self.publisherVC.playerHeight  =  [command.arguments objectAtIndex:2];
+        self.publisherVC.playerLeft =  [command.arguments objectAtIndex:3];
+        self.publisherVC.playerTop =  [command.arguments objectAtIndex:4];
+
+   
+        [self.publisherVC setupPlayer];
+    });
+    
+ 
 }
 
 //开启播放

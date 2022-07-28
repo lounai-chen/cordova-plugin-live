@@ -1566,6 +1566,15 @@ int64_t getCurrentTimeUs()
     self.livePlayer = [[AliLivePlayer alloc] init];
     self.livePlayer.delegate = self;
     [self.livePlayer setSetRenderView:self.playView];
+    
+    [self.pluginCallBack sendCmd:@"600|初始化播放器成功"];
+}
+
+- (void)onErrorWithPlayer:(AliLivePlayer *)player andErrorInfo:(AliLivePlayerErrorInfo *)errorInfo {
+    [self.pluginCallBack sendCmd:[NSString stringWithFormat:@"%@%@\n",@"601|播放异常:", errorInfo.message]] ;
+    if (errorInfo.code == ERROR_GENERAL_EIO) {
+        [player startWithURL:self.playUrl];
+    }
 }
 
 - (void)setupSubviews {

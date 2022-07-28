@@ -142,7 +142,7 @@ static LivePlugin *selfplugin = nil;
     [self.webView.superview bringSubviewToFront:self.webView];
     
     myAsyncCallBackId = command.callbackId;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess push"];
     [pluginResult setKeepCallbackAsBool:YES]; //不销毁，保存监听回调
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     
@@ -223,7 +223,7 @@ static LivePlugin *selfplugin = nil;
             [self.webView.superview bringSubviewToFront:self.webView];
                 
             myAsyncCallBackId = command.callbackId;
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess"];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess player"];
             [pluginResult setKeepCallbackAsBool:YES]; //不销毁，保存监听回调
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 

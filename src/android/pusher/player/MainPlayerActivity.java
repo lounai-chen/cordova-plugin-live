@@ -36,7 +36,7 @@ public class MainPlayerActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_live_main);
 
        // mController = new com.aliyun.aliliveplayersdk.MainActivityController(this);
         initView();

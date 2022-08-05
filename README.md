@@ -139,7 +139,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 1.不支持模拟器调试 
 
-2.AliyunQueenUIKit.framework,MNN.framework 设置为 Do Not Embed,  其他的framework设置为 Embed & Sign 
+2.这几个RtsSDK.framework, queen.framework, AlivcLibReplayKitExt.framework, AliyunPlayer.framework ,AliLivePlayerSDK.framework,opencv2.framework需修改设置为 Embed & Sign , 其他的AliyunQueenUIKit.framework,MNN.framework等,会默认设置为 Do Not Embed,  
 
 3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加 
 

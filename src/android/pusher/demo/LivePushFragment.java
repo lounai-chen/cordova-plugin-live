@@ -456,17 +456,20 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
       if (mSurfaceView == null) {
         mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
       }
-      android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
-      if (mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
-        lp.width = mAppContext.getResources().getDisplayMetrics().widthPixels - 10;
-        lp.height = (int) (mAppContext.getResources().getDisplayMetrics().heightPixels * 0.25);
-      } else {
-        lp.width = mPlugin_WidthPlayer;
-        lp.height = mPlugin_HeightPlayer;
-      }
 
-      mSurfaceView.setLayoutParams(lp);
-      setLayout(mSurfaceView, mPlugin_LeftPlayer, mPlugin_TopPlayer);
+      SetPlayerLayout();
+
+      // android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
+      // if (mPlugin_WidthPlayer == -1 || mPlugin_HeightPlayer == -1) {
+      //   lp.width = mAppContext.getResources().getDisplayMetrics().widthPixels - 10;
+      //   lp.height = (int) (mAppContext.getResources().getDisplayMetrics().heightPixels * 0.25);
+      // } else {
+      //   lp.width = mPlugin_WidthPlayer;
+      //   lp.height = mPlugin_HeightPlayer;
+      // }
+
+      // mSurfaceView.setLayoutParams(lp);
+      // setLayout(mSurfaceView, mPlugin_LeftPlayer, mPlugin_TopPlayer);
     }
 
     if (!mPlugin_UrlPlayer.isEmpty()) {
@@ -481,6 +484,28 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     if (mController != null && !mPlugin_UrlPlayer.isEmpty()) {
       LivePlugin.callJS("600|初始化播放器成功");
     }
+  }
+
+  public void  SetPlayerLayout(){
+    android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
+    if (mPlugin_WidthPlayer == -1  ) {
+      lp.width = mAppContext.getResources().getDisplayMetrics().widthPixels - 10;
+    } else {
+      lp.width = mPlugin_WidthPlayer;
+    }
+
+    if (mPlugin_HeightPlayer == -1) {
+      lp.height = (int) (mAppContext.getResources().getDisplayMetrics().heightPixels * 0.25);
+    }
+    else if (mPlugin_HeightPlayer == -2) {
+      lp.height = (int) (mAppContext.getResources().getDisplayMetrics().heightPixels);
+    }
+    else {
+      lp.height = mPlugin_HeightPlayer;
+    }
+
+    mSurfaceView.setLayoutParams(lp);
+    setLayout(mSurfaceView, mPlugin_LeftPlayer, mPlugin_TopPlayer);
   }
 
   public void PlayerStart() {

@@ -273,6 +273,21 @@ public class LivePlugin extends CordovaPlugin   {
       this.coolMethod("成功", callbackContext);
       return true;
     }
+    else if (action.equals("SetPlayerLayout")){
+      fragment_live.mPlugin_HeightPlayer = Integer.parseInt(args.getString(0));
+      fragment_live.mPlugin_WidthPlayer = Integer.parseInt(args.getString(1));
+      fragment_live.mPlugin_LeftPlayer = Integer.parseInt(args.getString(2));
+      fragment_live.mPlugin_TopPlayer = Integer.parseInt(args.getString(3));
+      cordova.getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          fragment_live.SetPlayerLayout();
+        }
+      });
+
+      this.coolMethod("重新设置播放器位置大小成功", callbackContext);
+      return true;
+    }
 
     //////// end player ///////
 

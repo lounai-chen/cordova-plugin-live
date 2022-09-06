@@ -137,5 +137,10 @@ exports.PlayerRotateMode = function ( arg0, success, error) {
     exec(success, error, 'LivePlugin', 'PlayerRotateMode', [arg0]);
 };
 
+//重新设置播放器位置大小
+exports.SetPlayerLayout = function ( arg0, arg1, arg2, arg3, success, error) {
+    exec(success, error, 'LivePlugin', 'SetPlayerLayout', [arg0,arg1, arg2, arg3]);
+};
+
 
 //////// end player ///////

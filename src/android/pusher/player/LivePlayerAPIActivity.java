@@ -196,8 +196,7 @@ public class LivePlayerAPIActivity extends AppCompatActivity implements View.OnC
 
     public void changeToSmallScreenMode(){
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        mOtherViewGroup.setVisibility(View.VISIBLE);
-        //mScreenModeImageView.setImageResource(R.drawable.alivc_screen_mode_large);
+        mOtherViewGroup.setVisibility(View.VISIBLE); 
 
         ViewGroup.LayoutParams layoutParams = mSurfaceView.getLayoutParams();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -206,10 +205,11 @@ public class LivePlayerAPIActivity extends AppCompatActivity implements View.OnC
         mSurfaceView.requestLayout();
     }
 
+    //全屏播放
     public void changeToFullScreenMode(){
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mOtherViewGroup.setVisibility(View.GONE);
-        mScreenModeImageView.setImageResource(R.drawable.image_bg);
+        
 
         ViewGroup.LayoutParams layoutParams = mSurfaceView.getLayoutParams();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;

@@ -40,8 +40,11 @@ import com.alivc.component.custom.AlivcLivePushCustomFilter;
 //import com.alivc.live.beautyui.bean.AnimojiItemBean;
 import com.alivc.live.pusher.AlivcAudioAACProfileEnum;
 import com.alivc.live.pusher.AlivcFpsEnum;
+import com.alivc.live.pusher.AlivcLiveBase;
+import com.alivc.live.pusher.AlivcLiveBaseListener;
 import com.alivc.live.pusher.AlivcLivePushBGMListener;
 import com.alivc.live.pusher.AlivcLivePushConfig;
+import com.alivc.live.pusher.AlivcLivePushConstants;
 import com.alivc.live.pusher.AlivcLivePushError;
 import com.alivc.live.pusher.AlivcLivePushErrorListener;
 import com.alivc.live.pusher.AlivcLivePushInfoListener;
@@ -56,7 +59,8 @@ import com.alivc.live.pusher.AlivcResolutionEnum;
 import com.alivc.live.pusher.AlivcSnapshotListener;
 
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-import org.webrtc.utils.AlivcLog;
+import org.webrtc.live_pusher.utils.AlivcLog;
+//import org.webrtc.utils.AlivcLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -123,7 +127,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LivePushFragment extends android.app.Fragment implements Runnable {
+public class LivePushFragment extends android.app.Fragment implements Runnable , AlivcLiveBaseListener {
   public static Context mAppContext;
   public static String mPlugin_UrlPush = "";
   public static String mPlugin_PreviewOrientationEnum = "1";
@@ -220,8 +224,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable {
   private boolean videoThreadOn = false;
   private View PageView;
 
-//  begin player
-private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
+  //  begin player
+  private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
 
   private final List<String> mEventDatas = new ArrayList<>();
   private final List<String> mRenderFrameDatas = new ArrayList<>();
@@ -318,15 +322,30 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     mAlivcLivePushConfig.setEnableAutoResolution(true); // 打开分辨率自适应，默认为false
     mAlivcLivePushConfig.setPreviewDisplayMode(AlivcPreviewDisplayMode.ALIVC_LIVE_PUSHER_PREVIEW_ASPECT_FIT);
 
-    mAlivcLivePusher    = new AlivcLivePusher();
+
 
     try {
-      mAlivcLivePusher.init(mAppContext,mAlivcLivePushConfig);
-      mAlivcLivePusher.setLogLevel(AlivcLivePushLogLevel.AlivcLivePushLogLevelInfo);
+      // 日志配置
+      AlivcLiveBase.setLogLevel(AlivcLivePushLogLevel.AlivcLivePushLogLevelDebug);
+      AlivcLiveBase.setConsoleEnabled(true);
       String logPath = getFilePath(mAppContext, "log_path");
       // full log file limited was kLogMaxFileSizeInKB * 5 (parts)
       int maxPartFileSizeInKB = 100 * 1024 * 1024; //100G
-      mAlivcLivePusher.setLogDirPath(logPath, maxPartFileSizeInKB);
+      AlivcLiveBase.setLogDirPath(logPath, maxPartFileSizeInKB);
+
+      // 注册sdk
+      AlivcLiveBase.setListener(this);
+      AlivcLiveBase.registerSDK();
+
+      mAlivcLivePusher    = new AlivcLivePusher();
+      mAlivcLivePusher.init(mAppContext,mAlivcLivePushConfig);
+
+//      mAlivcLivePusher.setLogLevel(AlivcLivePushLogLevel.AlivcLivePushLogLevelInfo);
+//      String logPath = getFilePath(mAppContext, "log_path");
+//      // full log file limited was kLogMaxFileSizeInKB * 5 (parts)
+//      int maxPartFileSizeInKB = 100 * 1024 * 1024; //100G
+//      mAlivcLivePusher.setLogDirPath(logPath, maxPartFileSizeInKB);
+
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
       // showDialog(this, e.getMessage());
@@ -357,7 +376,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     appResourcesPackage = getActivity().getPackageName();
-     PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
+    PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
 
     if(mSurfaceView==null){
       mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
@@ -753,7 +772,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReconnectSucceed(AlivcLivePusher pusher) {
-     // showToast(getSafeString(R.string.reconnect_success));
+      // showToast(getSafeString(R.string.reconnect_success));
       LivePlugin.callJS("-16|重新连接成功");
     }
 
@@ -761,7 +780,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     @Override
     public void onSendDataTimeout(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-     // showDialog(getSafeString(R.string.senddata_timeout));
+      // showDialog(getSafeString(R.string.senddata_timeout));
       LivePlugin.callJS("-17|发送数据超时");
     }
 
@@ -777,7 +796,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
     @Override
     public void onConnectionLost(AlivcLivePusher pusher) {
       mIsStartAsnycPushing = false;
-    //  showToast("推流已断开");
+      //  showToast("推流已断开");
       LivePlugin.callJS("-19|推流已断开");
     }
 
@@ -795,7 +814,7 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
 
     @Override
     public void onPacketsLost(AlivcLivePusher pusher) {
-    //  showToast("推流丢包通知");
+      //  showToast("推流丢包通知");
       LivePlugin.callJS("-21|推流丢失数据");
     }
   };
@@ -1015,6 +1034,11 @@ private com.aliyun.aliliveplayersdk.LivePlayerAPIActivityController mController;
 
   private void stopPcm() {
     audioThreadOn = false;
+  }
+
+  @Override
+  public void onLicenceCheck(AlivcLivePushConstants.AlivcLiveLicenseCheckResultCode result, String reason) {
+    Log.e("TAG", "onLicenceCheck " + result + " reson " + reason);
   }
 
   public interface DynamicListern {

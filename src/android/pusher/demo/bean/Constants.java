@@ -22,13 +22,7 @@ public class Constants {
          * */
         live_push_button = new ArrayList<>();
         live_img_soure=new HashMap<>();
-//        live_img_soure.put("开始推流",R.drawable.live_push);
-//        live_img_soure.put("美颜",R.drawable.live_beauty);
-//        live_img_soure.put("音效",R.drawable.live_sound);
-//        live_img_soure.put("摄像头",R.drawable.live_carmer);
-//        live_img_soure.put("静音",R.drawable.mute_btn);
-//        live_img_soure.put("调节参数",R.drawable.live_adjust_parm);
-//        live_img_soure.put("数据指标",R.drawable.live_data);
+ 
         live_push_button.add("开始推流");
         live_push_button.add("美颜");
         live_push_button.add("音效");
@@ -44,8 +38,7 @@ public class Constants {
         live_pull_button.add("暂停观看");
         live_pull_button.add("静音");
         live_pull_button.add("听筒切换");
-//        live_img_soure.put("暂停观看",R.drawable.finish_play);
-//        live_img_soure.put("听筒切换",R.drawable.telephone_change);
+ 
 
         /**
          * play页面按钮

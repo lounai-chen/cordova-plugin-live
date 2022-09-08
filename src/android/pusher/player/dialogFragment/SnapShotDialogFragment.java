@@ -47,7 +47,7 @@ public class SnapShotDialogFragment extends DialogFragment {
             layoutParams.gravity = Gravity.TOP | Gravity.START;
             //layoutParams.windowAnimations = R.style.SnapshotDialogAnim;
             window.setAttributes(layoutParams);
-            window.setBackgroundDrawable(new ColorDrawable());
+            //window.setBackgroundDrawable(new ColorDrawable());
         }
     }
 

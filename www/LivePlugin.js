@@ -138,6 +138,10 @@ exports.PlayerRotateMode = function ( arg0, success, error) {
 };
 
 //重新设置播放器位置大小
+//0 窗口高. -1 默认全屏的25% , -2 全屏
+//1 窗口宽. -1 默认全屏
+//2 x坐标 默认0
+//3 y坐标 默认0
 exports.SetPlayerLayout = function ( arg0, arg1, arg2, arg3, success, error) {
     exec(success, error, 'LivePlugin', 'SetPlayerLayout', [arg0,arg1, arg2, arg3]);
 };

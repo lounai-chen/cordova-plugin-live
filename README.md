@@ -1,5 +1,5 @@
 # cordova-plugin-live
-cordova live 直播推流 , 直播播流 , 可支持多个用户连麦 , 集成的是阿里云SDK
+cordova live 直播推流 , 直播播流 , 集成的是阿里云SDK
 
 
 ### 1.安装命令
@@ -122,7 +122,7 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 ### **安卓配置**
 
-*0.申请推流SDK License证书https://help.aliyun.com/document_detail/431730.html* 
+*0.申请推流SDK License证书,如果您在安装之前没修改plugin.xml证书的值,则要修改 platforms/android/android.json中licensekey,licensefile的值. 参考https://help.aliyun.com/document_detail/431730.html* 
 
 *1.注意您的cordova项目, "cordova-android" 的依赖版本起码是  10.1.2* 
 

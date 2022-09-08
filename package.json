@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-live",
-  "version": "2.0.1",
-  "description": "cordova live 直播推流插件",
+  "version": "2.0.2",
+  "description": "cordova live push 直播推流 , 直播播流 , 集成的是阿里云SDK ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -92,7 +92,7 @@ import com.alivc.live.pusher.widget.DataView;
 
 import com.aliyun.animoji.utils.DeviceOrientationDetector;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 
 import android.content.pm.ActivityInfo;
@@ -149,6 +149,8 @@ public class LivePushFragment extends android.app.Fragment implements Runnable ,
   public static Integer mPlugin_TopPlayer = 0;      //9 y坐标 默认0
 
   public static Integer mPlugin_IsJustPlayer = 0; // 1 //需要播放器碎片布局
+  public static Boolean need_initPlay = false ;
+  public static Boolean need_initPush = false;
 
   public static final String TAG = "LivePushFragment";
 
@@ -286,6 +288,77 @@ public class LivePushFragment extends android.app.Fragment implements Runnable ,
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
+
+  }
+
+  private String appResourcesPackage;
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    appResourcesPackage = getActivity().getPackageName();
+    PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
+
+
+    if(need_initPlay) {
+      player_init(); // 初始化播放器
+    }
+
+    if (need_initPush) {
+      push_init();
+    }
+    return  PageView;
+  }
+
+  SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+      if(mSurfaceStatus == com.alivc.live.pusher.SurfaceStatus.UNINITED) {
+        mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.CREATED;
+        if(mAlivcLivePusher != null) {
+          try {
+            if(mAsync) {
+              mAlivcLivePusher.startPreviewAysnc(mPreviewView);
+            } else {
+              mAlivcLivePusher.startPreview(mPreviewView);
+            }
+            if(mAlivcLivePushConfig.isExternMainStream()) {
+              startYUV(mAppContext);
+              startPCM(mAppContext);
+            }
+          } catch (IllegalArgumentException e) {
+            e.toString();
+          } catch (IllegalStateException e) {
+            e.toString();
+          }
+        }
+      } else if(mSurfaceStatus == com.alivc.live.pusher.SurfaceStatus.DESTROYED) {
+        mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.RECREATED;
+      }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+      mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.CHANGED;
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+      mSurfaceStatus = SurfaceStatus.DESTROYED;
+    }
+  };
+
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    view.setVisibility(View.VISIBLE);
+    view.bringToFront();
+
+  }
+
+  public  void push_init(){
+
     if(mPlugin_UrlPush.isEmpty() ) {
       return;
     }
@@ -365,18 +438,9 @@ public class LivePushFragment extends android.app.Fragment implements Runnable ,
       isPushing = mAlivcLivePusher.isPushing();
     }
 
-    mDeviceOrientationDetector.initDeviceDetector(getContext(), orientation -> {
+    mDeviceOrientationDetector.initDeviceDetector(mAppContext, orientation -> {
       mDeviceOrientation = orientation;
     });
-
-  }
-
-  private String appResourcesPackage;
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    appResourcesPackage = getActivity().getPackageName();
-    PageView = inflater.inflate(R.layout.push_fragment, container, false); //inflater.inflate(getResources().getIdentifier("activity_push", "layout", appResourcesPackage), container, false);
 
     if(mSurfaceView==null){
       mSurfaceView = (SurfaceView) PageView.findViewById(getResources().getIdentifier("surface_view", "id", appResourcesPackage));
@@ -413,58 +477,6 @@ public class LivePushFragment extends android.app.Fragment implements Runnable ,
         }
       });
     }
-
-    player_init(); // 初始化播放器
-
-    return  PageView;
-  }
-
-  SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-      if(mSurfaceStatus == com.alivc.live.pusher.SurfaceStatus.UNINITED) {
-        mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.CREATED;
-        if(mAlivcLivePusher != null) {
-          try {
-            if(mAsync) {
-              mAlivcLivePusher.startPreviewAysnc(mPreviewView);
-            } else {
-              mAlivcLivePusher.startPreview(mPreviewView);
-            }
-            if(mAlivcLivePushConfig.isExternMainStream()) {
-              startYUV(mAppContext);
-              startPCM(mAppContext);
-            }
-          } catch (IllegalArgumentException e) {
-            e.toString();
-          } catch (IllegalStateException e) {
-            e.toString();
-          }
-        }
-      } else if(mSurfaceStatus == com.alivc.live.pusher.SurfaceStatus.DESTROYED) {
-        mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.RECREATED;
-      }
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-      mSurfaceStatus = com.alivc.live.pusher.SurfaceStatus.CHANGED;
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-      mSurfaceStatus = SurfaceStatus.DESTROYED;
-    }
-  };
-
-  @RequiresApi(api = Build.VERSION_CODES.M)
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    view.setVisibility(View.VISIBLE);
-    view.bringToFront();
-
   }
 
   // begin player

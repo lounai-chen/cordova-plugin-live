@@ -31,7 +31,7 @@ import com.aliyun.liveplayer.define.ScaleMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 import org.apache.cordova.CordovaActivity;
 

@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 public class DataView extends LinearLayout {
     public DataView(Context context) {

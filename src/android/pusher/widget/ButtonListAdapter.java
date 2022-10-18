@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

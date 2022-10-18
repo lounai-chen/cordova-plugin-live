@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 /**
  * 设置最大高度的Layout

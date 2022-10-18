@@ -19,7 +19,7 @@ import androidx.core.content.PermissionChecker;
 import com.aliyun.liveplayer.define.MirrorMode;
 import com.aliyun.liveplayer.define.RotateMode;
 import com.aliyun.liveplayer.define.ScaleMode;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 
 import org.apache.cordova.CordovaInterface;
@@ -84,10 +84,28 @@ public class LivePlugin extends CordovaPlugin   {
       LivePushFragment.mPlugin_Left = Integer.parseInt(args.getString(8));  //8 x坐标 默认0
       LivePushFragment.mPlugin_Top = Integer.parseInt(args.getString(9));   //9 y坐标 默认0
 
-      LivePushFragment.mPlugin_IsJustPlayer = 1; //需要播放器碎片布局
+      LivePushFragment.mPlugin_IsJustPlayer = 0; //不需要播放器碎片布局
 
       LivePushFragment.mAppContext = this.cordova.getContext();
-      initLive(callbackContext);
+
+      fragment_live = null;
+
+      if (fragment_live == null) {
+        LivePushFragment.need_initPush = true;
+        LivePushFragment.need_initPlay = false;
+        initLive(callbackContext);
+      }
+      else {
+        LivePushFragment.mPlugin_IsJustPlayer = 0;
+        cordova.getActivity().runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            fragment_live.push_init();
+          }
+        });
+      }
+
+
       //todo 不锁屏
       return true;
     }
@@ -201,6 +219,7 @@ public class LivePlugin extends CordovaPlugin   {
 
 
       if (fragment_live == null) {
+        LivePushFragment.need_initPlay = true;
         if(LivePushFragment.mPlugin_IsJustPlayer==0){
           LivePushFragment.mPlugin_IsJustPlayer = 1; //需要播放器碎片布局
         }
@@ -347,11 +366,17 @@ public class LivePlugin extends CordovaPlugin   {
   private boolean initLive(CallbackContext callbackContext) {
 
     if (fragment_live != null) {
-      callbackContext.error("fragment_live already started");
+//      callbackContext.error("fragment_live already started");
+//      return true;
+      LivePushFragment.mPlugin_IsJustPlayer = 0; //不需要播放器碎片布局
+      LivePushFragment.need_initPlay =false;
       return true;
     }
+    else {
+      fragment_live = new LivePushFragment();
+    }
 
-    fragment_live = new LivePushFragment();
+
 
     cordova.getActivity().runOnUiThread(new Runnable() {
       @Override

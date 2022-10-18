@@ -21,7 +21,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 import com.aliyun.aliliveplayersdk.data.AliLiveData;
 import com.aliyun.liveplayer.define.MirrorMode;
 import com.aliyun.liveplayer.define.RotateMode;

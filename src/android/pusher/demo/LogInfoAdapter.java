@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 import com.alivc.live.pusher.AlivcEncodeModeEnum;
 import com.alivc.live.pusher.AlivcLivePushStatsInfo;

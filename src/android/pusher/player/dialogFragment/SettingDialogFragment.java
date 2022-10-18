@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 import com.aliyun.aliliveplayersdk.data.AliLiveData;
 
 public class SettingDialogFragment extends DialogFragment implements View.OnClickListener {

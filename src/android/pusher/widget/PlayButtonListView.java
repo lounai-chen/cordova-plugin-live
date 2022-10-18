@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 import java.util.List;
 

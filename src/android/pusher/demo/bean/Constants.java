@@ -1,6 +1,6 @@
 package com.alivc.live.pusher.demo.bean;
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

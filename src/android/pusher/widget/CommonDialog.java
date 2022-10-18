@@ -16,7 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
  
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 
 public class CommonDialog extends Dialog {

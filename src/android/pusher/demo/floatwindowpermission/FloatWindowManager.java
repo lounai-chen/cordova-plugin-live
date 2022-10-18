@@ -14,7 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 //import com.alivc.live.pusher.demo.R;
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 import com.alivc.live.pusher.demo.floatwindowpermission.rom.*;
 
 import java.lang.reflect.Field;

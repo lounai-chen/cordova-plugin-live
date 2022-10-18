@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 import com.aliyun.aliliveplayersdk.data.AliLiveData;
 import com.aliyun.aliliveplayersdk.dialogFragment.SettingDialogFragment;

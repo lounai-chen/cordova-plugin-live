@@ -8,10 +8,10 @@ import androidx.core.app.ActivityCompat;
 import com.acker.simplezxing.activity.CaptureActivity;
 import com.aliyun.aliliveplayersdk.data.AliLiveData;
 import com.aliyun.aliliveplayersdk.util.PermissionUtils;
-import com.zhongzilian.chestnutapp.MainActivity;
+import com.huayu.livestream.MainActivity;
 //import com.google.zxing.activity.CaptureActivity;
 
-import com.zhongzilian.chestnutapp.R;
+import com.huayu.quzhanyeapp.R;
 
 // todo 删除
 public class MainActivityController {

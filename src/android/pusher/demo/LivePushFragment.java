@@ -590,7 +590,11 @@ public class LivePushFragment extends android.app.Fragment implements Runnable ,
   }
 
   public   void StopLive(){
-    mAlivcLivePusher.stopPush();
+    mAlivcLivePusher.stopPush(); 
+    mAlivcLivePusher.stopPreview();
+    mAlivcLivePusher.destroy();
+    mAlivcLivePusher.setLivePushInfoListener(null);
+    mAlivcLivePusher = null;
     stopPcm();
   }
 

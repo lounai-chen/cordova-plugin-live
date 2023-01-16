@@ -81,7 +81,7 @@
         <framework src="src/ios/SDK/RtsSDK.framework"  /> -->
 
         
-        <framework src="src/ios/SDK/alivcffmpeg.framework" custom="true" />
+        <!-- <framework src="src/ios/SDK/alivcffmpeg.framework" custom="true" />
         <framework src="src/ios/SDK/AlivcLibReplayKitExt.framework" custom="true" />
         <framework src="src/ios/SDK/AlivcLivePusher.framework" custom="true" />
         <framework src="src/ios/SDK/AliLivePlayerSDK.framework" custom="true" />
@@ -91,8 +91,16 @@
         <framework src="src/ios/SDK/MNN.framework" custom="true"/>
         <framework src="src/ios/SDK/opencv2.framework" custom="true" />
         <framework src="src/ios/SDK/queen.framework" custom="true" />
-        <framework src="src/ios/SDK/RtsSDK.framework" custom="true" />
-
+        <framework src="src/ios/SDK/RtsSDK.framework" custom="true" /> -->
+		
+		<!--
+		推荐 Pod继承
+		1.编辑 ios/podfile 文件,加入配置
+		2.执行 pod install
+		3.拷贝内容 ios/Pods/Target Support Files/Pods-appname/pods-appname.debug.xconfig
+		4.粘贴到 ios/pods-debug.xcconfig
+		5.同理操作release配置文件
+		-->
 
     </platform>
 </plugin>

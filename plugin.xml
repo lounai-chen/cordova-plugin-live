@@ -94,8 +94,8 @@
         <framework src="src/ios/SDK/RtsSDK.framework" custom="true" /> -->
 		
 		<!--
-		推荐 Pod继承
-		1.编辑 ios/podfile 文件,加入配置
+		推荐 Pod集成
+		1.编辑 ios/podfile 文件,加入配置. 可参考 demo\Podfile 文件
 		2.执行 pod install
 		3.拷贝内容 ios/Pods/Target Support Files/Pods-appname/pods-appname.debug.xconfig
 		4.粘贴到 ios/pods-debug.xcconfig

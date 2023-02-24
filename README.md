@@ -145,20 +145,30 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
  
 
 2.推荐 Pod集成 
+
 		2.1 编辑 ios/podfile 文件,加入配置. 可参考 demo\Podfile 文件 
+
 		2.2 在IOS目录,执行 pod install 
+
 		2.3 拷贝内容 ios/Pods/Target Support Files/Pods-appname/pods-appname.debug.xconfig 
+
 		2.4 粘贴到 ios/pods-debug.xcconfig 
+
 		2.5 同理操作release配置文件 
+
     2.6 添加SDK库: AliLivePlayerSDK.framework , opencv2.framework , queen.framework 设置为 Embed & Sign 
+
     2.7 资源文件里面的 AlivcLiveReplayKitDefine.h 
+
     2.8 添加SDK授权文件,并且在xcode的info菜单加对应的key(AlivcLicenseKey,AlivcLicenseFile) 参考 https://help.aliyun.com/document_detail/431730.htm 
+
 
  
 
 
 
-3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加(先添加文件夹,再Add Files to) (记得一定要勾选 Copy Items if needed)
+3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加(先添加文件夹,再Add Files to) (记得一定要勾选 Copy Items if needed) 
+
 
 4.*注意:资源图片,需要您需手动拷贝到对应目录* 
 

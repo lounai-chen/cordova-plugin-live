@@ -128,6 +128,8 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 *2. AndroidManifest需手动对应的修改*
 
+*3. 插件下的src/android/res/layout的布局文件 需手动拷贝到对应的目录* 
+
 ```
 <application android:allowBackup="true"   />
 
@@ -139,15 +141,28 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
 ### **ios配置**
 
-1.不支持模拟器调试 
+1.不支持模拟器调试  
+ 
 
-2.这几个RtsSDK.framework, queen.framework, AlivcLibReplayKitExt.framework, AliyunPlayer.framework ,AliLivePlayerSDK.framework,opencv2.framework需修改设置为 Embed & Sign , 其他的AliyunQueenUIKit.framework,MNN.framework等,会默认设置为 Do Not Embed,  
+2.推荐 Pod集成 
+		2.1 编辑 ios/podfile 文件,加入配置. 可参考 demo\Podfile 文件 
+		2.2 在IOS目录,执行 pod install 
+		2.3 拷贝内容 ios/Pods/Target Support Files/Pods-appname/pods-appname.debug.xconfig 
+		2.4 粘贴到 ios/pods-debug.xcconfig 
+		2.5 同理操作release配置文件 
+    2.6 添加SDK库: AliLivePlayerSDK.framework , opencv2.framework , queen.framework 设置为 Embed & Sign 
+    2.7 资源文件里面的 AlivcLiveReplayKitDefine.h 
+    2.8 添加SDK授权文件,并且在xcode的info菜单加对应的key(AlivcLicenseKey,AlivcLicenseFile) 参考 https://help.aliyun.com/document_detail/431730.htm 
 
-3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加 
+ 
 
-4.*注意:多语言配置，资源图片,不知道怎么在插件的plugin.xml文件设置.因此需要您需手动拷贝到对应目录* 
 
-5.由于现在可以直接用html端的页面显示操作按钮,多语言可以不用设置了 
+
+3.插件的文件夹添加成功,但xcode编译没加载进来,因此需要手动先删除再添加(先添加文件夹,再Add Files to) (记得一定要勾选 Copy Items if needed)
+
+4.*注意:资源图片,需要您需手动拷贝到对应目录* 
+
+
 
 ### 其他问题 
 1.如果播流没声音,需要转码模版设置RTS. 详情查看 https://help.aliyun.com/document_detail/199444.html 

@@ -31,7 +31,7 @@
 #define TEST_EXTERN_PCM_DURATION 30000
 
 
-@interface AlivcLivePusherViewController () <AlivcPublisherViewDelegate, AlivcMusicViewDelegate,AlivcAnswerGameViewDelegate,UIAlertViewDelegate,AlivcLivePusherInfoDelegate,AlivcLivePusherErrorDelegate,AlivcLivePusherNetworkDelegate,AlivcLivePusherBGMDelegate,AlivcLivePusherCustomFilterDelegate,AlivcLivePusherCustomDetectorDelegate, AlivcLivePusherSnapshotDelegate,AliLivePlayerDelegate>{
+@interface AlivcLivePusherViewController () <AlivcPublisherViewDelegate, AlivcMusicViewDelegate,AlivcAnswerGameViewDelegate,UIAlertViewDelegate,AlivcLivePusherInfoDelegate,AlivcLivePusherErrorDelegate,AlivcLivePusherNetworkDelegate,AlivcLivePusherBGMDelegate,AlivcLivePusherCustomFilterDelegate,AlivcLivePusherCustomDetectorDelegate, AlivcLivePusherSnapshotDelegate,AliLivePlayerDelegate,AVPDelegate>{
     
     dispatch_source_t _streamingTimer;
     int _userVideoStreamHandle;
@@ -595,7 +595,8 @@ int64_t getCurrentTimeUs()
 //播放视频
 - (void) PlayerStart {
     
-    [self.livePlayer startWithURL: self.playUrl];
+    [self.livePlayer start];
+    //[self.livePlayer startWithURL: self.playUrl];
    
 }
 
@@ -608,7 +609,7 @@ int64_t getCurrentTimeUs()
 
 //恢复播放
 - (void) PlayerResume {
-     [self.livePlayer resume];
+     //[self.livePlayer resume];
 }
 
 //停止播放
@@ -618,7 +619,7 @@ int64_t getCurrentTimeUs()
 
 //播放器截图
 - (void) PlayerSnapshot {
-    [self.livePlayer snapshot];
+    //[self.livePlayer snapshot];
 }
 
 //是否静音 1静音
@@ -1554,8 +1555,10 @@ int64_t getCurrentTimeUs()
         self.playView = [[UIView alloc] initWithFrame:CGRectMake((CGFloat)[self.playerLeft floatValue], (CGFloat)[self.playerTop floatValue], [self width] - 10, 200)];
     }
     else{
-        self.playView = [[UIView alloc] initWithFrame:CGRectMake((CGFloat)[self.playerLeft floatValue], (CGFloat)[self.playerTop floatValue], (CGFloat)[self.playerWidth floatValue], (CGFloat)[self.playerHeight floatValue])];
+        self.playView = [[UIView alloc] initWithFrame:CGRectMake((CGFloat)[self.playerLeft floatValue], (CGFloat)[self.playerTop floatValue], (CGFloat)[self.playerWidth floatValue]/2.6, (CGFloat)[self.playerHeight floatValue]/2.6 )];
     }
+    
+    
     self.playView.backgroundColor = [UIColor lightGrayColor];
     self.playView.translatesAutoresizingMaskIntoConstraints = false;
     
@@ -1563,11 +1566,41 @@ int64_t getCurrentTimeUs()
     [self.view addSubview: view1];
     
     
-    self.livePlayer = [[AliLivePlayer alloc] init];
+    self.livePlayer = [[AliPlayer alloc] init]; //[[AliLivePlayer alloc] init];
+    AVPUrlSource *urlSource = [[AVPUrlSource alloc] urlWithString:self.playUrl];
+    [self.livePlayer setUrlSource:urlSource];
+    self.livePlayer.autoPlay = YES;
+    //AVPVidAuthSource  *authSource   = [[AVPVidAuthSource alloc] init];
+    //authSource.vid =@"vid_56677";
+    //authSource.playAuth = self.playUrl; //playAuth is not base64 encoded
+    //authSource.region = @"cn-shenzheng";
+    //authSource.quality =@"AUTO";
+    //[self.livePlayer setAuthSource:authSource];
+    
+    self.livePlayer.playerView =self.playView;
     self.livePlayer.delegate = self;
-    [self.livePlayer setSetRenderView:self.playView];
+   // self.livePlayer.scalingMode = AVP_SCALINGMODE_SCALEASPECTFIT;
+    //self.livePlayer.scalingMode =AVP_SCALINGMODE_SCALEASPECTFILL;
+    self.livePlayer.scalingMode = AVP_SCALINGMODE_SCALETOFILL;
+    self.livePlayer.mirrorMode = AVP_MIRRORMODE_NONE;
+    
+    //AVPVidStsSource *stsSource = [[AVPVidStsSource alloc] init];
+    //stsSource.quality =@"HD";
+    //stsSource.forceQuality=YES;
+    
+    
+    //[self.livePlayer setSetRenderView:self.playView];
+ 
+   
+    [self.livePlayer prepare];
     
     [self.pluginCallBack sendCmd:@"600|初始化播放器成功"];
+}
+
+-(void)onPlayerEvent:(AliPlayer*)player eventType:(AVPEventType)eventType {
+    if (eventType == AVPEventPrepareDone) {
+      NSLog(@"视频的宽:%d，高:%d", player.width, player.height);
+    }
 }
 
 - (void)onErrorWithPlayer:(AliLivePlayer *)player andErrorInfo:(AliLivePlayerErrorInfo *)errorInfo {
@@ -1941,6 +1974,50 @@ int64_t getCurrentTimeUs()
     if (self.motionManager) {
         [self.motionManager stopAccelerometerUpdates];
         self.motionManager = nil;
+    }
+}
+
+
+- (void)onPlayerStatusChanged:(AliPlayer*)player oldStatus:(AVPStatus)oldStatus newStatus:(AVPStatus)newStatus {
+    switch (newStatus) {
+        case AVPStatusIdle:{
+            //  空转，闲时，静态
+        }
+   break;
+        case AVPStatusInitialzed:{
+            //  初始化完成
+        }
+   break;
+        case AVPStatusPrepared:{
+            //  准备完成
+        }
+   break;
+        case AVPStatusStarted:{
+            //  正在播放
+        }
+   break;
+case AVPStatusPaused:{
+            //  播放暂停
+    [self.pluginCallBack sendCmd:[NSString stringWithFormat:@"%@\n",@"604|播放暂停"]] ;
+        }
+   break;
+case AVPStatusStopped:{
+            //  播放停止
+    [self.pluginCallBack sendCmd:[NSString stringWithFormat:@"%@\n",@"603|播放停止"]] ;
+        }
+   break;
+case AVPStatusCompletion:{
+            //  播放完成
+        [self.pluginCallBack sendCmd:[NSString stringWithFormat:@"%@\n",@"602|播放完成"]] ;
+        }
+   break;
+case AVPStatusError:{
+            //  播放错误
+            [self.pluginCallBack sendCmd:[NSString stringWithFormat:@"%@\n",@"601|播放异常"]] ;
+        }
+   break;
+        default:
+            break;
     }
 }
 

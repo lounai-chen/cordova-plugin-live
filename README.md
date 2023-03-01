@@ -97,6 +97,12 @@ cordova plugin add https://github.com/lounai-chen/cordova-plugin-live
 
  600|初始化播放器成功 
  601|播放异常 errorCode:   , errorMsg:    [备注;当停止推流|没有网络,也会触发该回调,errorCode:537067524]
+ ios
+ 601|播放异常
+ 602|播放完成
+ 603|播放停止
+ 604|播放暂停
+
  
 
  -10|推流未知错误  

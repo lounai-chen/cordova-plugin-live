@@ -46,7 +46,7 @@
 
 @property (nonatomic, assign) BOOL isUserMainStream;
 
-@property (nonatomic, strong) AliLivePlayer *livePlayer;
+@property (nonatomic, strong) AliPlayer *livePlayer;
 
 
 - (int) start;

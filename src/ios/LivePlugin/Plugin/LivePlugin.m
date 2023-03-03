@@ -4,7 +4,7 @@
 #import "AlivcLivePushConfigViewController.h"
 #import "AlivcLivePusherViewController.h"
 #import <AlivcLivePusher/AlivcLivePusher.h>
- 
+//#import "LivePlugin.h"
 
 @interface LivePlugin : CDVPlugin {
   //   variables go here.
@@ -28,7 +28,6 @@
 - (void)CameraDirection:(CDVInvokedUrlCommand*)command;
 - (void)LiveFlash:(CDVInvokedUrlCommand*)command;
 
-
 @end
 
 @implementation LivePlugin
@@ -45,7 +44,7 @@ static LivePlugin *selfplugin = nil;
 
 - (void)init:(CDVInvokedUrlCommand*)command
 {
-   
+    selfplugin=self;
     dispatch_async(dispatch_get_main_queue(), ^{
         // If a popover is already open, close it; we only want one at a time.
         if (self.publisherVC != nil) {
@@ -205,8 +204,9 @@ static LivePlugin *selfplugin = nil;
 
 //初始化播放器
 - (void)InitPlayer:(CDVInvokedUrlCommand *) command
-{   
-    
+{
+    selfplugin=self;
+    myAsyncCallBackId = command.callbackId;
     dispatch_async(dispatch_get_main_queue(), ^{
        
         if(self.publisherVC == nil){
@@ -222,7 +222,7 @@ static LivePlugin *selfplugin = nil;
             [self.webView.superview addSubview:self.publisherVC.view];
             [self.webView.superview bringSubviewToFront:self.webView];
                 
-            myAsyncCallBackId = command.callbackId;
+           
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sucess player"];
             [pluginResult setKeepCallbackAsBool:YES]; //不销毁，保存监听回调
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -237,12 +237,14 @@ static LivePlugin *selfplugin = nil;
 
         self.publisherVC.playUrl =  [command.arguments objectAtIndex:0];
         self.publisherVC.playerWidth=  [command.arguments objectAtIndex:1];
-        self.publisherVC.playerHeight  =  [command.arguments objectAtIndex:2];
-        self.publisherVC.playerLeft =  [command.arguments objectAtIndex:3];
-        self.publisherVC.playerTop =  [command.arguments objectAtIndex:4];
+        self.publisherVC.playerHeight  = [command.arguments objectAtIndex:2];
+        self.publisherVC.playerLeft =   [command.arguments objectAtIndex:3];
+        self.publisherVC.playerTop =   [command.arguments objectAtIndex:4];
 
    
         [self.publisherVC setupPlayer];
+    
+    [self sendCmd:@"600|初始化播放器成功"];
     });
     
  

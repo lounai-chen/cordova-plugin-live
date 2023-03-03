@@ -248,7 +248,7 @@ int64_t getCurrentTimeUs()
  创建推流
  */
 - (int)setupPusher {
-   
+    _pluginCallBack = [[LivePlugin alloc] init];
     if(self.isUserMainStream) {
         
         self.pushConfig.externMainStream = true;
@@ -1054,18 +1054,9 @@ int64_t getCurrentTimeUs()
     BOOL result =[UIImagePNGRepresentation(image)writeToFile:filePath   atomically:YES]; // 保存成功会返回YES
     if (result == YES) {
         NSLog(@"保存成功");
-            dispatch_async(dispatch_get_main_queue(), ^{
-
-//                [self.view makeToast:@"保存成功"];
-//                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (__bridge void *)self);
-
-            });
 
     }
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"截图已保存" message:filePath delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        [alertView show];
-//    });
+
      
 }
 
@@ -1539,9 +1530,8 @@ int64_t getCurrentTimeUs()
 #pragma - UI
 
 - (void)setupPlayer {
-
-    //self.livePlayer = [[AliLivePlayer alloc] initWithConfiguration:self.configuration];
     // 初始化 livePlayer
+    _pluginCallBack = [[LivePlugin alloc] init];
     
     UIView *view1 = [[UIView alloc]initWithFrame:[self getFullScreenFrame]];
     if([self.hasePush  isEqualToString: @"push"]){
@@ -1594,7 +1584,7 @@ int64_t getCurrentTimeUs()
    
     [self.livePlayer prepare];
     
-    [self.pluginCallBack sendCmd:@"600|初始化播放器成功"];
+    
 }
 
 -(void)onPlayerEvent:(AliPlayer*)player eventType:(AVPEventType)eventType {
@@ -1805,24 +1795,10 @@ int64_t getCurrentTimeUs()
 }
 
 - (UIView *)previewView {
-    
-//    if (!_previewView) {
-//        _previewView = [[UIView alloc] init];
-//        //_previewView.opaque = NO;
-//        _previewView.backgroundColor = [UIColor clearColor];
-//        //_previewView.backgroundColor = [UIColor blueColor];
-//        //_previewView.frame = [self getFullScreenFrame_previewView];
-//
-//        //[self.webView.superview addSubview: _previewView];
-//       // [self.webView bringSubviewToFront: _previewView];
-//    }
-//    return _previewView;
-    
-    
+
     if (!_previewView) {
             _previewView = [[UIView alloc] init];
             _previewView.backgroundColor = [UIColor clearColor];
-       // _previewView.superview.backgroundColor = [UIColor yellowColor];
             _previewView.frame = [self getFullScreenFrame_previewView];
         }
         return _previewView;
@@ -1939,34 +1915,7 @@ int64_t getCurrentTimeUs()
 - (void)initMotionManager
 {
     self.motionManager = [[CMMotionManager alloc] init];
-//    if (self.motionManager.accelerometerAvailable) {
-//        self.motionManager.accelerometerUpdateInterval = 0.1f;
-//        __weak typeof(self) weakSelf = self;
-//        [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
-//                                                 withHandler:^(CMAccelerometerData* accelerometerData, NSError* error) {
-//                                                     __strong typeof(self) strongSelf = weakSelf;
-//                                                     if (strongSelf.motionManager) {
-//                                                         CMAccelerometerData* newestAccel = strongSelf.motionManager.accelerometerData;
-//                                                         double accelerationX = newestAccel.acceleration.x;
-//                                                         double accelerationY = newestAccel.acceleration.y;
-//                                                         double ra = atan2(-accelerationY, accelerationX);
-//                                                         double degree = ra * 180 / M_PI;
-//                                                         if (degree >= -105 && degree <= -75) {
-//                                                             //NSLog(@"@keria motion: %f, 倒立", degree);
-//                                                             mScreenRotation = 180;
-//                                                         } else if (degree >= -15 && degree <= 15) {
-//                                                             //NSLog(@"@keria motion: %f, 右转", degree);
-//                                                             mScreenRotation = 90;
-//                                                         } else if (degree >= 75 && degree <= 105) {
-//                                                             //NSLog(@"@keria motion: %f, 正立", degree);
-//                                                             mScreenRotation = 0;
-//                                                         } else if (degree >= 165 || degree <= -165) {
-//                                                             //NSLog(@"@keria motion: %f, 左转", degree);
-//                                                             mScreenRotation = 270;
-//                                                         }
-//                                                     }
-//                                                 }];
-//    }
+
 }
 
 - (void)destroyMotionManager
